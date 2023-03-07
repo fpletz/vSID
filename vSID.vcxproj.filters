@@ -24,6 +24,15 @@
     <ClCompile Include="vSIDPlugin.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="utils.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="jsonparser.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="flightplan.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vSID.def">
@@ -59,6 +68,15 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="constants.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="utils.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="jsonparser.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="flightplan.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

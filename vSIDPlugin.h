@@ -6,7 +6,7 @@
 
 const std::string pluginName = "vSID";
 const std::string pluginVersion = "0.1.0";
-const std::string pluginAuthor = "Gameagle";
+const std::string pluginAuthor = "Vatger";
 const std::string pluginCopyright = "to be selected";
 const std::string pluginViewAviso = "";
 

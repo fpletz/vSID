@@ -2,7 +2,10 @@
 #include <vector>
 #include <string>
 
-namespace CvSIDPlugin
+namespace CvSIDPluginUtils
 {
-	std::vector<std::string> splitString(std::string &string);
+	std::string ltrim(std::string& string);
+	std::string rtrim(std::string& string);
+	std::string trim(std::string& string);
+	std::vector<std::string> splitString(std::string& string);
 }

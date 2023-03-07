@@ -55,7 +55,6 @@ CvSIDApp::CvSIDApp()
 
 CvSIDApp theApp;
 
-
 // CvSIDApp-Initialisierung
 
 BOOL CvSIDApp::InitInstance()
