@@ -4,8 +4,12 @@
 #include "pch.h"
 #include "framework.h"
 #include "vSID.h"
-#include "vSIDPlugin.h"
-#include "EuroScopePlugIn.h"
+
+//#include "vSIDPlugin.h"
+//#include "utils.h"
+//#include "EuroScopePlugIn.h"
+
+//#include "configparser.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
@@ -38,13 +42,13 @@
 
 // CvSIDApp
 
-BEGIN_MESSAGE_MAP(CvSIDApp, CWinApp)
+BEGIN_MESSAGE_MAP(vsid::VSIDApp, CWinApp)
 END_MESSAGE_MAP()
 
 
 // CvSIDApp-Erstellung
 
-CvSIDApp::CvSIDApp()
+vsid::VSIDApp::VSIDApp()
 {
 	// TODO: Hier Code zur Konstruktion einfügen
 	// Alle wichtigen Initialisierungen in InitInstance positionieren
@@ -53,32 +57,17 @@ CvSIDApp::CvSIDApp()
 
 // Das einzige CvSIDApp-Objekt
 
-CvSIDApp theApp;
+vsid::VSIDApp vsidApp;
 
 // CvSIDApp-Initialisierung
 
-BOOL CvSIDApp::InitInstance()
+BOOL vsid::VSIDApp::InitInstance()
 {
 	CWinApp::InitInstance();
 
 	return TRUE;
 }
 
-CvSIDPlugin* gpMyPlugin = NULL;
-
-void __declspec (dllexport) EuroScopePlugInInit(EuroScopePlugIn::CPlugIn** ppPlugInInstance)
-{
-
-	// create the instance
-	*ppPlugInInstance = gpMyPlugin = new CvSIDPlugin();
-}
+//vsid::VSIDPlugin* vsidPlugin = NULL;
 
 
-//---EuroScopePlugInExit-----------------------------------------------
-
-void __declspec (dllexport) EuroScopePlugInExit(void)
-{
-
-	// delete the instance
-	delete gpMyPlugin;
-}

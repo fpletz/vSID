@@ -27,10 +27,13 @@
     <ClCompile Include="utils.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="jsonparser.cpp">
+    <ClCompile Include="flightplan.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="flightplan.cpp">
+    <ClCompile Include="configparser.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
+    <ClCompile Include="messageHandler.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -61,7 +64,7 @@
     <ClInclude Include="vSIDPlugin.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\..\Programme\Euroscope\PlugInEnvironment\EuroScopePlugIn.h">
+    <ClInclude Include="es_environment\EuroScopePlugIn.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="stdafx.h">
@@ -73,10 +76,19 @@
     <ClInclude Include="utils.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="jsonparser.h">
+    <ClInclude Include="flightplan.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="flightplan.h">
+    <ClInclude Include="airport.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="sid.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="configparser.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="messageHandler.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
@@ -84,5 +96,8 @@
     <ResourceCompile Include="vSID.rc">
       <Filter>Ressourcendateien</Filter>
     </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Changelog.txt" />
   </ItemGroup>
 </Project>

@@ -1,51 +1,41 @@
-#include <string>
-#include <vector>
-
 #include "pch.h"
-#include "EuroScopePlugIn.h"
+//#include "EuroScopePlugIn.h"
 #include "flightplan.h"
-#include "utils.h"
 
-//debugging
-#include "vSID.h"
-//end debugging
+#include <string>
+//#include <vector>
+//#include <array>
 
-CvSIDFlightplan::CvSIDFlightplan(EuroScopePlugIn::CFlightPlan* flightplan)
-{
-	EuroScopePlugIn::CFlightPlanData flightplanData = flightplan->GetFlightPlanData();
-	std::string extractedRoute = flightplanData.GetRoute();
 
-	std::vector<std::string> filedRouteVector = CvSIDPluginUtils::splitString(std::string(flightplanData.GetRoute()));
-	std::string filedSid = flightplanData.GetSidName();
-	std::string sidWaypoint;
 
-}
 
-CvSIDFlightplan::~CvSIDFlightplan() {};
 
-void CvSIDFlightplan::findSidWaypoint()
-{
-	// gpMyPlugin in vSID.cpp - used to send messages from other files
-	extern CvSIDPlugin* gpMyPlugin;
-	gpMyPlugin->DisplayUserMessage("vSID", "", flightplanData.GetRoute(), true, true, false, false, false);
-	gpMyPlugin->DisplayUserMessage("vSID", "", extractedRoute.c_str(), true, true, false, false, false);
-	for (std::string& wayPoint : CvSIDPluginUtils::splitString(filedRouteVector))
-	{
-		if (wayPoint == filedSid)
-		{
-			//continue;
-		}
-		if (wayPoint == "GAGSI") // test SID
-		{
-			sidWayPoint = wayPoint;
-			break;
-		}
-	}
-	sidWayPoint = "outside of loop"; // debug purpose only
-}
 
-std::string CvSIDFlightplan::getSidWayPoint()
-{
-	return sidWayPoint;
-}
+//
+////bool CvSIDFlightplan::validatePosition(struct sid* sid)
+////{
+////	//EuroScopePlugIn::CRadarTargetPositionData trackPosition = this->flightPlan.GetFPTrackPosition();
+////	
+////	Point trackPosition = { 34.67, 16.74 }; //randome Point for debugging until I find out how to convert trackposition to lat/lon coordinates
+////
+////
+////	line edge1 = { sid->area.P1, sid->area.P2 };
+////	line edge2 = { sid->area.P2, sid->area.P3 };
+////	line edge3 = { sid->area.P3, sid->area.P4 };
+////	line edge4 = { sid->area.P4, sid->area.P1 };
+////
+////	std::array<line, 4> edges = { edge1, edge2, edge3, edge4 };
+////
+////	line ray = { trackPosition , {trackPosition.lon, trackPosition.lat + 0.1} }; //0.1 deg lat is approx 10 km which should be enaugh for an infinte ray in an Airport Area
+////	
+////	for (line edge : edges) {
+////
+////		int mOfEdge = (edge.P2.lon - edge.P1.lon) / (edge.P2.lat - edge.P1.lat);
+////
+////
+////	}
+////
+////
+////	return true;
+////}
 

@@ -1,0 +1,31 @@
+{
+    "airportConfigs": "config",
+    "grp": "settings/grp/thisdas",
+    "colors": {
+        "sidSuggestion": {
+            "r": 255,
+            "g": 255,
+            "b": 255
+        },
+        "fplnSuggestedSid": {
+            "r": 15,
+            "g": 170,
+            "b": 40
+        },
+        "fplnCustomSidLocal": {
+            "r": 230,
+            "g": 230,
+            "b": 60
+        },
+        "fplnCustomSidRemote": {
+            "r": 255,
+            "g": 120,
+            "b": 30
+        },
+        "noSid": {
+            "r": 170,
+            "g": 10,
+            "b": 0
+        }
+    }
+}

@@ -4,6 +4,8 @@
 #pragma once
 #include "EuroScopePlugIn.h"
 #include "vSIDPlugin.h"
+
+//#include "utils.h"
 #ifndef __AFXWIN_H__
 	#error "'pch.h' vor dieser Datei für PCH einschließen"
 #endif
@@ -15,14 +17,27 @@
 // Informationen zur Implementierung dieser Klasse finden Sie unter vSID.cpp.
 //
 
-class CvSIDApp : public CWinApp
+/**
+ * @brief DLL - main app for the plugin
+ * 
+ */
+namespace vsid
 {
-public:
-	CvSIDApp();
+	//class VSIDPlugin;
+	class VSIDApp : public CWinApp
+	{
+	public:
+		VSIDApp();
 
-// Überschreibungen
-public:
-	virtual BOOL InitInstance();
-	CvSIDPlugin * gpMyPlugin = NULL;
-	DECLARE_MESSAGE_MAP()
-};
+		// Überschreibungen
+	public:
+		virtual BOOL InitInstance();
+		/**
+		 * @brief pointer to the plugin for ES
+		 *
+		 */
+		//vsid::VSIDPlugin* gpMyPlugin = NULL;
+		//vsid::VSIDPlugin* vsidPlugin = NULL;
+		DECLARE_MESSAGE_MAP()
+	};
+}

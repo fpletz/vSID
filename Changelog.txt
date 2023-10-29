@@ -1,0 +1,21 @@
+[Changelog v0.2.0]
+
+[FIXED] code cleanup
+[CHANGED] messageHandler is a new system that is now safely able to
+		  handle messages from any component which are then extracted in the
+		  main app
+[FIXED] NO SID was shown when a rwy is closed but DEP granted on request. Now
+		shows selected SID correctly as "custom SID" (YELLOW/ORANGE)
+[NEW] colors for TagItem can now be configured
+
+[Changelog v0.1.0]
+
+[NEW] initial alpha release
+[NEW] automatic SID selection based on config, active apt & act rwy
+[NEW] color coding	- GREEN: matches suggestion & fpln
+					- YELLOW: deviation from suggestion but set by local atc
+					- ORANGE: deviation from suggestion but set by other atc
+					- RED: NO SID if no SID could be found for the flightplan
+[NEW] strips filed SIDs or found SIDs from fpln - wrongly filed fplns might
+      not be stripped in total
+[NEW] setting SID/RWY block in fpln and setting initial climb
