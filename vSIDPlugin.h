@@ -30,8 +30,8 @@ namespace vsid
 	struct fplnInfo
 	{
 		// TEST
-		bool atcSetRwy = false;
 		bool set = false;
+		std::string atcRwy;
 		std::string tagString;
 		COLORREF tagColor;
 	};
@@ -59,18 +59,19 @@ namespace vsid
 		 * and configured SIDs in config
 		 * 
 		 * @param FlightPlan - Flightplan data from ES
-		 * @param checkOnly - If flightplan should only be validated. Forwarded to processFlightplan()
+		 * @param atcRwy - The rwy assigned by ATC which shall be considered
 		 */
-		void processSid(EuroScopePlugIn::CFlightPlan FlightPlan, bool checkOnly, std::string atcRwy = "");
+		vsid::sids::sid processSid(EuroScopePlugIn::CFlightPlan FlightPlan, std::string atcRwy = "");
 		/**
 		 * @brief Tries to set a clean route without SID. SID will then be placed in front
 		 * and color codes for the TagItem set. Processed flightplans are stored.
 		 * 
 		 * @param FlightPlan - Flightplan data from ES
-		 * @param setSid - The found SID for the flightplan
 		 * @param checkOnly - If the flightplan should only be validated
+		 * @param atcRwy - The rwy assigned by ATC which shall be considered
+		 * @param manualSid - manual Sid that has been selected and should be processed
 		 */
-		void processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan, vsid::sids::sid& setSid, bool checkOnly);
+		void processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan, bool checkOnly, std::string atcRwy = "", vsid::sids::sid manualSid = {});
 		/**
 		 * @brief Called with every function call (list interaction) inside ES
 		 *
