@@ -32,8 +32,10 @@ namespace vsid
 		// TEST
 		bool set = false;
 		std::string atcRwy;
-		std::string tagString;
-		COLORREF tagColor;
+		std::string sid;
+		COLORREF sidColor;
+		int clmb;
+		bool clmbVia;
 	};
 
 	/**

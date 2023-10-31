@@ -106,3 +106,8 @@ bool vsid::utils::containsDigit(int number, int digit)
 	}
 	return false;
 }
+
+int vsid::utils::getMinClimb(int elevation)
+{
+	return (std::ceil((float)elevation / 1000) * 1000) + 500;
+}

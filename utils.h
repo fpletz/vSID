@@ -73,6 +73,7 @@ namespace vsid
 		 * @return false 
 		 */
 		bool containsDigit(int number, int digit);
+		int getMinClimb(int elevation);
 	}
 }
 

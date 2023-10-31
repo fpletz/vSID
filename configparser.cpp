@@ -66,7 +66,7 @@ void vsid::ConfigParser::loadMainConfig()
     }
     catch (std::error_code& e)
     {
-        messageHandler->writeMessage("ERROR", "Failed to get colors: " + e.message());
+        messageHandler->writeMessage("ERROR", "Failed to import colors: " + e.message());
     }
 }
 
@@ -109,6 +109,9 @@ void vsid::ConfigParser::loadAirportConfig(std::vector<vsid::airport> &activeAir
                     }
                     else
                     {
+                        airport.elevation = this->parsedConfig.at(airport.icao).value("elevation", 0);
+                        airport.transAlt = this->parsedConfig.at(airport.icao).value("transAlt", 0);
+                        airport.maxInitialClimb = this->parsedConfig.at(airport.icao).value("maxInitialClimb", 0);
                         for (vsid::sids::sid& sid : airport.sids)
                         {
                             if (this->parsedConfig.at(airport.icao).at("sids").contains(sid.waypoint))

@@ -1,6 +1,8 @@
 {
     "EDDF": {
         "elevation": 357,
+        "transAlt": 5000,
+        "maxInitialClimb": 7000,
         "sids": {
             "ANEKI": {
             "A": {
