@@ -512,25 +512,31 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 		EuroScopePlugIn::CFlightPlan fpln = FlightPlanSelectASEL();
 		EuroScopePlugIn::CFlightPlanData fplnData = fpln.GetFlightPlanData();
 		std::map<std::string, int> alt;
-		this->OpenPopupList(Area, "Select Climb", 1);
-		/*for (vsid::airport& apt : this->activeAirports)
-		{
-			if (apt.icao != fpln.GetFlightPlanData().GetOrigin()) continue;*/
-			
-			//for (int i = vsid::utils::getMinClimb(apt.elevation); i <= apt.maxInitialClimb;)
+
+		// code order important! the popuplist may only be generated when no sItemString is present (if it is a button has been clicked)
+		// if the list gets set up again while clicking a button wrong values might occur
 		for (int i = this->activeAirports[fplnData.GetOrigin()].maxInitialClimb; i >= vsid::utils::getMinClimb(this->activeAirports[fplnData.GetOrigin()].elevation); i -= 500)
 		{
-			std::string menuElem;
-			menuElem = (i > this->activeAirports[fplnData.GetOrigin()].transAlt) ? "0" + std::to_string(i / 100) : "A" + std::to_string(i / 100);
+			std::string menuElem = (i > this->activeAirports[fplnData.GetOrigin()].transAlt) ? "0" + std::to_string(i / 100) : "A" + std::to_string(i / 100);
 			alt[menuElem] = i;
-			this->AddPopupListElement(menuElem.c_str(), menuElem.c_str(), TAG_FUNC_VSID_CLMBMENU, false, EuroScopePlugIn::POPUP_ELEMENT_NO_CHECKBOX, false, false);
+		}
+
+		if (strlen(sItemString) == 0)
+		{
+			this->OpenPopupList(Area, "Select Climb", 1);
+			for (int i = this->activeAirports[fplnData.GetOrigin()].maxInitialClimb; i >= vsid::utils::getMinClimb(this->activeAirports[fplnData.GetOrigin()].elevation); i -= 500)
+			{
+				std::string clmbElem = (i > this->activeAirports[fplnData.GetOrigin()].transAlt) ? "0" + std::to_string(i / 100) : "A" + std::to_string(i / 100);
+				this->AddPopupListElement(clmbElem.c_str(), clmbElem.c_str(), TAG_FUNC_VSID_CLMBMENU, false, EuroScopePlugIn::POPUP_ELEMENT_NO_CHECKBOX, false, false);
+			}
 		}
 		if (strlen(sItemString) != 0)
 		{
-			messageHandler->writeMessage("DEBUG", "sItemstring: " + std::string(sItemString) + " vs. Value: " + std::to_string(alt[sItemString]));
-			fpln.GetControllerAssignedData().SetClearedAltitude(alt[sItemString]);
+			if (!fpln.GetControllerAssignedData().SetClearedAltitude(alt[sItemString]))
+			{
+				messageHandler->writeMessage("ERROR", "Failed to set cleared altitude");
+			}
 		}
-		//}
 	}
 }
 
