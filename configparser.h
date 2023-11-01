@@ -34,7 +34,7 @@ namespace vsid
 		virtual ~ConfigParser();
 
 		//std::vector<std::filesystem::path> loadConfigFiles();
-		void loadAirportConfig(std::vector<vsid::airport> &activeAirports);
+		void loadAirportConfig(std::map<std::string, vsid::airport> &activeAirports);
 		void loadMainConfig();
 		COLORREF getColor(std::string color);
 	private:

@@ -70,7 +70,7 @@ void vsid::ConfigParser::loadMainConfig()
     }
 }
 
-void vsid::ConfigParser::loadAirportConfig(std::vector<vsid::airport> &activeAirports)
+void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> &activeAirports)
 {
     // get the current path where plugins .dll is stored
     char path[MAX_PATH + 1] = { 0 };
@@ -90,7 +90,7 @@ void vsid::ConfigParser::loadAirportConfig(std::vector<vsid::airport> &activeAir
     }
 
     std::vector<std::filesystem::path> files;
-    for (vsid::airport& airport : activeAirports)
+    for (std::pair<const std::string, vsid::airport> &apt : activeAirports)
     {
         for (const std::filesystem::path& entry : std::filesystem::directory_iterator(basePath))
         {
@@ -103,36 +103,54 @@ void vsid::ConfigParser::loadAirportConfig(std::vector<vsid::airport> &activeAir
                     //configTest = json::parse(testFile);
                     this->parsedConfig = json::parse(configFile);
 
-                    if (!this->parsedConfig.contains(airport.icao))
+                    if (!this->parsedConfig.contains(apt.first))
                     {
+                        messageHandler->writeMessage("ERROR", "Did not find Apt " + apt.first + " in config");
                         continue;
                     }
                     else
                     {
-                        airport.elevation = this->parsedConfig.at(airport.icao).value("elevation", 0);
-                        airport.transAlt = this->parsedConfig.at(airport.icao).value("transAlt", 0);
-                        airport.maxInitialClimb = this->parsedConfig.at(airport.icao).value("maxInitialClimb", 0);
-                        for (vsid::sids::sid& sid : airport.sids)
+                        apt.second.elevation = this->parsedConfig.at(apt.first).value("elevation", 0);
+                        apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
+                        apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
+
+                        for (auto &sid : this->parsedConfig.at(apt.first).at("sids").items())
                         {
-                            if (this->parsedConfig.at(airport.icao).at("sids").contains(sid.waypoint))
+                            std::string wpt = sid.key(); // sid waypoint
+
+                            for (auto& sidWpt : this->parsedConfig.at(apt.first).at("sids").at(sid.key()).items())
                             {
-                                json configWaypoint =   this->parsedConfig.
-                                                        at(airport.icao).
-                                                        at("sids").
-                                                        at(sid.waypoint);
-                                std::string designator{ sid.designator };
-                                if (this->parsedConfig.at(airport.icao).at("sids").at(sid.waypoint).contains(designator))
-                                {
-                                    sid.rwy = configWaypoint.at(designator).value("rwy", "");
-                                    sid.initialClimb = configWaypoint.at(designator).value("initial", 0);
-                                    sid.climbvia = configWaypoint.at(designator).value("climbvia", 0);
-                                    sid.prio = configWaypoint.at(designator).value("prio", 0);
-                                    sid.pilotfiled = configWaypoint.at(designator).value("pilotfiled", 0);
-                                    sid.wtc = configWaypoint.at(designator).value("wtc", "");
-                                    sid.engineType = configWaypoint.at(designator).value("engineType", "");
-                                    sid.engineCount = configWaypoint.at(designator).value("engineCount", 0);
-                                    sid.mtow = configWaypoint.at(designator).value("mtow", 0);                                                                      
-                                }
+                                std::string desig = sidWpt.key(); // sid designator, [0] operand needed as string is mandatory here
+
+                                std::string rwys = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("rwy", "");
+                                int initial = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("initial", 0);
+                                int via = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("climbvia", 0);
+                                int prio = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("prio", 99);
+                                int pilot = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("pilotfiled", 0);
+                                std::string wtc = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("wtc", "");
+                                std::string engineType = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("engineType", "");
+                                int engineCount = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("engineCount", 0);
+                                int mtow = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("mtow", 0);
+                                // area when implemented
+                                // equip when implemented
+                                // lvo when implemented
+                                // timeFrom when implemented
+                                // timeTo when implemented
+                                
+                                vsid::sids::sid newSid = {  wpt,
+                                                            ' ',
+                                                            desig[0],
+                                                            rwys,
+                                                            initial,
+                                                            via,
+                                                            prio,
+                                                            pilot,
+                                                            wtc,
+                                                            engineType,
+                                                            engineCount,
+                                                            mtow,
+                                                         };
+                                apt.second.sids.push_back(newSid);
                             }
                         }
                     }

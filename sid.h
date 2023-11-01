@@ -27,9 +27,9 @@ namespace vsid
 			char designator = ' ';
 			std::string rwy = "";
 			int initialClimb = 0;
-			bool climbvia = 0;
+			int climbvia = 0;
 			int prio = 0;
-			bool pilotfiled = 0;
+			int pilotfiled = 0;
 			std::string wtc = "";
 			std::string engineType = "";
 			int engineCount = 0;

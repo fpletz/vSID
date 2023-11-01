@@ -103,7 +103,8 @@ namespace vsid
 		void OnTimer(int Counter);
 		
 	private:
-		std::vector<vsid::airport> activeAirports;
+		//std::vector<vsid::airport> activeAirports;
+		std::map<std::string, vsid::airport> activeAirports;
 		bool debug;
 		std::map<std::string, vsid::fplnInfo> processed;
 		vsid::ConfigParser configParser;
