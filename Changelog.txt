@@ -1,21 +1,51 @@
+[Changelog v0.3.0]
+
+[FIXED]
+*	clmb menu sometimes sent wrong values
+	should also fix "nullptr" values shown in clmb menu
+*	now differentiation between dep / arr rwy, should fix wrong sid suggestions
+*	sometimes sid numbers were an 'x' - see [CHANGED] loading logic
+
+[NEW]
+*	config "health check" - if sids are configured that are not found in .ese file
+	warn the user
+
+[CHANGED]
+*	loading logic now: active apts/rwys > config > .ese file
+
+
 [Changelog v0.2.0]
 
-[FIXED] code cleanup
-[CHANGED] messageHandler is a new system that is now safely able to
-		  handle messages from any component which are then extracted in the
-		  main app
-[FIXED] NO SID was shown when a rwy is closed but DEP granted on request. Now
-		shows selected SID correctly as "custom SID" (YELLOW/ORANGE)
-[NEW] colors for TagItem can now be configured
+[FIXED]
+*	code cleanup
+*	engine type was not taken into consideration
+*	NO SID was shown when a rwy is closed but DEP granted on request. Now
+	shows selected SID correctly as "custom SID" (YELLOW/ORANGE)
+[CHANGED]
+*	messageHandler is a new system that is now safely able to
+	handle messages from any component which are then extracted in the
+	main app
+*	custom SID suggestion (RWY change) is now displayed in yellow
+	leftclick on SID menu now confirms custom SID instead setting
+	preferred sid
+[NEW]
+*	colors for TagItem can now be configured
+*	colors for initial climb can be configured
+	- WHITE: config suggestion not in fpln
+	- GREEN: climb matches config and set in fpln
+	- ORANGE: custom climb set (also if custom sid set)
+*	climb menu implemented
 
 [Changelog v0.1.0]
 
-[NEW] initial alpha release
-[NEW] automatic SID selection based on config, active apt & act rwy
-[NEW] color coding	- GREEN: matches suggestion & fpln
-					- YELLOW: deviation from suggestion but set by local atc
-					- ORANGE: deviation from suggestion but set by other atc
-					- RED: NO SID if no SID could be found for the flightplan
-[NEW] strips filed SIDs or found SIDs from fpln - wrongly filed fplns might
+[NEW]
+*	initial alpha release
+*	automatic SID selection based on config, active apt & act rwy
+*	color coding	- WHITE: suggestion not in fpln
+					- GREEN: matches suggestion & fpln
+					- YELLOW: sid suggestion for custom rwy selection (not in fpln)
+					- ORANGE: deviation from suggestion and set in fpln
+					- RED: NO SID if no SID could be found for the flightplan or MANUAL
+*	strips filed SIDs or found SIDs from fpln - wrongly filed fplns might
       not be stripped in total
-[NEW] setting SID/RWY block in fpln and setting initial climb
+*	setting SID/RWY block in fpln and setting initial climb
