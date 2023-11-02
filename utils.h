@@ -49,6 +49,14 @@ namespace vsid
 		 */
 		std::string join(const std::vector<std::string>& toJoin, const char del = ' ');
 		/**
+		 * @brief Joins a set of strings into one string
+		 *
+		 * @param toJoin - Vector to join
+		 * @param del - delimiter
+		 * @return std::string
+		 */
+		std::string join(const std::set<std::string>& toJoin, const char del = ' ');
+		/**
 		 * @brief Splits a string based on spaces - splits again for '/' delimeter. Used to vectorize the filed route - WILL BE DELETED
 		 *
 		 * @param string
