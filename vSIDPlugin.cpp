@@ -20,7 +20,7 @@ vsid::VSIDPlugin::VSIDPlugin() : EuroScopePlugIn::CPlugIn(EuroScopePlugIn::COMPA
 
 	UpdateActiveAirports(); // preload rwy settings
 
-	DisplayUserMessage(pluginName.c_str(), "", std::string("INFO: Version " + pluginVersion + " loaded").c_str(), true, true, false, false, false);
+	DisplayUserMessage("Message", "vSID", std::string("Version " + pluginVersion + " loaded").c_str(), true, true, false, false, false);
 }
 
 vsid::VSIDPlugin::~VSIDPlugin() {}
@@ -437,10 +437,10 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, POINT Pt, RECT Area) {
 
 	// if logged in as observer disable functions - DISABLED DURING DEVELOPMENT
-	/*if (!ControllerMyself().IsController())
+	if (!ControllerMyself().IsController())
 	{
 		return;
-	}*/
+	}
 
 	/* DOCUMENTATION 
 		//for (int i = 0; i < 8; i++) // test on how to get annotations
@@ -805,68 +805,42 @@ void vsid::VSIDPlugin::UpdateActiveAirports()
 		}
 	}
 
-	//// health check --> POSSIBLY NOT NEEDED, WAS FOR CHECKING MISSING SID NUMBERS, BUT THEY APPEAR TO HAVE BEEN DELETED
-	//std::map<std::string, std::set<std::string>> incompSid;
-	//for (std::pair<const std::string, vsid::airport> &aptElem : this->activeAirports)
-	//{
-	//	for (vsid::sids::sid& sid : aptElem.second.sids)
-	//	{
-	//		if (std::string("0123456789").find_first_of(sid.number) == std::string::npos)
-	//		{
-	//			incompSid[aptElem.first].insert(sid.waypoint + '?' + sid.designator);
-	//		}
-	//	}
-	//}
-	//for (auto& elem : incompSid)
-	//{
-	//	for (auto& sid : elem.second)
-	//	{
-	//		messageHandler->writeMessage("DEBUG", "[" + elem.first + "]: " + sid);
-	//	}
-
-	//}
-	//if (incompSid.size() > 0)
-	//{
-	//	for (EuroScopePlugIn::CSectorElement	sfe = this->SectorFileElementSelectFirst(EuroScopePlugIn::SECTOR_ELEMENT_SID);
-	//											sfe.IsValid();
-	//											sfe = this->SectorFileElementSelectNext(sfe, EuroScopePlugIn::SECTOR_ELEMENT_SID))
-	//	{
-	//		std::vector<std::string> elemVec = vsid::utils::split(vsid::utils::trim(sfe.GetName()), ' ');
-	//		std::string sidWpt = elemVec.at(3).substr(0, elemVec.at(3).size() - 2);
-	//		char sidNumber = elemVec.at(3).at(elemVec.at(3).size() - 2);
-	//		char sidDesig = elemVec.at(3).at(elemVec.at(3).size() - 1);
-
-	//		for (std::pair<std::string, std::set<std::string>> elem : incompSid)
-	//		{	
-	//			if (elem.first != elemVec.at(0)) continue;
-	//			if (sidWpt != "SULUS") continue;
-	//			for (const std::string &sid : elem.second)
-	//			{
-	//				messageHandler->writeMessage("DEBUG", "[" + sid.substr(0, sid.size() - 2) + sid[sid.size() - 1] + "] vs. [" + sidWpt + sidDesig + "]");
-	//				if (sid.substr(0, sid.size() - 2) != sidWpt) continue;
-	//				if (sid[sid.length() - 1] != sidDesig) continue;
-	//				messageHandler->writeMessage("DEBUG", "Found sid: " + sidWpt + sidNumber + sidDesig);
-	//			}
-	//		}
-	//	}
-	//}
-	// DOCUMENTATION
-	/*for (auto& elem : incompSid)
+	// health check in case SIDs in config do not match sector file
+	std::map<std::string, std::set<std::string>> incompSid;
+	for (std::pair<const std::string, vsid::airport> &aptElem : this->activeAirports)
 	{
-		for (auto& sid : elem.second)
+		for (vsid::sids::sid& sid : aptElem.second.sids)
 		{
-			messageHandler->writeMessage("DEBUG", "[" + elem.first + "]: " + sid);
+			if (std::string("0123456789").find_first_of(sid.number) == std::string::npos)
+			{
+				incompSid[aptElem.first].insert(sid.waypoint + '?' + sid.designator);
+			}
 		}
-		
-	}*/
+	}
+	// if incompatible SIDs (not in sector file) have been found remove them
+	for (auto& elem : incompSid)
+	{
+		messageHandler->writeMessage("WARNING", "Check config for [" + elem.first + "] - Could not master sids: " + vsid::utils::join(elem.second, ','));
+		for (const std::string& incompSid : elem.second)
+		{
+			for (auto it = this->activeAirports[elem.first].sids.begin(); it != this->activeAirports[elem.first].sids.end(); it++)
+			{
+				if (it->waypoint == incompSid.substr(0, incompSid.length() - 2) && it->designator == incompSid[incompSid.length() - 1])
+				{
+					this->activeAirports[elem.first].sids.erase(it);
+					break;
+				}
+			}
+		}
+	}
 }
 
 void vsid::VSIDPlugin::OnTimer(int Counter)
 {
-	std::string msg = messageHandler->getMessage();
-	if (msg != "")
+	std::pair<std::string, std::string> msg = messageHandler->getMessage();
+	if (msg.first != "" && msg.second != "")
 	{
-		DisplayUserMessage("vSID", "", msg.c_str(), true, true, false, true, false);
+		DisplayUserMessage("vSID", msg.first.c_str(), msg.second.c_str(), true, true, false, true, false);
 	}
 }
 /*

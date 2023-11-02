@@ -21,7 +21,7 @@
 namespace vsid
 {
 	const std::string pluginName = "vSID";
-	const std::string pluginVersion = "0.2.0";
+	const std::string pluginVersion = "0.3.0";
 	const std::string pluginAuthor = "Philip Maier, O.B.";
 	const std::string pluginCopyright = "to be selected";
 	const std::string pluginViewAviso = "";
@@ -29,13 +29,12 @@ namespace vsid
 	class ConfigParser;
 	struct fplnInfo
 	{
-		// TEST
 		bool set = false;
 		std::string atcRwy;
 		std::string sid;
 		COLORREF sidColor;
 		int clmb;
-		bool clmbVia;
+		int clmbVia;
 	};
 
 	/**
