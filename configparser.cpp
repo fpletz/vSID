@@ -90,6 +90,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
     }
 
     std::vector<std::filesystem::path> files;
+    std::set<std::string> aptConfig;
     for (std::pair<const std::string, vsid::airport> &apt : activeAirports)
     {
         for (const std::filesystem::path& entry : std::filesystem::directory_iterator(basePath))
@@ -105,11 +106,12 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
 
                     if (!this->parsedConfig.contains(apt.first))
                     {
-                        messageHandler->writeMessage("ERROR", "Did not find Apt " + apt.first + " in config");
                         continue;
                     }
                     else
                     {
+                        aptConfig.insert(apt.first);
+
                         apt.second.elevation = this->parsedConfig.at(apt.first).value("elevation", 0);
                         apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
@@ -174,7 +176,12 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                 }*/
             }
         }
-    }    
+    }
+    for (std::pair<const std::string, vsid::airport>& apt : activeAirports)
+    {
+        if (aptConfig.count(apt.first)) continue;
+        messageHandler->writeMessage("INFO", "No config found for: " + apt.first);
+    }
 }
 
 COLORREF vsid::ConfigParser::getColor(std::string color)
