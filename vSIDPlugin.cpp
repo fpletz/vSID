@@ -101,7 +101,7 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 		// skip if no rwy was found in SID;
 		if (!rwyMatch) continue;
 		// skip if engine type doesn't match
-		if (currSid.engineType.find(fplnData.GetEngineType()) != std::string::npos)
+		if (currSid.engineType != "" && ~currSid.engineType.find(fplnData.GetEngineType()) != std::string::npos)
 		{
 			continue;
 		}
@@ -111,7 +111,7 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 			continue;
 		}
 		// skip if SID has WTC requirement and acft doesn't match
-		if (currSid.wtc != "" && !(currSid.wtc.find(fplnData.GetAircraftWtc()) != std::string::npos))
+		if (currSid.wtc != "" && ~currSid.wtc.find(fplnData.GetAircraftWtc()) != std::string::npos)
 		{
 			continue;
 		}
@@ -581,7 +581,8 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 				}
 				else
 				{
-					*pRGB = this->configParser.getColor("clmbSet"); // cyan
+					messageHandler->writeMessage("DEBUG", "[" + std::string(fpln.GetCallsign()) + "] climb: " + std::to_string(this->configParser.getColor("clmbSet")) + " vs. via: " + std::to_string(this->configParser.getColor("clmbViaSet")));
+					*pRGB = this->configParser.getColor("clmbSet"); // cyan clmbSet
 				}
 			}
 			else
