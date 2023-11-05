@@ -1,3 +1,12 @@
+[Changelog v0.3.1]
+
+[FIXED]
+*	engineType was ignored
+*	clmbSet color improved, was shown as green before (probably too close to clmbVia green for ES)
+*	If internal stored initial climb is zero display --- now
+	~ NO SID and MANUAL are now pre-set with an initial climb of 0
+	~ for atc set but unknown SIDs (e.g. DCT08R in EDDM) the default value of initial climb is now 0
+
 [Changelog v0.3.0]
 
 [FIXED]
