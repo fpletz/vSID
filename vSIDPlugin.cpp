@@ -307,7 +307,6 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 			fplnInfo.sidColor = this->configParser.getColor("customSidSet"); // orange
 			//for (vsid::airport& apt : this->activeAirports) // possible performance improvement if needed - check only if fplnInfo.clmb = req. final level else get set val. in .clmb
 			//{
-				//if (apt.icao != fplnData.GetOrigin()) continue;
 			for (vsid::sids::sid& sid : this->activeAirports[fplnData.GetOrigin()].sids)
 			{
 				if (sid.waypoint != sidByController.substr(0, sidByController.length() - 2))
@@ -326,7 +325,6 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 				fplnInfo.clmbVia = sid.climbvia;
 				break;
 			}
-			//}
 		}
 		// sid set in fpln by any atc and matches plugin suggestion
 		else if (sidByController != "" && sidSuggestion == sidByController)
@@ -418,11 +416,13 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 	{
 		fplnInfo.sid = "NO SID";
 		fplnInfo.sidColor = this->configParser.getColor("noSid"); // red
+		fplnInfo.clmb = 0;
 	}
 	if (sidCustomSuggestionRaw.waypoint == "manual")
 	{
 		fplnInfo.sid = "MANUAL";
 		fplnInfo.sidColor = this->configParser.getColor("noSid"); // red
+		fplnInfo.clmb = 0;
 	}
 	this->processed[fpln.GetCallsign()] = fplnInfo;
 }
@@ -581,8 +581,7 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 				}
 				else
 				{
-					messageHandler->writeMessage("DEBUG", "[" + std::string(fpln.GetCallsign()) + "] climb: " + std::to_string(this->configParser.getColor("clmbSet")) + " vs. via: " + std::to_string(this->configParser.getColor("clmbViaSet")));
-					*pRGB = this->configParser.getColor("clmbSet"); // cyan clmbSet
+					*pRGB = this->configParser.getColor("clmbSet"); // cyan
 				}
 			}
 			else
@@ -590,19 +589,15 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 				*pRGB = this->configParser.getColor("customClmbSet"); // orange
 			}
 
-			/*for (vsid::airport& apt : this->activeAirports)
-			{
-				if (apt.icao == fplnData.GetOrigin())
-				{
-					transAlt = apt.transAlt;
-					maxInitialClimb = apt.maxInitialClimb;
-				}
-			}*/
 			transAlt = this->activeAirports[fplnData.GetOrigin()].transAlt;
 			maxInitialClimb = this->activeAirports[fplnData.GetOrigin()].maxInitialClimb;
 			if (fpln.GetClearedAltitude() == fpln.GetFinalAltitude())
 			{
-				if (this->processed[callsign].clmb <= transAlt)
+				if (this->processed[callsign].clmb == 0)
+				{
+					strcpy_s(sItemString, 16, std::string("---").c_str());
+				}
+				else if (this->processed[callsign].clmb <= transAlt)
 				{
 					strcpy_s(sItemString, 16, std::string("A").append(std::to_string(this->processed[callsign].clmb / 100)).c_str());
 				}
@@ -620,7 +615,7 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 			}
 			else
 			{
-				if (fpln.GetClearedAltitude() == 0)
+				if (fpln.GetClearedAltitude() == 0 || this->processed[callsign].clmb == 0)
 				{
 					strcpy_s(sItemString, 16, std::string("---").c_str());
 				}
@@ -639,8 +634,7 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 						strcpy_s(sItemString, 16, std::string("0").append(std::to_string(fpln.GetClearedAltitude() / 100)).c_str());
 					}
 				}
-			}
-			
+			}			
 		}
 	}
 }
