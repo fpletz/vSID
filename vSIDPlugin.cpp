@@ -191,7 +191,7 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 		if (filedRoute.front().find('/') != std::string::npos && !(filedRoute.front().find("/N") != std::string::npos))
 		{
 			std::vector<std::string> sidBlock = vsid::utils::split(filedRoute.at(0), '/');
-			if (sidBlock.front().find_first_of("0123456789RV") != std::string::npos)
+			if (sidBlock.front().find_first_of("0123456789RV") != std::string::npos && sidBlock.front() != fplnData.GetOrigin())
 			{
 				sidByController = sidBlock.front();
 			}
@@ -774,7 +774,6 @@ void vsid::VSIDPlugin::UpdateActiveAirports()
 
 			std::string name = sfe.GetName();
 
-			//messageHandler->writeMessage("DEBUG", "Checking: " + std::string(sfe.GetName()));
 			for (vsid::sids::sid& sid : this->activeAirports[vsid::utils::trim(sfe.GetAirportName())].sids)
 			{
 				if (name.substr(0, name.length() - 2) != sid.waypoint) continue;
