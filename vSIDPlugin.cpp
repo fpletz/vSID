@@ -10,6 +10,7 @@ vsid::VSIDPlugin* vsidPlugin;
 vsid::VSIDPlugin::VSIDPlugin() : EuroScopePlugIn::CPlugIn(EuroScopePlugIn::COMPATIBILITY_CODE, pluginName.c_str(), pluginVersion.c_str(), pluginAuthor.c_str(), pluginCopyright.c_str()) {
 
 	this->configParser.loadMainConfig();
+	this->configParser.loadGrpConfig();
 	
 	RegisterTagItemType("vSID SID", TAG_ITEM_VSID_SIDS);
 	RegisterTagItemFunction("SIDs Auto Select", TAG_FUNC_VSID_SIDS_AUTO);
@@ -306,7 +307,7 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 			fplnInfo.sid = sidByController;
 			fplnInfo.sidColor = this->configParser.getColor("customSidSet"); // orange
 			//for (vsid::airport& apt : this->activeAirports) // possible performance improvement if needed - check only if fplnInfo.clmb = req. final level else get set val. in .clmb
-			//{
+
 			for (vsid::sids::sid& sid : this->activeAirports[fplnData.GetOrigin()].sids)
 			{
 				if (sid.waypoint != sidByController.substr(0, sidByController.length() - 2))
@@ -771,13 +772,18 @@ void vsid::VSIDPlugin::UpdateActiveAirports()
 
 			if (!this->activeAirports.count(vsid::utils::trim(sfe.GetAirportName()))) continue;
 
+			std::string name = sfe.GetName();
+
+			//messageHandler->writeMessage("DEBUG", "Checking: " + std::string(sfe.GetName()));
 			for (vsid::sids::sid& sid : this->activeAirports[vsid::utils::trim(sfe.GetAirportName())].sids)
 			{
-				std::string name = sfe.GetName();
 				if (name.substr(0, name.length() - 2) != sid.waypoint) continue;
 				if (name[name.length() - 1] != sid.designator) continue;
 
-				sid.number = name[name.length() - 2];
+				if (std::string("0123456789").find_first_of(name[name.length() - 2]) != std::string::npos)
+				{
+					sid.number = name[name.length() - 2];
+				}
 			}
 			//// DOCUMENTATION
 			//if (!sidSection)
