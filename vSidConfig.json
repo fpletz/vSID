@@ -1,6 +1,6 @@
 {
     "airportConfigs": "config",
-    "grp": "settings/grp/thisdas",
+    "grp": "config/grp",
     "colors": {
         "sidSuggestion": {
             "r": 255,

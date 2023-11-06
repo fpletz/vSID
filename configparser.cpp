@@ -80,12 +80,18 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
     //basePath.concat("\\config");
     if (this->vSidConfig.contains("airportConfigs"))
     {
-        basePath.append(this->vSidConfig.value("airportConfigs", ""));
+        basePath.append(this->vSidConfig.value("airportConfigs", "")).make_preferred();
         messageHandler->writeMessage("DEBUG", "airport config: " + basePath.string());
     }
     else
     {
         messageHandler->writeMessage("ERROR", "No config path for airports in main config");
+        return;
+    }
+
+    if (!std::filesystem::exists(basePath))
+    {
+        messageHandler->writeMessage("ERROR", "No airport config folder found at: " + basePath.string());
         return;
     }
 
@@ -181,6 +187,69 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
     {
         if (aptConfig.count(apt.first)) continue;
         messageHandler->writeMessage("INFO", "No config found for: " + apt.first);
+    }
+}
+
+void vsid::ConfigParser::loadGrpConfig()
+{
+    // get the current path where plugins .dll is stored
+    char path[MAX_PATH + 1] = { 0 };
+    GetModuleFileNameA((HINSTANCE)&__ImageBase, path, MAX_PATH);
+    PathRemoveFileSpecA(path);
+    std::filesystem::path basePath = path;
+    //basePath.concat("\\config");
+    if (this->vSidConfig.contains("grp"))
+    {
+        basePath.append(this->vSidConfig.value("grp", "")).make_preferred();
+        messageHandler->writeMessage("DEBUG", "grp config: " + basePath.string());
+    }
+    else
+    {
+        messageHandler->writeMessage("ERROR", "No config path for GRP in main config");
+        return;
+    }
+
+    if (!std::filesystem::exists(basePath))
+    {
+        messageHandler->writeMessage("ERROR", "No grp config found in: " + basePath.string());
+        return;
+    }
+    for (const std::filesystem::path& entry : std::filesystem::directory_iterator(basePath))
+    {
+        if (entry.extension() == ".json")
+        {
+            if (entry.filename().string() != "ICAO_Aircraft.json") continue;
+
+            std::ifstream configFile(entry.string());
+
+            try
+            {
+                //configTest = json::parse(testFile);
+                this->grpConfig = json::parse(configFile);
+
+                int i = 0;
+                for (auto it = this->grpConfig.begin(); it != this->grpConfig.end(); ++it)
+                {
+                    if (i > 5) break;
+                    if (it->contains("MTOW"))
+                    {
+                        //messageHandler->writeMessage("DEBUG", std::to_string(it->value("MTOW", 0)));
+                    }
+
+                    i++;
+                }
+            }
+            catch (const json::parse_error& e)
+            {
+                //vsid::messagehandler::LogMessage("ERROR:", "Failed to load airport config : " + std::string(e.what
+                messageHandler->writeMessage("ERROR:", "Failed to load grp config : " + std::string(e.what()));
+            }
+            catch (const json::type_error& e)
+            {
+                //vsid::messagehandler::LogMessage("ERROR:", "Failed to load airport config : " + std::string(e.what()));
+                messageHandler->writeMessage("ERROR:", "Failed to load grp config : " + std::string(e.what()));
+            }
+        }
     }
 }
 

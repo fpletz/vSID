@@ -36,10 +36,12 @@ namespace vsid
 		//std::vector<std::filesystem::path> loadConfigFiles();
 		void loadAirportConfig(std::map<std::string, vsid::airport> &activeAirports);
 		void loadMainConfig();
+		void loadGrpConfig();
 		COLORREF getColor(std::string color);
 	private:
 		std::map<std::string, COLORREF> colors;
 		json parsedConfig;
 		json vSidConfig;
+		json grpConfig;
 	};
 }
