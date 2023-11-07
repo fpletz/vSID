@@ -116,6 +116,21 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 		{
 			continue;
 		}
+		// skip if SID has mtow requirement and acft is too heavy - if grp config has not yet been loaded load it
+		if (currSid.mtow) // IN DEVELOPMENT
+		{
+			if (this->configParser.grpConfig.size() == 0)
+			{
+				this->configParser.loadGrpConfig();
+			}
+			std::string acftType = fplnData.GetAircraftFPType();
+			for (auto it = this->configParser.grpConfig.begin(); it != this->configParser.grpConfig.end(); ++it)
+			{
+				if (it->value("ICAO", "") != acftType) continue;
+				if (it->value("MTOW", 0) > currSid.mtow) break; // acft icao found but to heavy, no further checks
+				else break; // acft light enough, no further checks
+			}
+		}
 		// if a SID is accepted when filed by a pilot set the SID and break
 		std::string currSidCombo = currSid.waypoint + currSid.number + currSid.designator;
 		if (currSid.pilotfiled && currSidCombo == fplnData.GetSidName())
@@ -150,6 +165,7 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 	if (manualSid.waypoint != "")
 	{
 		sidSuggestionRaw = manualSid;
+		sidSuggestionRaw.rwy = atcRwy; // force dep rwy
 	}
 	/* if a rwy is given by atc check for a sid for this rwy and for a normal sid
 	* to be then able to compare those two
@@ -463,8 +479,6 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 		std::map<std::string, vsid::sids::sid> vectDepartures;
 		std::string depRWY = fplnData.GetDepartureRwy();
 
-		/*for (vsid::airport &apt : this->activeAirports)
-		{*/
 		for (vsid::sids::sid &sid : this->activeAirports[fplnData.GetOrigin()].sids)
 		{
 			if (sid.waypoint == filedSidWpt && sid.rwy.find(depRWY) != std::string::npos)
@@ -473,8 +487,6 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 				validDepartures[sid.waypoint + 'R' + 'V'] = { sid.waypoint, 'R', 'V', depRWY };
 			}
 		}
-		//}
-
 
 		this->OpenPopupList(Area, "Select SID", 1);
 		if (validDepartures.size() == 0)
@@ -489,7 +501,7 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 		{
 			if (std::string(sItemString, strlen(sItemString)-2, strlen(sItemString)) != "Vectors")
 			{
-				this->processFlightplan(fpln, false, "", validDepartures[sItemString]);
+				this->processFlightplan(fpln, false, depRWY, validDepartures[sItemString]);
 			}
 		}
 		// FlightPlan->flightPlan.GetControllerAssignedData().SetFlightStripAnnotation(0, sItemString) // test on how to set annotations (-> exclusive per plugin)
@@ -681,7 +693,6 @@ void vsid::VSIDPlugin::OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlight
 				std::string setOrigin = vsid::utils::split(filedRoute.at(0), '/').front();
 				if (setOrigin == fplnData.GetOrigin())
 				{
-					//messageHandler->writeMessage("DEBUG", "ATC RWY: \"" + vsid::utils::split(filedRoute.at(0), '/').back() + "\"");
 					this->processFlightplan(FlightPlan, true, vsid::utils::split(filedRoute.at(0), '/').back());
 				}
 				else
