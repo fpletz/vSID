@@ -38,10 +38,10 @@ namespace vsid
 		void loadMainConfig();
 		void loadGrpConfig();
 		COLORREF getColor(std::string color);
+		json grpConfig;
 	private:
 		std::map<std::string, COLORREF> colors;
 		json parsedConfig;
 		json vSidConfig;
-		json grpConfig;
 	};
 }

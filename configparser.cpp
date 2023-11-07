@@ -224,20 +224,18 @@ void vsid::ConfigParser::loadGrpConfig()
 
             try
             {
-                //configTest = json::parse(testFile);
                 this->grpConfig = json::parse(configFile);
 
-                int i = 0;
-                for (auto it = this->grpConfig.begin(); it != this->grpConfig.end(); ++it)
-                {
-                    if (i > 5) break;
-                    if (it->contains("MTOW"))
-                    {
-                        //messageHandler->writeMessage("DEBUG", std::to_string(it->value("MTOW", 0)));
-                    }
-
-                    i++;
-                }
+                //int i = 0;
+                //for (auto it = this->grpConfig.begin(); it != this->grpConfig.end(); ++it)
+                //{
+                //    if (i > 5) break;
+                //    if (it->contains("MTOW"))
+                //    {
+                //        //messageHandler->writeMessage("DEBUG", std::to_string(it->value("MTOW", 0)));
+                //    }
+                //    i++;
+                //}
             }
             catch (const json::parse_error& e)
             {
