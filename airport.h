@@ -3,6 +3,7 @@
 #include <string>
 //#include <map>
 #include <vector>
+#include <map>
 #include <set>
 
 #include "sid.h"
@@ -20,6 +21,7 @@ namespace vsid
 		std::set<std::string> depRwys;
 		std::set<std::string> arrRwys;
 		std::vector<vsid::sids::sid> sids;
+		std::map<std::string, int> customRules;
 		int transAlt;
 		int maxInitialClimb;
 	};

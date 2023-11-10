@@ -3,6 +3,7 @@
         "elevation": 159,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
+        "customRules" : {},
         "sids": {
             "DOMEG": {
                 "E": {
@@ -15,6 +16,7 @@
                     "engineType": "",
                     "engineCount": 0,
                     "mtow": 0,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
@@ -31,6 +33,7 @@
                     "engineType": "PT",
                     "engineCount": 0,
                     "mtow": 5700,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
@@ -47,13 +50,14 @@
                     "engineType": "",
                     "engineCount": 0,
                     "mtow": 0,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
                     "timeFrom": "",
                     "timeTo": ""
                 },
-			    "Z": {
+			    "Z1": {
                     "rwy": "25",
                     "initial": 5000,
                     "climbvia": 0,
@@ -63,13 +67,14 @@
                     "engineType": "J",
                     "engineCount": 0,
                     "mtow": 20000,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
                     "timeFrom": "",
                     "timeTo": ""
                 },
-				"Z": {
+				"Z2": {
                     "rwy": "25",
                     "initial": 5000,
                     "climbvia": 0,
@@ -79,6 +84,7 @@
                     "engineType": "TP",
                     "engineCount": 0,
                     "mtow": 0,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
@@ -97,13 +103,14 @@
                     "engineType": "",
                     "engineCount": 0,
                     "mtow": 0,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
                     "timeFrom": "",
                     "timeTo": ""
                 },
-                "Y": {
+                "Y1": {
                     "rwy": "07",
                     "initial": 5000,
                     "climbvia": 1,
@@ -113,13 +120,14 @@
                     "engineType": "J",
                     "engineCount": 0,
                     "mtow": 20000,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
                     "timeFrom": "",
                     "timeTo": ""
                 },
-				"Y": {
+				"Y2": {
                     "rwy": "07",
                     "initial": 5000,
                     "climbvia": 1,
@@ -129,6 +137,7 @@
                     "engineType": "PT",
                     "engineCount": 0,
                     "mtow": 0,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
@@ -145,6 +154,7 @@
                     "engineType": "",
                     "engineCount": 0,
                     "mtow": 0,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
@@ -163,6 +173,7 @@
                     "engineType": "",
                     "engineCount": 0,
                     "mtow": 0,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
@@ -179,13 +190,14 @@
                     "engineType": "",
                     "engineCount": 0,
                     "mtow": 0,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
                     "timeFrom": "",
                     "timeTo": ""
                 },
-			    "X": {
+			    "X1": {
                     "rwy": "25",
                     "initial": 5000,
                     "climbvia": 0,
@@ -195,13 +207,14 @@
                     "engineType": "J",
                     "engineCount": 0,
                     "mtow": 20000,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
                     "timeFrom": "",
                     "timeTo": ""
                 },
-				"X": {
+				"X2": {
                     "rwy": "25",
                     "initial": 5000,
                     "climbvia": 0,
@@ -211,6 +224,7 @@
                     "engineType": "TP",
                     "engineCount": 0,
                     "mtow": 0,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
@@ -229,13 +243,14 @@
                     "engineType": "PT",
                     "engineCount": 0,
                     "mtow": 5700,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
                     "timeFrom": "",
                     "timeTo": ""
                 },
-			    "Z": {
+			    "Z1": {
                     "rwy": "25",
                     "initial": 5000,
                     "climbvia": 0,
@@ -245,13 +260,14 @@
                     "engineType": "J",
                     "engineCount": 0,
                     "mtow": 20000,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
                     "timeFrom": "",
                     "timeTo": ""
                 },
-				"Z": {
+				"Z2": {
                     "rwy": "25",
                     "initial": 5000,
                     "climbvia": 0,
@@ -261,6 +277,7 @@
                     "engineType": "TP",
                     "engineCount": 0,
                     "mtow": 0,
+                    "customRule": "",
                     "area": "0",
                     "equip": "0",
                     "lvo": "0",
