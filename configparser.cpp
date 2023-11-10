@@ -121,6 +121,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                         apt.second.elevation = this->parsedConfig.at(apt.first).value("elevation", 0);
                         apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
+                        apt.second.customRules = this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, int>{});
 
                         for (auto &sid : this->parsedConfig.at(apt.first).at("sids").items())
                         {
@@ -128,7 +129,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
 
                             for (auto& sidWpt : this->parsedConfig.at(apt.first).at("sids").at(sid.key()).items())
                             {
-                                std::string desig = sidWpt.key(); // sid designator, [0] operand needed as string is mandatory here
+                                std::string desig = sidWpt.key();
 
                                 std::string rwys = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("rwy", "");
                                 int initial = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("initial", 0);
@@ -139,6 +140,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                 std::string engineType = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("engineType", "");
                                 int engineCount = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("engineCount", 0);
                                 int mtow = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("mtow", 0);
+                                std::string customRule = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("customRule", "");
                                 // area when implemented
                                 // equip when implemented
                                 // lvo when implemented
@@ -147,7 +149,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                 
                                 vsid::sids::sid newSid = {  wpt,
                                                             ' ',
-                                                            desig[0],
+                                                            desig,
                                                             rwys,
                                                             initial,
                                                             via,
@@ -157,6 +159,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                                             engineType,
                                                             engineCount,
                                                             mtow,
+                                                            customRule
                                                          };
                                 apt.second.sids.push_back(newSid);
                             }

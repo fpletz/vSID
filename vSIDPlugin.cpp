@@ -4,6 +4,7 @@
 #include "messageHandler.h"
 
 #include <set>
+#include <algorithm>
 
 vsid::VSIDPlugin* vsidPlugin;
 
@@ -70,6 +71,24 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 	for(vsid::sids::sid &currSid : this->activeAirports[fplnData.GetOrigin()].sids)
 	{
 		bool rwyMatch = false;
+		bool customRuleActive = false;
+		if (this->activeAirports[fplnData.GetOrigin()].customRules.size() > 0)
+		{
+			/*for (auto& elem : this->activeAirports[fplnData.GetOrigin()].customRules)
+			{
+				if (elem.second)
+				{
+					customRuleActive = true;
+					break;
+				}
+			}*/
+			customRuleActive = std::any_of(
+											this->activeAirports[fplnData.GetOrigin()].customRules.begin(),
+											this->activeAirports[fplnData.GetOrigin()].customRules.end(),
+											[](auto item)
+											{ return item.second; }
+											);
+		}
 		// skip if current SID does not match found SID wpt
 		if (currSid.waypoint != sidWpt)
 		{	
@@ -78,6 +97,21 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 		// check for rwy match, only if match found "return" true - otherwise sid would be selected due to missing skip for outer loop
 		for (std::string depRwy : this->activeAirports[fplnData.GetOrigin()].depRwys)
 		{
+			// if a custom rule exists 
+			if (customRuleActive)
+			{
+				if (currSid.customRule == "") continue;
+
+				std::map<std::string, int> customRules = this->activeAirports[fplnData.GetOrigin()].customRules;
+				std::vector<std::string> sidRules = vsid::utils::split(currSid.customRule, ',');
+				
+				// skip if a rule is active but it is none of the rules set in current sid
+				if (!std::any_of(customRules.begin(), customRules.end(), [&sidRules](auto item)
+					{
+						return std::find(sidRules.begin(), sidRules.end(), item.first) != sidRules.end() && item.second;
+					}
+				)) continue;
+			}
 			// skip if a rwy has been set manually and it doesn't match available sid rwys
 			if (atcRwy != "" && atcRwy != depRwy)
 			{
@@ -132,7 +166,7 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 			}
 		}
 		// if a SID is accepted when filed by a pilot set the SID and break
-		std::string currSidCombo = currSid.waypoint + currSid.number + currSid.designator;
+		std::string currSidCombo = currSid.waypoint + currSid.number + currSid.designator[0];
 		if (currSid.pilotfiled && currSidCombo == fplnData.GetSidName())
 		{
 			setSid = currSid;
@@ -189,13 +223,13 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 	std::string sidSuggestion;
 	if (sidSuggestionRaw.waypoint != "")
 	{
-		sidSuggestion = sidSuggestionRaw.waypoint + sidSuggestionRaw.number + sidSuggestionRaw.designator;
+		sidSuggestion = sidSuggestionRaw.waypoint + sidSuggestionRaw.number + sidSuggestionRaw.designator[0];
 	}
 	/* combined 'custom' SID if one has been found */
 	std::string sidCustomSuggestion;
 	if (sidCustomSuggestionRaw.waypoint != "" && sidCustomSuggestionRaw.waypoint != "manual")
 	{
-		sidCustomSuggestion = sidCustomSuggestionRaw.waypoint + sidCustomSuggestionRaw.number + sidCustomSuggestionRaw.designator;
+		sidCustomSuggestion = sidCustomSuggestionRaw.waypoint + sidCustomSuggestionRaw.number + sidCustomSuggestionRaw.designator[0];
 	}
 
 	//
@@ -288,13 +322,13 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 	if (sidSuggestionRaw.waypoint != "" && (sidCustomSuggestionRaw.waypoint == "" || sidCustomSuggestionRaw.waypoint == "manual"))
 	{
 		std::ostringstream ss;
-		ss << sidSuggestionRaw.waypoint + sidSuggestionRaw.number + sidSuggestionRaw.designator << "/" << setRwy;
+		ss << sidSuggestionRaw.waypoint + sidSuggestionRaw.number + sidSuggestionRaw.designator[0] << "/" << setRwy;
 		filedRoute.insert(filedRoute.begin(), vsid::utils::trim(ss.str()));
 	}
 	if (sidCustomSuggestionRaw.waypoint != "" && sidCustomSuggestionRaw.waypoint != "manual")
 	{
 		std::ostringstream ss;
-		ss << sidCustomSuggestionRaw.waypoint + sidCustomSuggestionRaw.number + sidCustomSuggestionRaw.designator << "/" << setRwy;
+		ss << sidCustomSuggestionRaw.waypoint + sidCustomSuggestionRaw.number + sidCustomSuggestionRaw.designator[0] << "/" << setRwy;
 		filedRoute.insert(filedRoute.begin(), vsid::utils::trim(ss.str()));
 	}
 
@@ -334,7 +368,7 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 				{
 					continue;
 				}
-				if (sid.designator != sidByController.at(sidByController.length() - 1))
+				if (sid.designator[0] != sidByController.at(sidByController.length() - 1))
 				{
 					continue;
 				}
@@ -342,6 +376,7 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 				fplnInfo.clmbVia = sid.climbvia;
 				break;
 			}
+			if(fplnInfo.clmb == 0) fplnInfo.clmb = fpln.GetClearedAltitude();
 		}
 		// sid set in fpln by any atc and matches plugin suggestion
 		else if (sidByController != "" && sidSuggestion == sidByController)
@@ -483,8 +518,8 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 		{
 			if (sid.waypoint == filedSidWpt && sid.rwy.find(depRWY) != std::string::npos)
 			{
-				validDepartures[sid.waypoint + sid.number + sid.designator] = sid;
-				validDepartures[sid.waypoint + 'R' + 'V'] = { sid.waypoint, 'R', 'V', depRWY };
+				validDepartures[sid.waypoint + sid.number + sid.designator[0]] = sid;
+				validDepartures[sid.waypoint + 'R' + 'V'] = {sid.waypoint, 'R', "V", depRWY};
 			}
 		}
 
@@ -788,7 +823,7 @@ void vsid::VSIDPlugin::UpdateActiveAirports()
 			for (vsid::sids::sid& sid : this->activeAirports[vsid::utils::trim(sfe.GetAirportName())].sids)
 			{
 				if (name.substr(0, name.length() - 2) != sid.waypoint) continue;
-				if (name[name.length() - 1] != sid.designator) continue;
+				if (name[name.length() - 1] != sid.designator[0]) continue;
 
 				if (std::string("0123456789").find_first_of(name[name.length() - 2]) != std::string::npos)
 				{
@@ -824,7 +859,7 @@ void vsid::VSIDPlugin::UpdateActiveAirports()
 		{
 			if (std::string("0123456789").find_first_of(sid.number) == std::string::npos)
 			{
-				incompSid[aptElem.first].insert(sid.waypoint + '?' + sid.designator);
+				incompSid[aptElem.first].insert(sid.waypoint + '?' + sid.designator[0]);
 			}
 		}
 	}
@@ -836,7 +871,7 @@ void vsid::VSIDPlugin::UpdateActiveAirports()
 		{
 			for (auto it = this->activeAirports[elem.first].sids.begin(); it != this->activeAirports[elem.first].sids.end(); it++)
 			{
-				if (it->waypoint == incompSid.substr(0, incompSid.length() - 2) && it->designator == incompSid[incompSid.length() - 1])
+				if (it->waypoint == incompSid.substr(0, incompSid.length() - 2) && it->designator[0] == incompSid[incompSid.length() - 1])
 				{
 					this->activeAirports[elem.first].sids.erase(it);
 					break;

@@ -24,7 +24,7 @@ namespace vsid
 		{
 			std::string waypoint = "";
 			char number = ' ';
-			char designator = ' ';
+			std::string designator = "";
 			std::string rwy = "";
 			int initialClimb = 0;
 			int climbvia = 0;
@@ -34,6 +34,7 @@ namespace vsid
 			std::string engineType = "";
 			int engineCount = 0;
 			int mtow = 0;
+			std::string customRule = "";
 			SIDArea area = {};
 		};
 	}
