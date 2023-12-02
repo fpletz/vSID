@@ -10,7 +10,7 @@
 
 //#include "EuroScopePlugIn.h"
 
-//#include "utils.h"
+#include "utils.h"
 
 //#include "vSID.h"
 //#include "messageHandler.h"
@@ -119,6 +119,8 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                         aptConfig.insert(apt.first);
 
                         apt.second.elevation = this->parsedConfig.at(apt.first).value("elevation", 0);
+                        apt.second.allRwys = vsid::utils::split(this->parsedConfig.at(apt.first).value("runways", ""), ',');
+                        apt.second.arrAsDep = this->parsedConfig.at(apt.first).value("ArrAsDep", 0);
                         apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
                         apt.second.customRules = this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, int>{});
@@ -168,12 +170,10 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                 }
                 catch (const json::parse_error& e)
                 {
-                    //vsid::messagehandler::LogMessage("ERROR:", "Failed to load airport config : " + std::string(e.what
                     messageHandler->writeMessage("ERROR:", "Failed to load airport config : " + std::string(e.what()));
                 }
                 catch (const json::type_error& e)
                 {
-                    //vsid::messagehandler::LogMessage("ERROR:", "Failed to load airport config : " + std::string(e.what()));
                     messageHandler->writeMessage("ERROR:", "Failed to load airport config : " + std::string(e.what()));
                 }
 
@@ -228,26 +228,13 @@ void vsid::ConfigParser::loadGrpConfig()
             try
             {
                 this->grpConfig = json::parse(configFile);
-
-                //int i = 0;
-                //for (auto it = this->grpConfig.begin(); it != this->grpConfig.end(); ++it)
-                //{
-                //    if (i > 5) break;
-                //    if (it->contains("MTOW"))
-                //    {
-                //        //messageHandler->writeMessage("DEBUG", std::to_string(it->value("MTOW", 0)));
-                //    }
-                //    i++;
-                //}
             }
             catch (const json::parse_error& e)
             {
-                //vsid::messagehandler::LogMessage("ERROR:", "Failed to load airport config : " + std::string(e.what
                 messageHandler->writeMessage("ERROR:", "Failed to load grp config : " + std::string(e.what()));
             }
             catch (const json::type_error& e)
             {
-                //vsid::messagehandler::LogMessage("ERROR:", "Failed to load airport config : " + std::string(e.what()));
                 messageHandler->writeMessage("ERROR:", "Failed to load grp config : " + std::string(e.what()));
             }
         }
