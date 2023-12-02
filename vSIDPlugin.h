@@ -32,6 +32,7 @@ namespace vsid
 		bool set = false;
 		std::string atcRwy;
 		std::string sid;
+		std::string sidRwy;
 		COLORREF sidColor;
 		int clmb = 0;
 		int clmbVia = 0;

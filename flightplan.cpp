@@ -1,41 +1,59 @@
 #include "pch.h"
-//#include "EuroScopePlugIn.h"
+
 #include "flightplan.h"
+#include "utils.h"
 
-#include <string>
-//#include <vector>
-//#include <array>
+std::pair<std::string, std::string> vsid::fpln::clean(std::vector<std::string> &filedRoute, std::string origin, std::string filedSidWpt)
+{
+	std::string sidByController;
+	std::string rwyByAtc;
 
-
-
-
-
-
-//
-////bool CvSIDFlightplan::validatePosition(struct sid* sid)
-////{
-////	//EuroScopePlugIn::CRadarTargetPositionData trackPosition = this->flightPlan.GetFPTrackPosition();
-////	
-////	Point trackPosition = { 34.67, 16.74 }; //randome Point for debugging until I find out how to convert trackposition to lat/lon coordinates
-////
-////
-////	line edge1 = { sid->area.P1, sid->area.P2 };
-////	line edge2 = { sid->area.P2, sid->area.P3 };
-////	line edge3 = { sid->area.P3, sid->area.P4 };
-////	line edge4 = { sid->area.P4, sid->area.P1 };
-////
-////	std::array<line, 4> edges = { edge1, edge2, edge3, edge4 };
-////
-////	line ray = { trackPosition , {trackPosition.lon, trackPosition.lat + 0.1} }; //0.1 deg lat is approx 10 km which should be enaugh for an infinte ray in an Airport Area
-////	
-////	for (line edge : edges) {
-////
-////		int mOfEdge = (edge.P2.lon - edge.P1.lon) / (edge.P2.lat - edge.P1.lat);
-////
-////
-////	}
-////
-////
-////	return true;
-////}
+	if (filedRoute.size() > 0)
+	{
+		if (filedRoute.front().find('/') != std::string::npos && !(filedRoute.front().find("/N") != std::string::npos))
+		{
+			std::vector<std::string> sidBlock = vsid::utils::split(filedRoute.at(0), '/');
+			if (sidBlock.front().find_first_of("0123456789RV") != std::string::npos && sidBlock.front() != origin)
+			{
+				sidByController = sidBlock.front();
+				rwyByAtc = sidBlock.back();
+			}
+			if (sidBlock.front() == origin)
+			{
+				rwyByAtc = sidBlock.back();
+			}
+			filedRoute.erase(filedRoute.begin());
+		}
+	}
+	/* if a possible SID block was found check the entire route for more SIDs (e.g. filed) and erase them as well*/
+	if (filedRoute.size() > 0 && filedSidWpt != "")
+	{
+		for (std::vector<std::string>::iterator it = filedRoute.begin(); it != filedRoute.end();)
+		{
+			if (sidByController != "")
+			{
+				if (it->substr(0, it->length() - 2) == sidByController.substr(0, sidByController.length() - 2))
+				{
+					it = filedRoute.erase(it);
+				}
+				else
+				{
+					++it;
+				}
+			}
+			else
+			{
+				if (it->substr(0, it->length() - 2) == filedSidWpt)
+				{
+					it = filedRoute.erase(it);
+				}
+				else
+				{
+					++it;
+				}
+			}
+		}
+	}
+	return { sidByController, rwyByAtc };
+}
 

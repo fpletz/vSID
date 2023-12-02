@@ -1,64 +1,22 @@
 #pragma once
-//#include <vector>
-//#include <string>
 #include "pch.h"
+#include "EuroScopePlugIn.h"
 
-//#include "vSID.h"
-////#include "EuroScopePlugIn.h"
-//#include "messageHandler.h"
-//#include "utils.h"
-//#include "sid.h"
+#include <vector>
+#include <string>
 
 namespace vsid
 {
 	namespace fpln
 	{
+		/**
+		 * @brief Strip the filed route from SID/RWY and/or SID to have a bare route to populate with set SID.
+		 * 
+		 * @param filedRoute - filed route as vector with route entries as elements
+		 * @param filedSidWpt - the sid (first) waypoint that is filed
+		 * @param origin - departure airport icao
+		 * @return std::pair<std::string, std::string> - sid by atc (or none) and rwy by atc if present
+		 */
+		std::pair<std::string, std::string> clean(std::vector<std::string> &filedRoute, std::string origin, std::string filedSidWpt = "");
 	}
-	
-	/**
-	 * @brief Class to manage a single flightplan
-	 *
-	 */
-	//class Flightplan
-	//{
-	//public:
-	//	Flightplan(EuroScopePlugIn::CFlightPlan& flightPlan);
-	//	virtual ~Flightplan();
-
-	//	EuroScopePlugIn::CFlightPlan flightPlan;
-	//	/**
-	//	 * @brief All data we have for the flightplan
-	//	 * 
-	//	 */
-	//	EuroScopePlugIn::CFlightPlanData flightPlanData;
-	//	/**
-	//	 * @brief filed route as a vector with elements for each waypoint
-	//	 * 
-	//	 */
-	//	std::vector<std::string> filedRoute;
-	//	/**
-	//	 * @brief the extracted SID waypoint
-	//	 *
-	//	 */
-	//	std::string filedSid;
-	//	/**
-	//	 * @brief Find the SID waypoint based on the filed SID or
-	//	 * based on the first waypoints - first 3 waypoints are checked
-	//	 *
-	//	 */
-	//	std::string sidWayPoint;
-	//	char wtc;
-	//	char engineType;
-	//	int engineCount;
-	//	std::string acType;
-	//	std::string callsign;
-
-	//	std::string getSidWayPoint();
-
-	//	//bool validatePosition(struct sid* sid);
-
-	//private:
-	//	void findSidWaypoint();
-	//};
-
 }
