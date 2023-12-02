@@ -251,8 +251,8 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 	{
 		if (sidSuggestionRaw.rwy.find(',') != std::string::npos)
 		{
-			std::vector<std::string> rwySplit = vsid::utils::split(sidSuggestionRaw.rwy, ',');
-			for (std::string& rwy : rwySplit)
+			std::vector<std::string> rwys = vsid::utils::split(sidSuggestionRaw.rwy, ',');
+			for (std::string& rwy : rwys)
 			{
 				if (this->activeAirports[fplnData.GetOrigin()].arrAsDep)
 				{
@@ -273,7 +273,7 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 			}
 			if (setRwy == "")
 			{
-				setRwy = rwySplit.front();
+				setRwy = rwys.front();
 			}
 		}
 		else
@@ -600,6 +600,8 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 		}
 		if (strlen(sItemString) != 0)
 		{
+			messageHandler->writeMessage("DEBUG", "sidRwy: " + this->processed[fpln.GetCallsign()].sidRwy);
+
 			std::vector<std::string> filedRoute = vsid::utils::split(fplnData.GetRoute(), ' ');
 			vsid::fpln::clean(filedRoute, fplnData.GetOrigin());
 
@@ -610,6 +612,10 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 			if (!fplnData.SetRoute(vsid::utils::join(filedRoute).c_str()))
 			{
 				messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to change Flighplan!");
+			}
+			if (!fplnData.AmendFlightPlan())
+			{
+				messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to amend Flighplan!");
 			}
 		}
 	}
@@ -719,19 +725,45 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 		EuroScopePlugIn::CFlightPlanData fplnData = FlightPlan.GetFlightPlanData();
 
 		std::vector<std::string> filedRoute = vsid::utils::split(fplnData.GetRoute(), ' ');
+		std::pair<std::string, std::string> atcBlock = vsid::fpln::clean(filedRoute, fplnData.GetOrigin());
 		
-		if ((this->processed.find(FlightPlan.GetCallsign()) != this->processed.end() &&
-			this->processed[FlightPlan.GetCallsign()].sidRwy.find(this->processed[FlightPlan.GetCallsign()].atcRwy) != std::string::npos) ||
-			filedRoute.front().find(fplnData.GetOrigin()) != std::string::npos
+		if (this->processed.find(FlightPlan.GetCallsign()) != this->processed.end() &&
+			atcBlock.second != "" &&
+			this->activeAirports[fplnData.GetOrigin()].depRwys.count(atcBlock.second)
 			)
 		{
 			*pRGB = this->configParser.getColor("rwySet");
 		}
-		else
+		else if(this->processed.find(FlightPlan.GetCallsign()) != this->processed.end() &&
+				atcBlock.second != "" &&
+				!this->activeAirports[fplnData.GetOrigin()].depRwys.count(atcBlock.second)
+				)
 		{
-			*pRGB = this->configParser.getColor("rwyNotSet");
-		}		
-		strcpy_s(sItemString, 16, fplnData.GetDepartureRwy());
+			*pRGB = this->configParser.getColor("notDepRwySet");
+		}
+		else *pRGB = this->configParser.getColor("rwyNotSet");
+
+		if (this->processed.find(FlightPlan.GetCallsign()) != this->processed.end())
+		{
+			if (atcBlock.second != "")
+			{
+				strcpy_s(sItemString, 16, atcBlock.second.c_str());
+			}
+			else
+			{
+				std::string sidRwy;
+				if (this->processed[FlightPlan.GetCallsign()].sidRwy.find(',') != std::string::npos)
+				{
+					sidRwy = vsid::utils::split(this->processed[FlightPlan.GetCallsign()].sidRwy, ',').at(0);
+				}
+				else
+				{
+					sidRwy = this->processed[FlightPlan.GetCallsign()].sidRwy;
+				}
+				strcpy_s(sItemString, 16, sidRwy.c_str());
+			}
+		}
+		else strcpy_s(sItemString, 16, fplnData.GetDepartureRwy());
 	}
 }
 
