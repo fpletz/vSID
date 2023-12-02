@@ -2,8 +2,8 @@
 #include "pch.h"
 #include "EuroScopePlugIn.h"
 
-#include <vector>
 #include <string>
+#include <vector>
 
 namespace vsid
 {
