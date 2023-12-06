@@ -30,7 +30,6 @@ namespace vsid
 	struct fplnInfo
 	{
 		bool set = false;
-		std::string atcRwy;
 		std::string sid;
 		std::string sidRwy;
 		COLORREF sidColor;
