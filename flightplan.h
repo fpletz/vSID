@@ -11,6 +11,7 @@ namespace vsid
 	{
 		/**
 		 * @brief Strip the filed route from SID/RWY and/or SID to have a bare route to populate with set SID.
+		 * Any SIDs or RWYs will be deleted and have to be reset.
 		 * 
 		 * @param filedRoute - filed route as vector with route entries as elements
 		 * @param filedSidWpt - the sid (first) waypoint that is filed
