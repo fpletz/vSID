@@ -6,7 +6,7 @@
 //#include "vSID.h"
 
 
-//#include <algorithm>
+#include <algorithm>
 
 std::string vsid::utils::ltrim(const std::string& string)
 {
@@ -125,4 +125,10 @@ bool vsid::utils::containsDigit(int number, int digit)
 int vsid::utils::getMinClimb(int elevation)
 {
 	return (std::ceil((float)elevation / 1000) * 1000) + 500;
+}
+
+std::string vsid::utils::tolower(std::string input)
+{
+	std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return std::tolower(c); });
+	return input;
 }

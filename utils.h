@@ -81,7 +81,16 @@ namespace vsid
 		 * @return false 
 		 */
 		bool containsDigit(int number, int digit);
+
 		int getMinClimb(int elevation);
+
+		std::string tolower(std::string input);
+
+		template<typename T>
+		std::string toupper(T input)
+		{
+			std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return std::toupper(c); });
+			return input;
+		}
 	}
 }
-
