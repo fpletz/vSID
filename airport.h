@@ -22,5 +22,6 @@ namespace vsid
 		int arrAsDep;
 		int transAlt;
 		int maxInitialClimb;
+		std::map<std::string, int> settings;
 	};
 }
