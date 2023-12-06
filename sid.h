@@ -36,6 +36,9 @@ namespace vsid
 			int mtow = 0;
 			std::string customRule = "";
 			SIDArea area = {};
+			std::string equip = "";
+			int lvp = 0;
+			int nightOps = 0;
 		};
 	}
 }

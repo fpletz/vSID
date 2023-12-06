@@ -1,26 +1,12 @@
 #include "pch.h"
 
 #include "configparser.h"
-//#include <string>
-//#include <vector>
-
-//#include <filesystem>
-
-//#include <fstream>
-
-//#include "EuroScopePlugIn.h"
-
 #include "utils.h"
-
-//#include "vSID.h"
-//#include "messageHandler.h"
-
-//#include "nlohmann/json.hpp"
-
-//namespace fs = std::filesystem;
-//using json = nlohmann::ordered_json;
-
 #include "messageHandler.h"
+#include "sid.h"
+
+#include <vector>
+#include <fstream>
 
 vsid::ConfigParser::ConfigParser()
 {
@@ -70,7 +56,9 @@ void vsid::ConfigParser::loadMainConfig()
     }
 }
 
-void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> &activeAirports)
+void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> &activeAirports,
+                                        std::map<std::string, std::map<std::string, int>>& savedSettings
+                                        )
 {
     // get the current path where plugins .dll is stored
     char path[MAX_PATH + 1] = { 0 };
@@ -124,6 +112,12 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                         apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
                         apt.second.customRules = this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, int>{});
+                        if (savedSettings.count(apt.first))
+                        {
+                            apt.second.settings = savedSettings[apt.first];
+                        }
+                        else
+                            apt.second.settings = { {"lvp", 0}, {"night", 0} };                        
 
                         for (auto &sid : this->parsedConfig.at(apt.first).at("sids").items())
                         {
@@ -143,11 +137,10 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                 int engineCount = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("engineCount", 0);
                                 int mtow = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("mtow", 0);
                                 std::string customRule = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("customRule", "");
-                                // area when implemented
-                                // equip when implemented
-                                // lvo when implemented
-                                // timeFrom when implemented
-                                // timeTo when implemented
+                                vsid::sids::SIDArea area = {};
+                                std::string equip = "";
+                                int lvp = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("lvp", 0);
+                                int nightOps = 0;
                                 
                                 vsid::sids::sid newSid = {  wpt,
                                                             ' ',
@@ -161,7 +154,11 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                                             engineType,
                                                             engineCount,
                                                             mtow,
-                                                            customRule
+                                                            customRule,
+                                                            area,
+                                                            equip,
+                                                            lvp,
+                                                            nightOps
                                                          };
                                 apt.second.sids.push_back(newSid);
                             }

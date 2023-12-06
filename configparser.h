@@ -1,24 +1,11 @@
 #pragma once
 #include "pch.h"
 
-#include <string>
-#include <vector>
-#include <fstream>
-
-//#include "vSID.h"
 #include "airport.h"
 #include "nlohmann/json.hpp"
 
-//#include <filesystem>
-
-//#include <fstream>
-
-//#include "messageHandler.h"
-//#include "utils.h"
-
-
-//#include "EuroScopePlugIn.h"
-//#include "utils.h"
+#include <string>
+#include <map>
 
 using json = nlohmann::ordered_json;
 /**
@@ -34,7 +21,9 @@ namespace vsid
 		virtual ~ConfigParser();
 
 		//std::vector<std::filesystem::path> loadConfigFiles();
-		void loadAirportConfig(std::map<std::string, vsid::airport> &activeAirports);
+		void loadAirportConfig(std::map<std::string, vsid::airport> &activeAirports,
+							std::map<std::string, std::map<std::string, int>> &savedSettings
+							);
 		void loadMainConfig();
 		void loadGrpConfig();
 		COLORREF getColor(std::string color);
