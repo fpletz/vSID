@@ -21,7 +21,7 @@
 namespace vsid
 {
 	const std::string pluginName = "vSID";
-	const std::string pluginVersion = "0.3.1";
+	const std::string pluginVersion = "0.4.0";
 	const std::string pluginAuthor = "Philip Maier, O.B.";
 	const std::string pluginCopyright = "to be selected";
 	const std::string pluginViewAviso = "";
@@ -48,7 +48,7 @@ namespace vsid
 		VSIDPlugin();
 		virtual ~VSIDPlugin();
 
-		bool getDebug();
+		bool getDebug() const;
 		/**
 		 * @brief Extract a sid waypoint. ES GetSidName() is used and the last 2 chars substracted
 		 * 
@@ -109,8 +109,7 @@ namespace vsid
 		std::map<std::string, vsid::fplnInfo> processed;
 		vsid::ConfigParser configParser;
 		std::string configPath;
-		//testing - later to be managed by flightplan annotations (saving sids there / in the route)
-		//std::map<std::string, std::string> selectedSIDs;
+		std::map<std::string, std::map<std::string, int>> savedSettings;
 
 		/**
 		 * @brief Loads and updates the active airports with available configs
