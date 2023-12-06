@@ -57,3 +57,20 @@ std::pair<std::string, std::string> vsid::fpln::clean(std::vector<std::string> &
 	return { sidByController, rwyByAtc };
 }
 
+std::string vsid::fpln::getAtcRwy(std::vector<std::string>& filedRoute, std::string origin)
+{
+	std::string sidBlock;
+	std::string atcRwy;
+	if (filedRoute.size() > 0)
+	{
+		if (filedRoute.front().find('/') != std::string::npos && !(filedRoute.front().find("/N") != std::string::npos))
+		{
+			std::vector<std::string> sidBlock = vsid::utils::split(filedRoute.at(0), '/');
+			if (sidBlock.front().find_first_of("0123456789RV") != std::string::npos || sidBlock.front() == origin)
+			{
+				atcRwy = sidBlock.back();
+			}
+		}
+	}
+	return atcRwy;
+}

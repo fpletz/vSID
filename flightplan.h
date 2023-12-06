@@ -19,5 +19,7 @@ namespace vsid
 		 * @return std::pair<std::string, std::string> - sid by atc (or none) and rwy by atc if present
 		 */
 		std::pair<std::string, std::string> clean(std::vector<std::string> &filedRoute, std::string origin, std::string filedSidWpt = "");
+
+		std::string getAtcRwy(std::vector<std::string>& filedRoute, std::string origin);
 	}
 }
