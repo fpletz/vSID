@@ -3,11 +3,13 @@
 [NEW]
 *	customRules - custom rules can now be set per airport and per sid which rule should be applied if active
 *	MTOW check
-*	RWY Tag Item - shows active RWYs highlighted and inactive RWYs as "disabled"
+*	RWY tagItem - shows active RWYs highlighted and inactive RWYs as "disabled"
+*	Arr RWYs can now be used as Dep RWYs - setting per airport - populates depRwy with arrRwy if active
 *	LVP setting - toggle per airport and is then checked for the corresponding SID value
 
 [FIXED]
 *	WTC could not be compared properly - fixed other occurences where the same check was used
+*	RWY tagItem & SID tagItem could sometimes set wrong values
 
 [Changelog v0.3.1]
 
