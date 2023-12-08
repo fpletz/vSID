@@ -20,6 +20,13 @@ namespace vsid
 		 */
 		std::pair<std::string, std::string> clean(std::vector<std::string> &filedRoute, std::string origin, std::string filedSidWpt = "");
 
+		/**
+		 * @brief Get only the assigned rwy extracted from the flightplan
+		 * 
+		 * @param filedRoute 
+		 * @param origin 
+		 * @return
+		 */
 		std::string getAtcRwy(std::vector<std::string>& filedRoute, std::string origin);
 	}
 }
