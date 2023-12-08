@@ -1,3 +1,9 @@
+[Changelog v0.4.1 - HOTFIX]
+
+[FIXED]
+*	No SID could be found due to LVP settings
+*	Selecting NO SID from the menu resulted in plugin crash
+
 [Changelog v0.4.0]
 
 [NEW]
