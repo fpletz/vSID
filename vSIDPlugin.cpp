@@ -106,7 +106,7 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 			continue;
 		}
 		// skip if lvp ops are inactive but SID is configured for lvp ops
-		if (!this->activeAirports[fplnData.GetOrigin()].settings["lvp"] && currSid.lvp)
+		if (!this->activeAirports[fplnData.GetOrigin()].settings["lvp"] && currSid.lvp && currSid.lvp != -1)
 		{
 			continue;
 		}
@@ -473,7 +473,7 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 			this->OpenPopupList(Area, "Select SID", 1);
 			if (validDepartures.size() == 0)
 			{
-				this->AddPopupListElement("NO SID", "NO SID", TAG_FUNC_VSID_SIDS_MAN, false, EuroScopePlugIn::POPUP_ELEMENT_NO_CHECKBOX, true, false); // possibly set disabled to false as NO SID is set when rwy closed but avbl sid for rwy selected
+				this->AddPopupListElement("NO SID", "NO SID", TAG_FUNC_VSID_SIDS_MAN, false, EuroScopePlugIn::POPUP_ELEMENT_NO_CHECKBOX, true, false);
 			}
 			for (const auto& sid : validDepartures)
 			{
@@ -481,12 +481,9 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 			}
 		}
 		
-		if (strlen(sItemString) != 0)
+		if (strlen(sItemString) != 0 && sItemString != "NO SID")
 		{
-			if (std::string(sItemString, strlen(sItemString)-2, strlen(sItemString)) != "Vectors")
-			{
-				this->processFlightplan(fpln, false, depRWY, validDepartures[sItemString]);
-			}
+			this->processFlightplan(fpln, false, depRWY, validDepartures[sItemString]);
 		}
 		// FlightPlan->flightPlan.GetControllerAssignedData().SetFlightStripAnnotation(0, sItemString) // test on how to set annotations (-> exclusive per plugin)
 	}
@@ -622,7 +619,7 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 			*pRGB = this->processed[callsign].sidColor;
 			strcpy_s(sItemString, 16, this->processed[callsign].sid.c_str());
 		}
-		else
+		else if(std::string(FlightPlan.GetFlightPlanData().GetPlanType()) == "I")
 		{
 			this->processFlightplan(FlightPlan, true);
 		}
