@@ -111,7 +111,14 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                         apt.second.arrAsDep = this->parsedConfig.at(apt.first).value("ArrAsDep", 0);
                         apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
-                        apt.second.customRules = this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, int>{});
+                        std::map<std::string, int> customRules;
+                        for (auto &el : this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, int>{}))
+                        {
+                            std::pair<std::string, int> rule = { vsid::utils::toupper(el.first), el.second };
+                            customRules.insert(rule);
+                        }
+                        apt.second.customRules = customRules;
+                        customRules.clear();
                         if (savedSettings.count(apt.first))
                         {
                             apt.second.settings = savedSettings[apt.first];
