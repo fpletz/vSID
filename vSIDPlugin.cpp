@@ -205,10 +205,6 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 	{
 		sidSuggestionRaw = this->processSid(fpln, "");
 		sidCustomSuggestionRaw = this->processSid(fpln, atcRwy);
-		if (sidCustomSuggestionRaw.waypoint == "")
-		{
-			sidCustomSuggestionRaw.waypoint = "manual";
-		}
 	}
 	/* default state */
 	else
@@ -410,12 +406,6 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 		}
 	}
 	if (sidSuggestionRaw.waypoint == "" && sidByController == "")
-	{
-		fplnInfo.sid = "NO SID";
-		fplnInfo.sidColor = this->configParser.getColor("noSid"); // red
-		fplnInfo.clmb = 0;
-	}
-	if (sidCustomSuggestionRaw.waypoint == "manual")
 	{
 		fplnInfo.sid = "MANUAL";
 		fplnInfo.sidColor = this->configParser.getColor("noSid"); // red
@@ -715,16 +705,16 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 		
 		if (this->processed.find(FlightPlan.GetCallsign()) != this->processed.end() &&
 			atcBlock.second != "" &&
-			this->activeAirports[fplnData.GetOrigin()].depRwys.count(atcBlock.second) &&
-			fplnData.IsAmended()
+			this->activeAirports[fplnData.GetOrigin()].depRwys.count(atcBlock.second)/* && - DISABLED UNTIL ANSWER FROM ES DEV
+			fplnData.IsAmended()*/
 			)
 		{
 			*pRGB = this->configParser.getColor("rwySet");
 		}
 		else if(this->processed.find(FlightPlan.GetCallsign()) != this->processed.end() &&
 				atcBlock.second != "" &&
-				!this->activeAirports[fplnData.GetOrigin()].depRwys.count(atcBlock.second) &&
-				fplnData.IsAmended()
+				!this->activeAirports[fplnData.GetOrigin()].depRwys.count(atcBlock.second)/* && - DISABLED UNTIL ANSWER FROM ES DEV
+				fplnData.IsAmended()*/
 				)
 		{
 			*pRGB = this->configParser.getColor("notDepRwySet");
