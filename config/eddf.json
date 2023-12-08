@@ -1,28 +1,13 @@
 {
     "EDDF": {
         "elevation": 357,
+        "runways": "25C,25L,07C,07R,18",
+        "ArrAsDep": 1,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
         "customRules" : {},
         "sids": {
             "ANEKI": {
-            "A": {
-                "rwy": "18",
-                "initial": 4000,
-                "climbvia": 1,
-                "prio": 3,
-                "pilotfiled": 0,
-                "wtc": "",
-                "engineType": "",
-                "engineCount": 0,
-                "mtow": 0,
-                "customRule": "",
-                "area": "0",
-                "equip": "0",
-                "lvo": "0",
-                "timeFrom": "",
-                "timeTo": ""
-            },
             "D": {
                 "rwy": "07C,07R",
                 "initial": 4000,
@@ -36,7 +21,7 @@
                 "customRule": "",
                 "area": "0",
                 "equip": "0",
-                "lvo": "0",
+                "lvp": -1,
                 "timeFrom": "",
                 "timeTo": ""
             },
@@ -53,7 +38,7 @@
                 "customRule": "",
                 "area": "0",
                 "equip": "0",
-                "lvo": "0",
+                "lvp": -1,
                 "timeFrom": "",
                 "timeTo": ""
             },
@@ -70,7 +55,7 @@
                 "customRule": "",
                 "area": "0",
                 "equip": "0",
-                "lvo": "0",
+                "lvp": -1,
                 "timeFrom": "",
                 "timeTo": ""
             },
@@ -87,7 +72,7 @@
                 "customRule": "",
                 "area": "0",
                 "equip": "0",
-                "lvo": "0",
+                "lvp": -1,
                 "timeFrom": "",
                 "timeTo": ""
             },
@@ -104,7 +89,7 @@
                 "customRule": "",
                 "area": "0",
                 "equip": "0",
-                "lvo": "0",
+                "lvp": -1,
                 "timeFrom": "",
                 "timeTo": ""
             },
@@ -121,29 +106,12 @@
                 "customRule": "",
                 "area": "0",
                 "equip": "0",
-                "lvo": "0",
+                "lvp": -1,
                 "timeFrom": "",
                 "timeTo": ""
             }
             },
             "CINDY": {
-                "A": {
-                    "rwy": "18",
-                    "initial": 4000,
-                    "climbvia": 1,
-                    "prio": 3,
-                    "pilotfiled": 0,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvo": "0",
-                    "timeFrom": "",
-                    "timeTo": ""
-                },
                 "D": {
                     "rwy": "07C,07R",
                     "initial": 4000,
@@ -157,7 +125,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -174,7 +142,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -191,7 +159,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -208,7 +176,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -225,7 +193,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -242,7 +210,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
@@ -261,7 +229,7 @@
                         "customRule": "",
                         "area": "0",
                         "equip": "0",
-                        "lvo": "0",
+                        "lvp": -1,
                         "timeFrom": "",
                         "timeTo": ""
                 }
@@ -280,7 +248,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -297,7 +265,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -314,7 +282,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -331,7 +299,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -339,7 +307,7 @@
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": 1,
-                    "prio": 2,
+                    "prio": 3,
                     "pilotfiled": 0,
                     "wtc": "",
                     "engineType": "",
@@ -348,7 +316,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -365,7 +333,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -382,7 +350,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -399,7 +367,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "2200",
                     "timeTo": "0700"
                 },
@@ -416,7 +384,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -433,7 +401,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -450,7 +418,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -467,7 +435,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
@@ -486,7 +454,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -503,7 +471,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -520,7 +488,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -528,7 +496,7 @@
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": 1,
-                    "prio": 2,
+                    "prio": 3,
                     "pilotfiled": 0,
                     "wtc": "",
                     "engineType": "",
@@ -537,7 +505,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -545,7 +513,7 @@
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": 1,
-                    "prio": 2,
+                    "prio": 3,
                     "pilotfiled": 1,
                     "wtc": "",
                     "engineType": "",
@@ -554,7 +522,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -571,7 +539,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -588,7 +556,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -605,7 +573,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "2200",
                     "timeTo": "0700"
                 },
@@ -622,7 +590,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -639,7 +607,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -656,7 +624,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -673,7 +641,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
@@ -692,7 +660,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -709,7 +677,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -726,7 +694,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -743,7 +711,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -760,7 +728,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "2200",
                     "timeTo": "0700"
                 },
@@ -777,7 +745,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -794,7 +762,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -811,7 +779,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -828,29 +796,12 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
             },
             "SULUS": {
-                "A": {
-                    "rwy": "18",
-                    "initial": 4000,
-                    "climbvia": 1,
-                    "prio": 99,
-                    "pilotfiled": 0,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvo": "0",
-                    "timeFrom": "",
-                    "timeTo": ""
-                },
                 "D": {
                     "rwy": "07C,07R",
                     "initial": 4000,
@@ -864,7 +815,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -881,7 +832,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -898,7 +849,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -915,7 +866,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
@@ -934,7 +885,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -951,7 +902,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -968,7 +919,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -976,7 +927,7 @@
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": 1,
-                    "prio": 2,
+                    "prio": 3,
                     "pilotfiled": 0,
                     "wtc": "",
                     "engineType": "",
@@ -985,7 +936,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -993,7 +944,7 @@
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": 1,
-                    "prio": 2,
+                    "prio": 3,
                     "pilotfiled": 1,
                     "wtc": "",
                     "engineType": "",
@@ -1002,7 +953,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -1019,7 +970,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -1036,7 +987,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "2200",
                     "timeTo": "0700"
                 },
@@ -1053,7 +1004,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -1070,7 +1021,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -1087,7 +1038,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -1104,7 +1055,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
@@ -1123,7 +1074,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -1140,7 +1091,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
@@ -1159,7 +1110,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -1176,7 +1127,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -1193,7 +1144,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
@@ -1212,7 +1163,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
@@ -1231,7 +1182,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }

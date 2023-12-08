@@ -1,6 +1,8 @@
 {
     "EDDK": {
         "elevation": 302,
+        "runways": "32R,32L,24,14L,14R,06",
+        "ArrAsDep": 0,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
         "customRules" : {},
@@ -19,7 +21,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -36,7 +38,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -53,7 +55,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -70,7 +72,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -87,7 +89,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -104,7 +106,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -121,7 +123,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -138,7 +140,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
@@ -157,7 +159,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -174,7 +176,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -191,7 +193,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -208,7 +210,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -225,7 +227,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -242,7 +244,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -259,7 +261,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -276,7 +278,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -293,7 +295,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
@@ -312,7 +314,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -329,7 +331,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -346,7 +348,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -363,7 +365,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -380,7 +382,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -397,7 +399,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -414,7 +416,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -431,7 +433,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -448,7 +450,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -465,7 +467,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -482,7 +484,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -499,7 +501,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
@@ -518,7 +520,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -535,7 +537,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -552,7 +554,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -569,7 +571,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -586,7 +588,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -603,7 +605,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -620,7 +622,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -637,7 +639,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -654,7 +656,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
@@ -673,7 +675,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -690,7 +692,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -707,7 +709,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -724,7 +726,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -741,7 +743,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -758,7 +760,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -775,7 +777,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 },
@@ -792,7 +794,7 @@
                     "customRule": "",
                     "area": "0",
                     "equip": "0",
-                    "lvo": "0",
+                    "lvp": -1,
                     "timeFrom": "",
                     "timeTo": ""
                 }
