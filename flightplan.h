@@ -27,6 +27,6 @@ namespace vsid
 		 * @param origin 
 		 * @return
 		 */
-		std::string getAtcRwy(std::vector<std::string>& filedRoute, std::string origin);
+		std::pair<std::string, std::string> getAtcBlock(std::vector<std::string>& filedRoute, std::string origin);
 	}
 }
