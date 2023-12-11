@@ -40,5 +40,9 @@ namespace vsid
 			int lvp = 0;
 			int nightOps = 0;
 		};
+		std::string getName(const sid& sid);
+		bool isEmpty(const sid& sid);
+		bool operator==(const sid& sid1, const sid& sid2);
+		bool operator!=(const sid& sid1, const sid& sid2);
 	}
 }
