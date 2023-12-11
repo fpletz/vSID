@@ -41,11 +41,11 @@ void vsid::ConfigParser::loadMainConfig()
     {
         for (auto &elem : this->vSidConfig.at("colors").items())
         {
-            // default values are cyan to signal if the import went wront
+            // default values are blue to signal if the import went wront
             COLORREF rgbColor = RGB(
-                this->vSidConfig.at("colors").at(elem.key()).value("r", 30),
-                this->vSidConfig.at("colors").at(elem.key()).value("g", 200),
-                this->vSidConfig.at("colors").at(elem.key()).value("b", 230),
+                this->vSidConfig.at("colors").at(elem.key()).value("r", 60),
+                this->vSidConfig.at("colors").at(elem.key()).value("g", 80),
+                this->vSidConfig.at("colors").at(elem.key()).value("b", 240),
                 );
             this->colors[elem.key()] = rgbColor;
         }
