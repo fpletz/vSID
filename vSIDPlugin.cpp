@@ -119,7 +119,7 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 				{
 					return std::find(sidRules.begin(), sidRules.end(), item.first) != sidRules.end() && item.second;
 				}
-			) //&& sidRules.size() > 0
+			) //&& sidRules.size() > 0              CURRENTLY DISABLED DUE TO OTHER BUGS THAT NEED THIS FAIL FOR DEBUGGING
 			) continue;
 		}
 		// skip if lvp ops are active but SID is not configured for lvp ops and lvp is not disabled for SID
@@ -480,6 +480,8 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 	{
 		*pColorCode = EuroScopePlugIn::TAG_COLOR_RGB_DEFINED;
 		std::string callsign = FlightPlan.GetCallsign();
+		EuroScopePlugIn::CFlightPlanData fplnData = FlightPlan.GetFlightPlanData();
+		std::pair<std::string, std::string> atcBlock = vsid::fpln::getAtcBlock(vsid::utils::split(fplnData.GetRoute(), ' '), fplnData.GetOrigin());
 
 		if (!FlightPlan.IsValid())
 		{
@@ -502,8 +504,6 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 					this->processFlightplan(FlightPlan, true);
 				}
 			}*/
-			EuroScopePlugIn::CFlightPlanData fplnData = FlightPlan.GetFlightPlanData();
-			std::pair<std::string, std::string> atcBlock = vsid::fpln::getAtcBlock(vsid::utils::split(fplnData.GetRoute(), ' '), fplnData.GetOrigin());
 			std::string sidName = vsid::sids::getName(this->processed[callsign].sid);
 			std::string customSidName = vsid::sids::getName(this->processed[callsign].customSid);
 
@@ -564,7 +564,15 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 		}
 		else if(std::string(FlightPlan.GetFlightPlanData().GetPlanType()) == "I")
 		{
-			this->processFlightplan(FlightPlan, true);
+			if (atcBlock.first == fplnData.GetOrigin() && atcBlock.second != "")
+			{
+				this->processFlightplan(FlightPlan, true, atcBlock.second);
+			}
+			else
+			{
+				this->processFlightplan(FlightPlan, true);
+			}
+			
 		}
 	}
 
@@ -601,13 +609,24 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 
 			// determine if climb via is needed depending on customSid
 
-			if (atcSid != "" && atcSid == sidName)
+			if (atcSid == "" || atcSid == sidName || atcSid == fplnData.GetOrigin() && sidName != customSidName)
 			{
 				climbVia = this->processed[callsign].sid.initialClimb;
 			}
-			else if (atcSid != "" && atcSid == customSidName)
+			else if (atcSid == "" || atcSid == customSidName || atcSid == fplnData.GetOrigin())
 			{
 				climbVia = this->processed[callsign].customSid.initialClimb;
+			}
+
+			// determine initial climb depending on customSid
+
+			if (this->processed[callsign].sid.initialClimb != 0 && atcSid == sidName || atcSid == "" || atcSid == fplnData.GetOrigin())
+			{
+				tempAlt = this->processed[callsign].sid.initialClimb;
+			}
+			else if (this->processed[callsign].customSid.initialClimb != 0 && atcSid == customSidName || atcSid == "" || atcSid == fplnData.GetOrigin())
+			{
+				tempAlt = this->processed[callsign].customSid.initialClimb;
 			}
 
 			if (fpln.GetClearedAltitude() == fpln.GetFinalAltitude())
@@ -615,7 +634,7 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 				*pRGB = this->configParser.getColor("suggestedClmb"); // white
 			}
 			else if (fpln.GetClearedAltitude() != fpln.GetFinalAltitude() &&
-					fpln.GetClearedAltitude() == climbVia
+					fpln.GetClearedAltitude() == tempAlt
 					)
 			{
 				if (climbVia)
@@ -633,15 +652,6 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 			}
 
 			// determine the initial climb depending on existing customSid
-
-			if (this->processed[callsign].sid.initialClimb != 0 && (atcSid == sidName || atcSid == ""))
-			{
-				tempAlt = this->processed[callsign].sid.initialClimb;
-			}
-			else if (this->processed[callsign].customSid.initialClimb != 0 && atcSid == customSidName)
-			{
-				tempAlt = this->processed[callsign].customSid.initialClimb;
-			}
 
 			if (fpln.GetClearedAltitude() == fpln.GetFinalAltitude())
 			{
