@@ -29,7 +29,7 @@ namespace vsid
 	class ConfigParser;
 	struct fplnInfo
 	{
-		bool set = false;
+		bool localEdit = false;
 		vsid::sids::sid sid = {};
 		vsid::sids::sid customSid = {};
 	};
