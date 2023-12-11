@@ -18,7 +18,7 @@ namespace vsid
 		 * @param origin - departure airport icao
 		 * @return std::pair<std::string, std::string> - sid by atc (or none) and rwy by atc if present
 		 */
-		std::pair<std::string, std::string> clean(std::vector<std::string> &filedRoute, std::string origin, std::string filedSidWpt = "");
+		void clean(std::vector<std::string> &filedRoute, const std::string origin, std::string filedSidWpt = "");
 
 		/**
 		 * @brief Get only the assigned rwy extracted from the flightplan
@@ -27,6 +27,6 @@ namespace vsid
 		 * @param origin 
 		 * @return
 		 */
-		std::pair<std::string, std::string> getAtcBlock(std::vector<std::string>& filedRoute, std::string origin);
+		std::pair<std::string, std::string> getAtcBlock(const std::vector<std::string>& filedRoute, const std::string origin);
 	}
 }

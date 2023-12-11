@@ -3,7 +3,7 @@
 #include "flightplan.h"
 #include "utils.h"
 
-std::pair<std::string, std::string> vsid::fpln::clean(std::vector<std::string> &filedRoute, std::string origin, std::string filedSidWpt)
+void vsid::fpln::clean(std::vector<std::string> &filedRoute, const std::string origin, std::string filedSidWpt)
 {
 	std::string sidByController;
 	std::string rwyByAtc;
@@ -12,16 +12,6 @@ std::pair<std::string, std::string> vsid::fpln::clean(std::vector<std::string> &
 	{
 		if (filedRoute.front().find('/') != std::string::npos && !(filedRoute.front().find("/N") != std::string::npos))
 		{
-			std::vector<std::string> sidBlock = vsid::utils::split(filedRoute.at(0), '/');
-			if (sidBlock.front().find_first_of("0123456789RV") != std::string::npos && sidBlock.front() != origin)
-			{
-				sidByController = sidBlock.front();
-				rwyByAtc = sidBlock.back();
-			}
-			if (sidBlock.front() == origin)
-			{
-				rwyByAtc = sidBlock.back();
-			}
 			filedRoute.erase(filedRoute.begin());
 		}
 	}
@@ -54,10 +44,9 @@ std::pair<std::string, std::string> vsid::fpln::clean(std::vector<std::string> &
 			}
 		}
 	}
-	return { sidByController, rwyByAtc };
 }
 
-std::pair<std::string, std::string> vsid::fpln::getAtcBlock(std::vector<std::string>& filedRoute, std::string origin)
+std::pair<std::string, std::string> vsid::fpln::getAtcBlock(const std::vector<std::string>& filedRoute, const std::string origin)
 {
 	std::string sidBlock;
 	std::string atcRwy;
