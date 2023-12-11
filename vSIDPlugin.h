@@ -21,7 +21,7 @@
 namespace vsid
 {
 	const std::string pluginName = "vSID";
-	const std::string pluginVersion = "0.4.0";
+	const std::string pluginVersion = "0.5.0";
 	const std::string pluginAuthor = "Philip Maier, O.B.";
 	const std::string pluginCopyright = "to be selected";
 	const std::string pluginViewAviso = "";
@@ -30,11 +30,8 @@ namespace vsid
 	struct fplnInfo
 	{
 		bool set = false;
-		std::string sid;
-		std::string sidRwy;
-		COLORREF sidColor;
-		int clmb = 0;
-		int clmbVia = 0;
+		vsid::sids::sid sid = {};
+		vsid::sids::sid customSid = {};
 	};
 
 	/**
@@ -109,6 +106,8 @@ namespace vsid
 		vsid::ConfigParser configParser;
 		std::string configPath;
 		std::map<std::string, std::map<std::string, int>> savedSettings;
+		// list of ground states set by controllers
+		std::string gsList;
 
 		/**
 		 * @brief Loads and updates the active airports with available configs

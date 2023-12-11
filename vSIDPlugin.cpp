@@ -88,7 +88,26 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 		if (currSid.waypoint != sidWpt)
 		{	
 			continue;
-		}		
+		}
+		// skip if current SID rwys don't match dep rwys
+		for (std::string depRwy : this->activeAirports[fplnData.GetOrigin()].depRwys)
+		{
+			// skip if a rwy has been set manually and it doesn't match available sid rwys
+			if (atcRwy != "" && atcRwy != depRwy)
+			{
+				continue;
+			}
+			// skip if airport dep rwys are not part of the SID
+			if (currSid.rwy.find(depRwy) == std::string::npos)
+			{
+				continue;
+			}
+			else
+			{
+				rwyMatch = true;
+				break;
+			}
+		}
 		// if a custom rule exists 
 		if (customRuleActive)
 		{
@@ -111,24 +130,6 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 		if (!this->activeAirports[fplnData.GetOrigin()].settings["lvp"] && currSid.lvp && currSid.lvp != -1)
 		{
 			continue;
-		}
-		for (std::string depRwy : this->activeAirports[fplnData.GetOrigin()].depRwys)
-		{
-			// skip if a rwy has been set manually and it doesn't match available sid rwys
-			if (atcRwy != "" && atcRwy != depRwy)
-			{
-				continue;
-			}
-			// skip if airport dep rwys are not part of the SID
-			if (currSid.rwy.find(depRwy) == std::string::npos)
-			{
-				continue;
-			}
-			else
-			{
-				rwyMatch = true;
-				break;
-			}
 		}
 		// skip if no matching rwy was found in SID;
 		if (!rwyMatch) continue;
@@ -186,56 +187,46 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 	EuroScopePlugIn::CFlightPlan fpln = FlightPlan;
 	EuroScopePlugIn::CFlightPlanData fplnData = fpln.GetFlightPlanData();
 	EuroScopePlugIn::CFlightPlanControllerAssignedData cad = fpln.GetControllerAssignedData();
-	std::vector<std::string> filedRoute = vsid::utils::split(std::string(fplnData.GetRoute()), ' ');
 	std::string filedSidWpt = this->findSidWpt(fplnData);
-	vsid::sids::sid sidSuggestionRaw;
-	vsid::sids::sid sidCustomSuggestionRaw;
-	std::string sidByController;
+	std::vector<std::string> filedRoute = vsid::utils::split(std::string(fplnData.GetRoute()), ' ');
+	vsid::sids::sid sidSuggestion;
+	vsid::sids::sid sidCustomSuggestion;
+	//std::string sidByController;
 	std::string setRwy;
 	vsid::fplnInfo fplnInfo;
+
+	vsid::fpln::clean(filedRoute, fplnData.GetOrigin(), filedSidWpt);
 
 	/* if a sid has been set manually choose this */
 	if (manualSid.waypoint != "")
 	{
-		sidSuggestionRaw = manualSid;
-		sidSuggestionRaw.rwy = atcRwy; // force dep rwy
+		sidSuggestion = this->processSid(fpln);
+		sidCustomSuggestion = manualSid;
+
+		if (sidSuggestion == sidCustomSuggestion)
+		{
+			sidCustomSuggestion = {};
+		}
 	}
 	/* if a rwy is given by atc check for a sid for this rwy and for a normal sid
 	* to be then able to compare those two
 	*/
 	else if (atcRwy != "")
 	{
-		sidSuggestionRaw = this->processSid(fpln, "");
-		sidCustomSuggestionRaw = this->processSid(fpln, atcRwy);
+		sidSuggestion = this->processSid(fpln);
+		sidCustomSuggestion = this->processSid(fpln, atcRwy);
 	}
 	/* default state */
 	else
 	{
-		sidSuggestionRaw = this->processSid(fpln, atcRwy);
+		sidSuggestion = this->processSid(fpln);
 	}
 
-	/* combined SID if one has been found */
-	std::string sidSuggestion;
-	if (sidSuggestionRaw.waypoint != "")
+	if (sidSuggestion.waypoint != "" && sidCustomSuggestion.waypoint == "")
 	{
-		sidSuggestion = sidSuggestionRaw.waypoint + sidSuggestionRaw.number + sidSuggestionRaw.designator[0];
-	}
-	/* combined 'custom' SID if one has been found */
-	std::string sidCustomSuggestion;
-	if (sidCustomSuggestionRaw.waypoint != "" && sidCustomSuggestionRaw.waypoint != "manual")
-	{
-		sidCustomSuggestion = sidCustomSuggestionRaw.waypoint + sidCustomSuggestionRaw.number + sidCustomSuggestionRaw.designator[0];
-	}
-
-	/* create clean route and get sid by atc and/or rwy by atc */
-	std::pair<std::string, std::string> atcBlock = vsid::fpln::clean(filedRoute, filedSidWpt, fplnData.GetOrigin());
-	if (atcBlock.first != "") sidByController = atcBlock.first;
-
-	if (sidSuggestion != "" && sidCustomSuggestion == "")
-	{
-		if (sidSuggestionRaw.rwy.find(',') != std::string::npos)
+		if (sidSuggestion.rwy.find(',') != std::string::npos)
 		{
-			std::vector<std::string> rwys = vsid::utils::split(sidSuggestionRaw.rwy, ',');
+			std::vector<std::string> rwys = vsid::utils::split(sidSuggestion.rwy, ',');
 			if (this->activeAirports[fplnData.GetOrigin()].depRwys.find(rwys.front()) !=
 				this->activeAirports[fplnData.GetOrigin()].depRwys.end()
 				)
@@ -245,175 +236,73 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 		}
 		else
 		{
-			setRwy = sidSuggestionRaw.rwy;
+			setRwy = sidSuggestion.rwy;
 		}
 	}
-	else if (sidCustomSuggestion != "" && sidCustomSuggestionRaw.waypoint != "manual")
+	else if (sidCustomSuggestion.waypoint != "")
 	{
-		if (sidCustomSuggestionRaw.rwy.find(',') != std::string::npos && atcRwy == "")
+		if (sidCustomSuggestion.rwy.find(',') != std::string::npos)
 		{
-			std::vector<std::string> rwySplit = vsid::utils::split(sidCustomSuggestionRaw.rwy, ',');
+			std::vector<std::string> rwySplit = vsid::utils::split(sidCustomSuggestion.rwy, ',');
 			setRwy = rwySplit.front();
-		}
-		else if (atcRwy != "")
-		{
-			setRwy = atcRwy;
 		}
 		else
 		{
-			setRwy = sidCustomSuggestionRaw.rwy;
+			setRwy = sidCustomSuggestion.rwy;
 		}
 	}
 	
-
 	// building a new route with the selected sid
-	if (sidSuggestionRaw.waypoint != "" && (sidCustomSuggestionRaw.waypoint == "" || sidCustomSuggestionRaw.waypoint == "manual"))
+	if (sidSuggestion.waypoint != "" && sidCustomSuggestion.waypoint == "")
 	{
 		std::ostringstream ss;
-		ss << sidSuggestionRaw.waypoint + sidSuggestionRaw.number + sidSuggestionRaw.designator[0] << "/" << setRwy;
+		ss << vsid::sids::getName(sidSuggestion) << "/" << setRwy;
 		filedRoute.insert(filedRoute.begin(), vsid::utils::trim(ss.str()));
 	}
-	if (sidCustomSuggestionRaw.waypoint != "" && sidCustomSuggestionRaw.waypoint != "manual")
+	else if (sidCustomSuggestion.waypoint != "")
 	{
 		std::ostringstream ss;
-		ss << sidCustomSuggestionRaw.waypoint + sidCustomSuggestionRaw.number + sidCustomSuggestionRaw.designator[0] << "/" << setRwy;
+		ss << vsid::sids::getName(sidCustomSuggestion) << "/" << setRwy;
 		filedRoute.insert(filedRoute.begin(), vsid::utils::trim(ss.str()));
 	}
 
-	if (checkOnly)
+	if (sidSuggestion.waypoint != "" && sidCustomSuggestion.waypoint == "")
 	{
-		// sid set in fpln by local atc but does not match plugin suggestion
-		if (sidByController == "" && sidCustomSuggestion != "" && sidCustomSuggestion != sidSuggestion)
-		{
-			fplnInfo.set = true;
-			fplnInfo.sid = sidCustomSuggestion;
-			fplnInfo.sidRwy = sidCustomSuggestionRaw.rwy;
-			fplnInfo.sidColor = this->configParser.getColor("customSidSuggestion"); // yellow
-			fplnInfo.clmb = sidCustomSuggestionRaw.initialClimb;
-			fplnInfo.clmbVia = sidCustomSuggestionRaw.climbvia;
-		}
-		// sid set in fpln by remote atc but does not match plugin suggestion
-		else if (sidByController != "" && sidByController != sidSuggestion)
-		{
-			if (this->processed[FlightPlan.GetCallsign()].set)
-			{
-				fplnInfo.set = false;
-			}
-			fplnInfo.sid = sidByController;
-			fplnInfo.sidColor = this->configParser.getColor("customSidSet"); // orange
-			//for (vsid::airport& apt : this->activeAirports) // possible performance improvement if needed - check only if fplnInfo.clmb = req. final level else get set val. in .clmb
-
-			for (vsid::sids::sid& sid : this->activeAirports[fplnData.GetOrigin()].sids)
-			{
-				if (sid.waypoint != sidByController.substr(0, sidByController.length() - 2))
-				{
-					continue;
-				}
-				if (sid.number != sidByController.at(sidByController.length() - 2))
-				{
-					continue;
-				}
-				if (sid.designator[0] != sidByController.at(sidByController.length() - 1))
-				{
-					continue;
-				}
-				fplnInfo.sidRwy = sid.rwy;
-				fplnInfo.clmb = sid.initialClimb;
-				fplnInfo.clmbVia = sid.climbvia;
-				break;
-			}
-			if(fplnInfo.clmb == 0) fplnInfo.clmb = fpln.GetClearedAltitude();
-		}
-		// sid set in fpln by any atc and matches plugin suggestion
-		else if (sidByController != "" && sidSuggestion == sidByController)
-		{
-			if (this->processed[FlightPlan.GetCallsign()].set)
-			{
-				fplnInfo.set = true;
-			}
-			else
-			{
-				fplnInfo.set = false;
-			}
-			fplnInfo.sid = sidByController;
-			fplnInfo.sidRwy = sidSuggestionRaw.rwy;
-			fplnInfo.sidColor = this->configParser.getColor("suggestedSidSet"); // green
-			fplnInfo.clmb = sidSuggestionRaw.initialClimb;
-			fplnInfo.clmbVia = sidSuggestionRaw.climbvia;
-		}
-		// set the plugin sid to white (not set in fpln yet)
-		else if (sidByController == "")
-		{
-			fplnInfo.set = false;
-			fplnInfo.sid = sidSuggestion;
-			fplnInfo.sidRwy = sidSuggestionRaw.rwy;
-			fplnInfo.sidColor = this->configParser.getColor("sidSuggestion"); // white
-			fplnInfo.clmb = sidSuggestionRaw.initialClimb;
-			fplnInfo.clmbVia = sidSuggestionRaw.climbvia;
-		}
+		fplnInfo.sid = sidSuggestion;
 	}
-	else
+	else if (sidCustomSuggestion.waypoint != "")
+	{
+		fplnInfo.sid = sidSuggestion;
+		fplnInfo.customSid = sidCustomSuggestion;
+	}
+	this->processed[fpln.GetCallsign()] = fplnInfo;
+
+	if(!checkOnly)
 	{	
 		fplnInfo.set = false;
 		if (!fplnData.SetRoute(vsid::utils::join(filedRoute).c_str()))
 		{
 			messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to change Flighplan!");
 		}
-		else
-		{
-			if (sidSuggestion != "" && sidCustomSuggestion == "")
-			{
-				fplnInfo.set = true;
-				fplnInfo.sid = sidSuggestion;
-				if (sidSuggestion.find_first_of("RV") != std::string::npos)
-				{
-					fplnInfo.sidColor = this->configParser.getColor("customSidSet"); // orange
-				}
-				else
-				{
-					fplnInfo.sidColor = this->configParser.getColor("suggestedSidSet"); // green
-				}
-				fplnInfo.sidRwy = sidSuggestionRaw.rwy;
-				fplnInfo.clmb = sidSuggestionRaw.initialClimb;
-				fplnInfo.clmbVia = sidSuggestionRaw.climbvia;
-			}
-			else if (sidCustomSuggestion != "")
-			{
-				fplnInfo.set = true;
-				fplnInfo.sid = sidCustomSuggestion;
-				fplnInfo.sidRwy = sidCustomSuggestionRaw.rwy;
-				fplnInfo.sidColor = this->configParser.getColor("customSidSet"); // orange
-				fplnInfo.clmb = sidCustomSuggestionRaw.initialClimb;
-				fplnInfo.clmbVia = sidCustomSuggestionRaw.climbvia;
-
-			}
-		}
 		if (!fplnData.AmendFlightPlan())
 		{
 			messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to amend Flighplan!");
 		}
-		if (sidSuggestion != "" && sidCustomSuggestion == "" && sidSuggestionRaw.initialClimb)
+		if (sidSuggestion.waypoint != "" && sidCustomSuggestion.waypoint == "" && sidSuggestion.initialClimb)
 		{
-			if (!cad.SetClearedAltitude(sidSuggestionRaw.initialClimb))
+			if (!cad.SetClearedAltitude(sidSuggestion.initialClimb))
 			{
 				messageHandler->writeMessage("ERROR", "Failed to set altitude.");
 			}
 		}
-		else if (sidCustomSuggestion != "" && sidCustomSuggestionRaw.initialClimb)
+		else if (sidCustomSuggestion.waypoint != "" && sidCustomSuggestion.initialClimb)
 		{
-			if (!cad.SetClearedAltitude(sidCustomSuggestionRaw.initialClimb))
+			if (!cad.SetClearedAltitude(sidCustomSuggestion.initialClimb))
 			{
 				messageHandler->writeMessage("ERROR", "Failed to set altitude.");
 			}
 		}
 	}
-	if (sidSuggestionRaw.waypoint == "" && sidByController == "")
-	{
-		fplnInfo.sid = "MANUAL";
-		fplnInfo.sidColor = this->configParser.getColor("noSid"); // red
-		fplnInfo.clmb = 0;
-	}
-	this->processed[fpln.GetCallsign()] = fplnInfo;
 }
 /*
 * END OWN FUNCTIONS
@@ -473,7 +362,7 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 			}
 		}
 		
-		if (strlen(sItemString) != 0 && sItemString != "NO SID")
+		if (strlen(sItemString) != 0 && std::string(sItemString) != "NO SID")
 		{
 			this->processFlightplan(fpln, false, depRWY, validDepartures[sItemString]);
 		}
@@ -488,7 +377,7 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 			EuroScopePlugIn::CFlightPlanData fplnData = fpln.GetFlightPlanData();
 			std::vector<std::string> filedRoute = vsid::utils::split(fplnData.GetRoute(), ' ');
 			std::string atcRwy = vsid::fpln::getAtcBlock(filedRoute, fplnData.GetOrigin()).second;
-			this->processFlightplan(FlightPlanSelectASEL(), false, atcRwy);
+			this->processFlightplan(FlightPlanSelectASEL(), false, atcRwy);            //////////////// possible unhandled exception: VFR flight or flight without runway
 		}
 		else
 		{
@@ -615,8 +504,65 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 					this->processFlightplan(FlightPlan, true);
 				}
 			}*/
-			*pRGB = this->processed[callsign].sidColor;
-			strcpy_s(sItemString, 16, this->processed[callsign].sid.c_str());
+			EuroScopePlugIn::CFlightPlanData fplnData = FlightPlan.GetFlightPlanData();
+			std::pair<std::string, std::string> atcBlock = vsid::fpln::getAtcBlock(vsid::utils::split(fplnData.GetRoute(), ' '), fplnData.GetOrigin());
+			std::string sidName = vsid::sids::getName(this->processed[callsign].sid);
+			std::string customSidName = vsid::sids::getName(this->processed[callsign].customSid);
+
+			if (atcBlock.first == fplnData.GetOrigin() && vsid::sids::isEmpty(this->processed[callsign].customSid))
+			{
+				*pRGB = this->configParser.getColor("noSid");
+			}
+			else if (atcBlock.first == "" ||
+					atcBlock.first == fplnData.GetOrigin() &&
+					(vsid::sids::isEmpty(this->processed[callsign].customSid) ||
+					this->processed[callsign].sid == this->processed[callsign].customSid)
+					)
+			{
+				*pRGB = this->configParser.getColor("sidSuggestion");
+			}
+			else if (atcBlock.first != "" &&
+					atcBlock.first == fplnData.GetOrigin() &&
+					!vsid::sids::isEmpty(this->processed[callsign].customSid) &&
+					this->processed[callsign].sid != this->processed[callsign].customSid
+					)
+			{
+				*pRGB = this->configParser.getColor("customSidSuggestion");
+			}
+			else if ((atcBlock.first != "" &&
+					atcBlock.first != fplnData.GetOrigin() &&
+					atcBlock.first == customSidName &&
+					this->processed[callsign].sid != this->processed[callsign].customSid) ||
+					atcBlock.first != sidName
+					)
+			{
+				*pRGB = this->configParser.getColor("customSidSet");
+			}
+			else if (atcBlock.first != "" && atcBlock.first == sidName)
+			{
+				*pRGB = this->configParser.getColor("suggestedSidSet");
+			}
+			else
+			{
+				*pRGB = RGB(140, 140, 60);
+			}
+
+			if (atcBlock.first != "" && atcBlock.first != fplnData.GetOrigin())
+			{
+				strcpy_s(sItemString, 16, atcBlock.first.c_str());
+			}
+			else if (atcBlock.first != "" && atcBlock.first == fplnData.GetOrigin() && this->processed[callsign].customSid.rwy.find(atcBlock.second) == std::string::npos)
+			{
+				strcpy_s(sItemString, 16, "MANUAL");
+			}
+			else if(sidName != "" && customSidName == "")
+			{
+				strcpy_s(sItemString, 16, sidName.c_str());
+			}
+			else if (customSidName != "")
+			{
+				strcpy_s(sItemString, 16, customSidName.c_str());
+			}
 		}
 		else if(std::string(FlightPlan.GetFlightPlanData().GetPlanType()) == "I")
 		{
@@ -635,13 +581,35 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 
 		if (this->processed.find(callsign) != this->processed.end())
 		{
+			// check to be able to determine if a found non-standard sid exists in valid sids and set it for ic comparison
+			std::string atcSid = vsid::fpln::getAtcBlock(vsid::utils::split(fplnData.GetRoute(), ' '), fplnData.GetOrigin()).first;
+			if (atcSid != "" &&
+				atcSid != fplnData.GetOrigin() &&
+				atcSid != vsid::sids::getName(this->processed[callsign].sid) &&
+				vsid::sids::isEmpty(this->processed[callsign].customSid))
+			{
+				for (const vsid::sids::sid& sid : this->activeAirports[fplnData.GetOrigin()].sids)
+				{
+					if (sid.waypoint != atcSid.substr(0, atcSid.length() - 2)) continue;
+					if (sid.designator[0] != atcSid[atcSid.length() - 1]) continue;
+					this->processed[callsign].customSid = sid;
+					break;
+				}
+			}
 			if (fpln.GetClearedAltitude() == fpln.GetFinalAltitude())
 			{
 				*pRGB = this->configParser.getColor("suggestedClmb"); // white
 			}
-			else if ((fpln.GetClearedAltitude() != fpln.GetFinalAltitude()) && (fpln.GetClearedAltitude() == this->processed[callsign].clmb))
+			else if (fpln.GetClearedAltitude() != fpln.GetFinalAltitude() &&
+					(fpln.GetClearedAltitude() == this->processed[callsign].sid.initialClimb &&
+					vsid::fpln::getAtcBlock(vsid::utils::split(fplnData.GetRoute(), ' '), fplnData.GetOrigin()).first ==
+					vsid::sids::getName(this->processed[callsign].sid)) ||
+					(fpln.GetClearedAltitude() == this->processed[callsign].customSid.initialClimb &&
+					vsid::fpln::getAtcBlock(vsid::utils::split(fplnData.GetRoute(), ' '), fplnData.GetOrigin()).first ==
+					vsid::sids::getName(this->processed[callsign].customSid))
+					)
 			{
-				if (this->processed[callsign].clmbVia)
+				if (this->processed[callsign].sid.climbvia)
 				{
 					*pRGB = this->configParser.getColor("clmbViaSet"); // green
 				}
@@ -657,31 +625,33 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 
 			transAlt = this->activeAirports[fplnData.GetOrigin()].transAlt;
 			maxInitialClimb = this->activeAirports[fplnData.GetOrigin()].maxInitialClimb;
-			if (fpln.GetClearedAltitude() == fpln.GetFinalAltitude())
+			if (fpln.GetClearedAltitude() == fpln.GetFinalAltitude() && std::string(fplnData.GetPlanType()) != "V")
 			{
-				if (this->processed[callsign].clmb == 0)
+				if (this->processed[callsign].sid.initialClimb == 0)
 				{
 					strcpy_s(sItemString, 16, std::string("---").c_str());
 				}
-				else if (this->processed[callsign].clmb <= transAlt)
+				else if (this->processed[callsign].sid.initialClimb <= transAlt)
 				{
-					strcpy_s(sItemString, 16, std::string("A").append(std::to_string(this->processed[callsign].clmb / 100)).c_str());
+					strcpy_s(sItemString, 16, std::string("A").append(std::to_string(this->processed[callsign].sid.initialClimb / 100)).c_str());
 				}
 				else
 				{
-					if (this->processed[callsign].clmb / 100 >= 100)
+					if (this->processed[callsign].sid.initialClimb / 100 >= 100)
 					{
-						strcpy_s(sItemString, 16, std::to_string(this->processed[callsign].clmb / 100).c_str());
+						strcpy_s(sItemString, 16, std::to_string(this->processed[callsign].sid.initialClimb / 100).c_str());
 					}
 					else
 					{
-						strcpy_s(sItemString, 16, std::string("0").append(std::to_string(this->processed[callsign].clmb / 100)).c_str());
+						strcpy_s(sItemString, 16, std::string("0").append(std::to_string(this->processed[callsign].sid.initialClimb / 100)).c_str());
 					}
 				}
 			}
 			else
 			{
-				if (fpln.GetClearedAltitude() == 0 || this->processed[callsign].clmb == 0)
+				if (fpln.GetClearedAltitude() == 0 ||
+					(this->processed[callsign].sid.initialClimb == 0 && std::string(fplnData.GetPlanType()) != "V")
+					)
 				{
 					strcpy_s(sItemString, 16, std::string("---").c_str());
 				}
@@ -715,7 +685,6 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 		// rwy set together with SID
 		if ((this->processed.find(FlightPlan.GetCallsign()) != this->processed.end() &&
 			atcBlock.second != "" &&
-			atcBlock.first != fplnData.GetOrigin() &&
 			this->activeAirports[fplnData.GetOrigin()].depRwys.find(atcBlock.second) !=
 			this->activeAirports[fplnData.GetOrigin()].depRwys.end())/* ||
 			fplnData.IsAmended()*/
@@ -723,20 +692,10 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 		{
 			*pRGB = this->configParser.getColor("rwySet");
 		}
-		// rwy set only with icao
-		else if (this->processed.find(FlightPlan.GetCallsign()) != this->processed.end() &&
-			atcBlock.second != "" &&
-			atcBlock.second == fplnData.GetOrigin() &&
-			this->activeAirports[fplnData.GetOrigin()].depRwys.find(atcBlock.second) !=
-			this->activeAirports[fplnData.GetOrigin()].depRwys.end() &&
-			this->gsList.find(FlightPlan.GetGroundState()) != std::string::npos
-			)
-		{
-			*pRGB = this->configParser.getColor("rwySet");
-		}
 		else if(this->processed.find(FlightPlan.GetCallsign()) != this->processed.end() &&
 				atcBlock.second != "" &&
-				!this->activeAirports[fplnData.GetOrigin()].depRwys.count(atcBlock.second)/* && - DISABLED UNTIL ANSWER FROM ES DEV
+				this->activeAirports[fplnData.GetOrigin()].depRwys.find(atcBlock.second) ==
+				this->activeAirports[fplnData.GetOrigin()].depRwys.end()/* && - DISABLED UNTIL ANSWER FROM ES DEV
 				fplnData.IsAmended()*/
 				)
 		{
@@ -753,13 +712,13 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 			else
 			{
 				std::string sidRwy;
-				if (this->processed[FlightPlan.GetCallsign()].sidRwy.find(',') != std::string::npos)
+				if (this->processed[FlightPlan.GetCallsign()].sid.rwy.find(',') != std::string::npos)
 				{
-					sidRwy = vsid::utils::split(this->processed[FlightPlan.GetCallsign()].sidRwy, ',').front();
+					sidRwy = vsid::utils::split(this->processed[FlightPlan.GetCallsign()].sid.rwy, ',').front();
 				}
 				else
 				{
-					sidRwy = this->processed[FlightPlan.GetCallsign()].sidRwy;
+					sidRwy = this->processed[FlightPlan.GetCallsign()].sid.rwy;
 				}
 				strcpy_s(sItemString, 16, sidRwy.c_str());
 			}
@@ -931,17 +890,10 @@ void vsid::VSIDPlugin::OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlight
 		std::vector<std::string> filedRoute = vsid::utils::split(fplnData.GetRoute(), ' ');
 		if (filedRoute.size() > 0)
 		{
-			if (filedRoute.at(0).find('/') != std::string::npos)
+			std::pair<std::string, std::string> atcBlock = vsid::fpln::getAtcBlock(filedRoute, fplnData.GetOrigin());
+			if (atcBlock.first == FlightPlan.GetFlightPlanData().GetOrigin() && atcBlock.second != "")
 			{
-				std::string setOrigin = vsid::utils::split(filedRoute.at(0), '/').front();
-				if (setOrigin == fplnData.GetOrigin())
-				{
-					this->processFlightplan(FlightPlan, true, vsid::utils::split(filedRoute.at(0), '/').back());
-				}
-				else
-				{
-					this->processFlightplan(FlightPlan, true);
-				}
+				this->processFlightplan(FlightPlan, true, atcBlock.second);
 			}
 			else
 			{
