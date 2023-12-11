@@ -43,6 +43,7 @@ std::vector<std::string> vsid::utils::split(const std::string &string, const cha
 
 std::string vsid::utils::join(const std::vector<std::string>& toJoin, const char del)
 {
+	if (toJoin.empty()) return "";
 	std::ostringstream ss;
 	for (const auto& elem : toJoin) // possible improvement back to a copy function
 	{
@@ -51,11 +52,11 @@ std::string vsid::utils::join(const std::vector<std::string>& toJoin, const char
 	//std::copy(toJoin.begin(), toJoin.end(), std::ostream_iterator<std::string>(ss, &del)); - causes strange symbol for &del in release version
 	std::string joinedStr = ss.str();
 	return joinedStr.erase(joinedStr.length() - 1, 1);
-	return joinedStr;
 }
 
 std::string vsid::utils::join(const std::set<std::string>& toJoin, char del)
 {
+	if (toJoin.empty()) return "";
 	std::ostringstream ss;
 	for (const auto& elem : toJoin) // possible improvement back to a copy function
 	{
