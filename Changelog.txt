@@ -1,3 +1,12 @@
+[Changelog v0.5.0]
+
+[CHANGED]
+*	SID selection and use of custom SIDs logic
+
+[FIXED]
+*	unhandled exception for empty flightplans when auto-selecting SID
+*	color flickering
+
 [Changelog v0.4.1 - HOTFIX]
 
 [FIXED]
