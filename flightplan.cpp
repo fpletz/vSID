@@ -5,12 +5,11 @@
 
 void vsid::fpln::clean(std::vector<std::string> &filedRoute, const std::string origin, std::string filedSidWpt)
 {
-	std::string sidByController;
-	std::string rwyByAtc;
+	std::pair<std::string, std::string> atcBlock = getAtcBlock(filedRoute, origin);
 
 	if (filedRoute.size() > 0)
 	{
-		if (filedRoute.front().find('/') != std::string::npos && !(filedRoute.front().find("/N") != std::string::npos))
+		if (filedRoute.front().find('/') != std::string::npos && filedRoute.front().find("/N") == std::string::npos)
 		{
 			filedRoute.erase(filedRoute.begin());
 		}
@@ -20,37 +19,41 @@ void vsid::fpln::clean(std::vector<std::string> &filedRoute, const std::string o
 	{
 		for (std::vector<std::string>::iterator it = filedRoute.begin(); it != filedRoute.end();)
 		{
-			if (sidByController != "")
+			if ((it->find(filedSidWpt) != std::string::npos && *it != filedSidWpt) || *it == origin)
 			{
-				if (it->substr(0, it->length() - 2) == sidByController.substr(0, sidByController.length() - 2))
-				{
-					it = filedRoute.erase(it);
-				}
-				else
-				{
-					++it;
-				}
+				it = filedRoute.erase(it);
 			}
-			else
-			{
-				if (it->substr(0, it->length() - 2) == filedSidWpt)
-				{
-					it = filedRoute.erase(it);
-				}
-				else
-				{
-					++it;
-				}
-			}
+			else ++it;
+			//if (atcBlock.first != "")
+			//{
+			//	if (it->substr(0, it->length() - 2) == atcBlock.first.substr(0, atcBlock.first.length() - 2))
+			//	{
+			//		it = filedRoute.erase(it);
+			//	}
+			//	else
+			//	{
+			//		++it;
+			//	}
+			//}
+			//else
+			//{
+			//	if (it->substr(0, it->length() - 2) == filedSidWpt)
+			//	{
+			//		it = filedRoute.erase(it);
+			//	}
+			//	else
+			//	{
+			//		++it;
+			//	}
+			//}
 		}
 	}
 }
 
 std::pair<std::string, std::string> vsid::fpln::getAtcBlock(const std::vector<std::string>& filedRoute, const std::string origin)
 {
-	std::string sidBlock;
-	std::string atcRwy;
-	std::string atcSid;
+	std::string atcRwy = "";
+	std::string atcSid = "";
 	if (filedRoute.size() > 0)
 	{
 		if (filedRoute.front().find('/') != std::string::npos && !(filedRoute.front().find("/N") != std::string::npos))
