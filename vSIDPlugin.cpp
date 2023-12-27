@@ -268,6 +268,10 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 	vsid::fpln::info fplnInfo = {};
 
 	vsid::fpln::clean(filedRoute, fplnData.GetOrigin(), filedSidWpt);
+	if (this->processed.contains(fpln.GetCallsign()))
+	{
+		fplnInfo.atcRWY = this->processed[fpln.GetCallsign()].atcRWY;
+	}
 
 	/* if a sid has been set manually choose this */
 	if (std::string(FlightPlan.GetFlightPlanData().GetPlanType()) == "V")
@@ -366,6 +370,11 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 		{
 			messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to amend Flighplan!");
 		}
+		else
+		{
+			this->processed[fpln.GetCallsign()].noFplnUpdate = true;
+			this->processed[fpln.GetCallsign()].atcRWY = true;
+		}
 		if (sidSuggestion.waypoint != "" && sidCustomSuggestion.waypoint == "" && sidSuggestion.initialClimb)
 		{
 			if (!cad.SetClearedAltitude(sidSuggestion.initialClimb))
@@ -393,10 +402,10 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, POINT Pt, RECT Area) {
 
 	// if logged in as observer disable functions - DISABLED DURING DEVELOPMENT
-	/*if (!ControllerMyself().IsController())
+	if (!ControllerMyself().IsController())
 	{
 		return;
-	}*/
+	}
 
 	/* DOCUMENTATION 
 		//for (int i = 0; i < 8; i++) // test on how to get annotations
@@ -473,6 +482,11 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 			if (!fplnData.AmendFlightPlan())
 			{
 				messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to amend Flighplan!");
+			}
+			else
+			{
+				this->processed[fpln.GetCallsign()].noFplnUpdate = true;
+				this->processed[fpln.GetCallsign()].atcRWY = true;
 			}
 		}
 		else if (strlen(sItemString) != 0 && std::string(sItemString) != "NO SID")
@@ -581,13 +595,18 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 			{
 				messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to change Flighplan!");
 			}
-			/*if (!vsid::fpln::findRemarks(fplnData, "VSID/RWY"))
+			if (!vsid::fpln::findRemarks(fplnData, "VSID/RWY"))
 			{
 				vsid::fpln::addRemark(fplnData, "VSID/RWY");
-			}*/
+			}
 			if (!fplnData.AmendFlightPlan())
 			{
 				messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to amend Flighplan!");
+			}
+			else
+			{
+				this->processed[fpln.GetCallsign()].noFplnUpdate = true;
+				this->processed[fpln.GetCallsign()].atcRWY = true;
 			}
 		}
 	}
@@ -831,34 +850,28 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 		*pColorCode = EuroScopePlugIn::TAG_COLOR_RGB_DEFINED;
 		EuroScopePlugIn::CFlightPlanData fplnData = FlightPlan.GetFlightPlanData();
 
-		std::vector<std::string> filedRoute = vsid::utils::split(fplnData.GetRoute(), ' ');
-		std::pair<std::string, std::string> atcBlock = vsid::fpln::getAtcBlock(filedRoute, fplnData.GetOrigin());
-
 		if (this->processed.find(FlightPlan.GetCallsign()) != this->processed.end())
 		{
-			if (!this->processed[FlightPlan.GetCallsign()].atcRWY && atcBlock.first == fplnData.GetOrigin())
-			{
-				//vsid::fpln::removeRemark(fplnData, "Test");
-			}
-			if ((atcBlock.second != "" &&
-				this->activeAirports[fplnData.GetOrigin()].depRwys.find(atcBlock.second) !=
-				this->activeAirports[fplnData.GetOrigin()].depRwys.end())/* ||
-				fplnData.IsAmended()*/
+			std::vector<std::string> filedRoute = vsid::utils::split(fplnData.GetRoute(), ' ');
+			std::pair<std::string, std::string> atcBlock = vsid::fpln::getAtcBlock(filedRoute, fplnData.GetOrigin());
+
+			if (atcBlock.second != "" &&
+				this->activeAirports[fplnData.GetOrigin()].depRwys.contains(atcBlock.second) &&
+				this->processed[FlightPlan.GetCallsign()].atcRWY
 				)
 			{
 				*pRGB = this->configParser.getColor("rwySet");
 			}
 			else if (atcBlock.second != "" &&
-				this->activeAirports[fplnData.GetOrigin()].depRwys.find(atcBlock.second) ==
-				this->activeAirports[fplnData.GetOrigin()].depRwys.end()/* && - DISABLED UNTIL ANSWER FROM ES DEV
-				fplnData.IsAmended()*/
+				!this->activeAirports[fplnData.GetOrigin()].depRwys.contains(atcBlock.second) &&
+				this->processed[FlightPlan.GetCallsign()].atcRWY
 				)
 			{
 				*pRGB = this->configParser.getColor("notDepRwySet");
 			}
 			else *pRGB = this->configParser.getColor("rwyNotSet");
 
-			if (atcBlock.second != "" && fplnData.IsAmended())
+			if (atcBlock.second != "" && this->processed[FlightPlan.GetCallsign()].atcRWY)
 			{
 				strcpy_s(sItemString, 16, atcBlock.second.c_str());
 			}
@@ -1074,10 +1087,17 @@ void vsid::VSIDPlugin::OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlight
 {
 	// if we receive updates for flightplans validate entered sid again to sync between controllers
 	// updates are received for any flightplan not just that under control
+
+	// if we want to supress an update that happened and skip sid checking
+	if (this->processed[FlightPlan.GetCallsign()].noFplnUpdate)
+	{
+		this->processed[FlightPlan.GetCallsign()].noFplnUpdate = false;
+		return;
+	}
+
 	if (!FlightPlan.IsValid())
 	{
-		std::string callsign = FlightPlan.GetCallsign();
-		messageHandler->writeMessage("WARNING", "[" + callsign + "] flightplan is invalid according to ES.");
+		messageHandler->writeMessage("WARNING", "[" + std::string(FlightPlan.GetCallsign()) + "] flightplan is invalid according to ES.");
 		return;
 	}
 	if (this->processed.find(FlightPlan.GetCallsign()) != this->processed.end())
@@ -1087,15 +1107,25 @@ void vsid::VSIDPlugin::OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlight
 		if (filedRoute.size() > 0)
 		{
 			std::pair<std::string, std::string> atcBlock = vsid::fpln::getAtcBlock(filedRoute, fplnData.GetOrigin());
-			// delete vsid remarks if present
-			/*if (vsid::fpln::findRemarks(fplnData, "VSID/RWY") && atcBlock.first != fplnData.GetOrigin())
+
+			if (!this->processed[FlightPlan.GetCallsign()].atcRWY &&
+				(fplnData.IsAmended() || FlightPlan.GetClearenceFlag() ||
+				atcBlock.first != fplnData.GetOrigin() ||
+				(atcBlock.first == fplnData.GetOrigin() && vsid::fpln::findRemarks(fplnData, "VSID/RWY")))
+				)
+			{
+				this->processed[FlightPlan.GetCallsign()].atcRWY = true;
+			}
+
+			if (vsid::fpln::findRemarks(fplnData, "VSID/RWY") && atcBlock.first != fplnData.GetOrigin())
 			{
 				vsid::fpln::removeRemark(fplnData, "VSID/RWY");
 				if (!fplnData.AmendFlightPlan())
 				{
 					messageHandler->writeMessage("ERROR", "[" + std::string(FlightPlan.GetCallsign()) + "] - Failed to amend Flighplan!");
 				}
-			}*/
+				else this->processed[FlightPlan.GetCallsign()].noFplnUpdate = true;
+			}
 			if (atcBlock.first == fplnData.GetOrigin() && atcBlock.second != "")
 			{
 				this->processFlightplan(FlightPlan, true, atcBlock.second);
