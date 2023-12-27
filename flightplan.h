@@ -13,6 +13,7 @@ namespace vsid
 		struct info
 		{
 			bool atcRWY = false;
+			bool noFplnUpdate = false;
 			vsid::sids::sid sid = {};
 			vsid::sids::sid customSid = {};
 		};
@@ -36,10 +37,10 @@ namespace vsid
 		 */
 		std::pair<std::string, std::string> getAtcBlock(const std::vector<std::string>& filedRoute, const std::string origin);
 
-		/*bool findRemarks(const EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(& searchStr));
+		bool findRemarks(const EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(& searchStr));
 
 		void removeRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(&toRemove));
 
-		void addRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(& toAdd));*/
+		void addRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(& toAdd));
 	}
 }
