@@ -1,6 +1,5 @@
 #include "pch.h"
 #include "time.h"
-
 #include "messageHandler.h"
 
 #include <chrono>
@@ -23,11 +22,7 @@ bool vsid::time::isActive(const std::string& timezone, const int start, const in
 			zt.get_local_time() > ztStart.get_local_time() &&
 			zt.get_local_time() < ztEnd.get_local_time()
 			)
-		//if(zt.get_local_time() > ztStart.get_local_time() || zt.get_local_time() < ztEnd.get_local_time())
 		{
-			std::ostringstream ss;
-			ss << zt.get_local_time() << " vs. start: " << ztStart.get_local_time() << " vs. end: " << ztEnd.get_local_time();
-			messageHandler->writeMessage("DEBUG", "time now: " + ss.str());
 			return true;
 		}
 	}
