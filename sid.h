@@ -38,7 +38,8 @@ namespace vsid
 			SIDArea area = {};
 			std::string equip = "";
 			int lvp = 0;
-			int nightOps = 0;
+			int timeFrom = -1;
+			int timeTo = -1;
 		};
 		std::string getName(const sid& sid);
 		std::string getRwy(const sid& sid);

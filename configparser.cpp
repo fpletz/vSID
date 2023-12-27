@@ -135,6 +135,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                 apt.second.customRules[setting.first] = setting.second;
                             }
                         }
+                        apt.second.timezone = this->parsedConfig.at(apt.first).value("timezone", "");
 
                         for (auto &sid : this->parsedConfig.at(apt.first).at("sids").items())
                         {
@@ -157,7 +158,8 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                 vsid::sids::SIDArea area = {};
                                 std::string equip = "";
                                 int lvp = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("lvp", 0);
-                                int nightOps = 0;
+                                int timeFrom = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("timeFrom", -1);
+                                int timeTo = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("timeTo", -1);
                                 
                                 vsid::sids::sid newSid = {  wpt,
                                                             ' ',
@@ -175,9 +177,11 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                                             area,
                                                             equip,
                                                             lvp,
-                                                            nightOps
+                                                            timeFrom,
+                                                            timeTo
                                                          };
                                 apt.second.sids.push_back(newSid);
+                                if (newSid.timeFrom != -1 && newSid.timeTo != -1) apt.second.nightSids.push_back(newSid);
                             }
                         }
                     }
@@ -257,7 +261,7 @@ void vsid::ConfigParser::loadGrpConfig()
 
 COLORREF vsid::ConfigParser::getColor(std::string color)
 {
-    if (auto &elem = this->colors.find(color); elem != this->colors.end())
+    if (auto const &elem = this->colors.find(color); elem != this->colors.end())
     {
         return this->colors[color];
     }

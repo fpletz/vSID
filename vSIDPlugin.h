@@ -4,35 +4,25 @@
 #include <map>
 #include <memory>
 #include <algorithm>
-//#include <string>
-//#include <vector>
 #include <sstream>
 
 #include "EuroScopePlugIn.h"
 #include "airport.h"
 #include "constants.h"
 
-//testing
-//#include "flightplan.h"
-//#include "vSID.h"
+#include "flightplan.h"
 #include "configparser.h"
 #include "utils.h"
 
 namespace vsid
 {
 	const std::string pluginName = "vSID";
-	const std::string pluginVersion = "0.5.0";
+	const std::string pluginVersion = "0.6.0";
 	const std::string pluginAuthor = "Philip Maier, O.B.";
 	const std::string pluginCopyright = "to be selected";
 	const std::string pluginViewAviso = "";
 
 	class ConfigParser;
-	struct fplnInfo
-	{
-		bool localEdit = false;
-		vsid::sids::sid sid = {};
-		vsid::sids::sid customSid = {};
-	};
 
 	/**
 	 * @brief Main class communicating with ES
@@ -102,7 +92,7 @@ namespace vsid
 		//std::vector<vsid::airport> activeAirports;
 		std::map<std::string, vsid::airport> activeAirports;
 		bool debug;
-		std::map<std::string, vsid::fplnInfo> processed;
+		std::map<std::string, vsid::fpln::info> processed;
 		vsid::ConfigParser configParser;
 		std::string configPath;
 		std::map<std::string, std::map<std::string, int>> savedSettings;
