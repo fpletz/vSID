@@ -1,4 +1,12 @@
 [Changelog v0.5.0]
+
+[NEW]
+*	Night ops depending on the configured times in SID considering the apt timezone
+
+[CHANGED]
+*	C++ Version upgraded from 17 to 20
+
+[Changelog v0.5.0]
 [NEW]
 *	VFR flightplans are now processed but handled differently from IFR flightplans
 *	only accept ICAO/RWY for checks if flightplan is amended
