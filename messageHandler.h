@@ -1,13 +1,7 @@
 #pragma once
-
-//#include "vSIDPlugin.h"
-//#include "vSID.h"
-
 #include <string>
 #include <memory>
 #include <vector>
-
-//#include"EuroScopePlugIn.h"
 
 namespace vsid
 {
