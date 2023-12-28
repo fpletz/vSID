@@ -124,7 +124,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                             apt.second.settings = savedSettings[apt.first];
                         }
                         else
-                            apt.second.settings = { {"lvp", 0}, {"night", 0} };
+                            apt.second.settings = { {"lvp", 0}, {"night", 0}, {"auto", 0} };
 
                         // if there are more settings than lvp / night we have rules
                         if (apt.second.settings.size() > 2)

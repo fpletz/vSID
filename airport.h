@@ -10,6 +10,11 @@
 
 namespace vsid
 {
+	struct controller
+	{
+		int facility = 0;
+		double freq = 0.0;
+	};
 	struct airport
 	{
 		std::string icao = "";

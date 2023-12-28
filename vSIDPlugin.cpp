@@ -150,10 +150,6 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 			}
 		}
 	}
-	for (auto sid : actNSid)
-	{
-		messageHandler->writeMessage("DEBUG", "Night sid: " + sid);
-	}
 
 	for(vsid::sids::sid &currSid : this->activeAirports[fplnData.GetOrigin()].sids)
 	{
@@ -913,7 +909,9 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 				"version / "
 				"Status - (inop) / "
 				"Level - (inop) / "
+				"auto [icao] - activate automode for icao (inop) /"
 				"rule [icao] [rulename] - toggle rule for icao / "
+				"night [icao] - toggle night mode for icao /"
 				"lvp [icao] - toggle lvp ops for icao / "
 				"Debug - toggle debug mode (inop)");
 			return true;
@@ -1056,6 +1054,41 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 				else messageHandler->writeMessage("INFO", vsid::utils::toupper(command[2]) + " is not in active airports");
 			}
 			return true;
+		}
+		else if (vsid::utils::tolower(command[1]) == "auto")
+		{
+			if (command.size() == 2)
+			{
+				std::ostringstream ss;
+				for (auto it = this->activeAirports.begin(); it != this->activeAirports.end();)
+				{
+					std::string status = (it->second.settings["auto"]) ? "ON" : "OFF";
+
+					ss << it->first << " Auto: " << status;
+					it++;
+					if (it != this->activeAirports.end()) ss << " / ";
+				}
+				messageHandler->writeMessage("INFO", ss.str());
+			}
+			else if (command.size() == 3)
+			{
+				if (this->activeAirports.count(vsid::utils::toupper(command[2])))
+				{
+					if (this->activeAirports[vsid::utils::toupper(command[2])].settings["auto"])
+					{
+						this->activeAirports[vsid::utils::toupper(command[2])].settings["auto"] = 0;
+					}
+					else
+					{
+						this->activeAirports[vsid::utils::toupper(command[2])].settings["auto"] = 1;
+					}
+					messageHandler->writeMessage("INFO", vsid::utils::toupper(command[2]) + " Auto: " +
+						((this->activeAirports[vsid::utils::toupper(command[2])].settings["auto"]) ? "ON" : "OFF")
+					);
+				}
+				else messageHandler->writeMessage("INFO", vsid::utils::toupper(command[2]) + " is not in active airports");
+			}
+			return true;
 			}
 		else if (vsid::utils::tolower(command[1]) == "debug")
 		{
@@ -1154,12 +1187,41 @@ void vsid::VSIDPlugin::OnFlightPlanDisconnect(EuroScopePlugIn::CFlightPlan Fligh
 	this->processed.erase(FlightPlan.GetCallsign());
 }
 
+void vsid::VSIDPlugin::OnControllerPositionUpdate(EuroScopePlugIn::CController Controller)
+{
+
+	std::string atcIcao = vsid::utils::split(Controller.GetCallsign(), '_').front();
+	std::string myIcao = vsid::utils::split(ControllerMyself().GetCallsign(), '_').front();
+
+	if (!this->activeAirports.contains(atcIcao) ||
+		Controller.GetPrimaryFrequency() == 0.0 ||
+		Controller.GetPrimaryFrequency() > 199.0) return;
+
+	if (!this->actAtc.contains(Controller.GetCallsign()))
+	{
+		this->actAtc[Controller.GetCallsign()] = { Controller.GetFacility(), Controller.GetPrimaryFrequency() };
+		
+		if (Controller.GetFacility() < ControllerMyself().GetFacility() &&
+			Controller.GetFacility() > 1 &&
+			atcIcao == myIcao)
+		{
+			if (this->activeAirports[atcIcao].settings["auto"] == 1)
+			{
+				this->activeAirports[atcIcao].settings["auto"] = 0;
+				messageHandler->writeMessage("INFO", "Disabling auto mode for " +
+											atcIcao + ". " + std::string(Controller.GetCallsign()) +
+											" now online."
+											);
+			}
+		}
+	}
+}
+
 void vsid::VSIDPlugin::OnControllerDisconnect(EuroScopePlugIn::CController Controller) // use this to check for lower atc disconnects to start automation again
 {
-	//vsid::messagehandler::LogMessage("DEBUG", "Controller disconnected: " + std::string(Controller.GetFullName()));
-	if (Controller.GetPositionId() == ControllerMyself().GetPositionId())
+	if (this->actAtc.contains(Controller.GetCallsign()))
 	{
-		//vsid::messagehandler::LogMessage("DEBUG", "I disconnected!");
+		this->actAtc.erase(Controller.GetCallsign());
 	}
 }
 
