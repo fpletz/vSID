@@ -752,11 +752,11 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 
 			if (atcSid == "" || atcSid == sidName || atcSid == fplnData.GetOrigin() && sidName != customSidName)
 			{
-				climbVia = this->processed[callsign].sid.initialClimb;
+				climbVia = this->processed[callsign].sid.climbvia;
 			}
 			else if (atcSid == "" || atcSid == customSidName || atcSid == fplnData.GetOrigin())
 			{
-				climbVia = this->processed[callsign].customSid.initialClimb;
+				climbVia = this->processed[callsign].customSid.climbvia;
 			}
 
 			// determine initial climb depending on customSid
@@ -850,6 +850,14 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 		{
 			std::vector<std::string> filedRoute = vsid::utils::split(fplnData.GetRoute(), ' ');
 			std::pair<std::string, std::string> atcBlock = vsid::fpln::getAtcBlock(filedRoute, fplnData.GetOrigin());
+
+			if (!this->processed[FlightPlan.GetCallsign()].atcRWY &&
+				(atcBlock.first == vsid::sids::getName(this->processed[FlightPlan.GetCallsign()].sid) ||
+				atcBlock.first == vsid::sids::getName(this->processed[FlightPlan.GetCallsign()].customSid))
+				)
+			{
+				this->processed[FlightPlan.GetCallsign()].atcRWY = true;
+			}
 
 			if (atcBlock.second != "" &&
 				this->activeAirports[fplnData.GetOrigin()].depRwys.contains(atcBlock.second) &&
