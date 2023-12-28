@@ -1,10 +1,14 @@
-[Changelog v0.5.0]
+[Changelog v0.6.0]
 
 [NEW]
 *	Night ops depending on the configured times in SID considering the apt timezone
+*	Remarks are set if vSID sets an ICAO/RWY block
+	~ if the block is later SID/RWY the remark is removed
 
 [CHANGED]
 *	C++ Version upgraded from 17 to 20
+*	RWY tagItem color coding improved
+	~ based on different alternating factors (isamended, iscleared, has vsid remark, is SID/RWY)
 
 [Changelog v0.5.0]
 [NEW]
