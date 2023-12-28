@@ -36,7 +36,7 @@ namespace vsid
 
 		bool getDebug() const;
 		/**
-		 * @brief Extract a sid waypoint. ES GetSidName() is used and the last 2 chars substracted
+		 * @brief Extract a sid waypoint. If ES doesn't find a SID the route is compared to available SID waypoints
 		 * 
 		 * @param FlightPlanData 
 		 * @return
@@ -69,6 +69,18 @@ namespace vsid
 		 * @param Area
 		 */
 		void OnFunctionCall(int FunctionId, const char* sItemString, POINT Pt, RECT Area);
+		/**
+		 * @brief Handles events on plane position updates if the flightplan is present in a tagItem
+		 * 
+		 * @param FlightPlan 
+		 * @param RadarTarget 
+		 * @param ItemCode 
+		 * @param TagData 
+		 * @param sItemString 
+		 * @param pColorCode 
+		 * @param pRGB 
+		 * @param pFontSize 
+		 */
 		void OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, EuroScopePlugIn::CRadarTarget RadarTarget, int ItemCode, int TagData, char sItemString[16], int* pColorCode, COLORREF* pRGB, double* pFontSize);
 		/**
 		 * @brief Called when a dot commmand is used and ES couldn't resolve it.
@@ -78,14 +90,41 @@ namespace vsid
 		 * @return
 		 */
 		bool OnCompileCommand(const char* sCommandLine);
+		/**
+		 * @brief Called when something is changed in the flightplan (used for route updates)
+		 * 
+		 * @param FlightPlan 
+		 */
 		void OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlightPlan FlightPlan);
+		/**
+		 * @brief Called when a flightplan disconnects from the network
+		 * 
+		 * @param FlightPlan 
+		 */
 		void OnFlightPlanDisconnect(EuroScopePlugIn::CFlightPlan FlightPlan);
+		/**
+		 * @brief Called whenever a controller position is updated. ~ every 5 seconds
+		 * 
+		 * @param Controller 
+		 */
+		void OnControllerPositionUpdate(EuroScopePlugIn::CController Controller);
+		/**
+		 * @brief Called if a controller disconnects
+		 * 
+		 * @param Controller 
+		 */
 		void OnControllerDisconnect(EuroScopePlugIn::CController Controller);
 		/**
 		 * @brief Called when the user clicks on the ok button of the runway selection dialog
 		 *
 		 */
-		void OnAirportRunwayActivityChanged();		
+		void OnAirportRunwayActivityChanged();
+		/**
+		 * @brief Called once a second
+		 * 
+		 * @param Counter 
+		 * @return * void 
+		 */
 		void OnTimer(int Counter);
 		
 	private:
@@ -98,6 +137,7 @@ namespace vsid
 		std::map<std::string, std::map<std::string, int>> savedSettings;
 		// list of ground states set by controllers
 		std::string gsList;
+		std::map<std::string, vsid::controller> actAtc;
 
 		/**
 		 * @brief Loads and updates the active airports with available configs

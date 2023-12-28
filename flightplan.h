@@ -37,10 +37,30 @@ namespace vsid
 		 */
 		std::pair<std::string, std::string> getAtcBlock(const std::vector<std::string>& filedRoute, const std::string origin);
 
+		/** 
+		 * @brief Searches the flightplan remarks for the given string
+		 * 
+		 * @param fplnData - flightplan data to get the remarks from
+		 * @param searchStr - which string to search for
+		 * @return true - if the string was found
+		 * @return false - if the string was not found
+		 */
 		bool findRemarks(const EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(& searchStr));
 
+		/**
+		 * @brief Removes the given string from the flightplan remarks if present
+		 * 
+		 * @param fplnData - flightplan data to remove the remarks from
+		 * @param searchStr - which string to remove
+		 */
 		void removeRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(&toRemove));
 
+		/**
+		 * @brief Adds the given string to the flightplan remarks
+		 * 
+		 * @param fplnData - flightplan data to edit the remarks for
+		 * @param searchStr - which string to add
+		 */
 		void addRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(& toAdd));
 	}
 }

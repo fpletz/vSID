@@ -41,10 +41,40 @@ namespace vsid
 			int timeFrom = -1;
 			int timeTo = -1;
 		};
+		/**
+		 * @brief Gets the SID name (wpt + number + designator)
+		 * 
+		 * @param sid - the sid object to check
+		 */
 		std::string getName(const sid& sid);
+		/**
+		 * @brief Gets the runway associated with a sid
+		 * 
+		 * @param sid - the sid object
+		 * @return runway if single or first runway if multiple
+		 */
 		std::string getRwy(const sid& sid);
+		/**
+		 * @brief Checks if a SID object is empty (waypoint is checked)
+		 * 
+		 * @param sid - the sid object
+		 */
 		bool isEmpty(const sid& sid);
+		/**
+		 * @brief Compares if two SIDs are the same
+		 * 
+		 * @param sid1 - first sid to compare
+		 * @param sid2 - second sid to compare
+		 * @return true - if waypoint, number and designator match
+		 */
 		bool operator==(const sid& sid1, const sid& sid2);
+		/**
+		 * @brief Compares if two SIDs are the different
+		 * 
+		 * @param sid1 - first sid to compare
+		 * @param sid2 - second sid to compare
+		 * @return true - if at least one of waypoint, number or designator don't match
+		 */
 		bool operator!=(const sid& sid1, const sid& sid2);
 	}
 }
