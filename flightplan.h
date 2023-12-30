@@ -14,6 +14,7 @@ namespace vsid
 		{
 			bool atcRWY = false;
 			bool noFplnUpdate = false;
+			bool remarkChecked = false;
 			vsid::sids::sid sid = {};
 			vsid::sids::sid customSid = {};
 		};
