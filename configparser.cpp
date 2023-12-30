@@ -188,11 +188,11 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                 }
                 catch (const json::parse_error& e)
                 {
-                    messageHandler->writeMessage("ERROR:", "Failed to load airport config : " + std::string(e.what()));
+                    messageHandler->writeMessage("ERROR", "Failed to load airport config (" + apt.first + "): " + std::string(e.what()));
                 }
                 catch (const json::type_error& e)
                 {
-                    messageHandler->writeMessage("ERROR:", "Failed to load airport config : " + std::string(e.what()));
+                    messageHandler->writeMessage("ERROR", "Failed to load airport config (" + apt.first + "): " + std::string(e.what()));
                 }
 
                 /* DOCUMENTATION on how to get all values below a key
