@@ -1,0 +1,69 @@
+{
+    "EDMO": {
+        "elevation": 1947,
+        "runways": "02,22",
+        "ArrAsDep": 0,
+        "transAlt": 5000,
+        "maxInitialClimb": 7000,
+        "customRules" : {},
+        "timeMode": 1,
+		"timezone": "Europe/Berlin",
+        "sids": {
+            "ATMAX": {
+                "R": {
+                    "rwy": "22",
+                    "initial": 7000,
+                    "climbvia": 0,
+                    "prio": 1,
+                    "pilotfiled": 0,
+                    "wtc": "",
+                    "engineType": "",
+                    "engineCount": 0,
+                    "mtow": 0,
+                    "customRule": "",
+                    "area": "0",
+                    "equip": "0",
+                    "lvp": -1,
+                    "timeFrom": -1,
+                    "timeTo": -1
+                }
+			},
+			"MAH": {
+                "R": {
+                    "rwy": "22",
+                    "initial": 7000,
+                    "climbvia": 1,
+                    "prio": 1,
+                    "pilotfiled": 0,
+                    "wtc": "",
+                    "engineType": "",
+                    "engineCount": 0,
+                    "mtow": 0,
+                    "customRule": "",
+                    "area": "0",
+                    "equip": "0",
+                    "lvp": -1,
+                    "timeFrom": -1,
+                    "timeTo": -1
+                },
+                "C": {
+                    "rwy": "22",
+                    "initial": 7000,
+                    "climbvia": 1,
+                    "prio": 99,
+                    "pilotfiled": 0,
+                    "wtc": "",
+                    "engineType": "",
+                    "engineCount": 0,
+                    "mtow": 0,
+                    "customRule": "",
+                    "area": "0",
+                    "equip": "0",
+                    "lvp": -1,
+                    "timeFrom": -1,
+                    "timeTo": -1
+                }
+			}
+        }
+    }
+}

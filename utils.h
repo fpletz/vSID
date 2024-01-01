@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <string>
+#include <algorithm>
 
 //#include "vSID.h"
 
@@ -82,10 +83,29 @@ namespace vsid
 		 */
 		bool containsDigit(int number, int digit);
 
+		/**
+		 * @brief Get a minimum climb for an airport (rounded to the next thousand ft above field + 500 ft)
+		 * 
+		 * @param elevation 
+		 * @return int 
+		 */
 		int getMinClimb(int elevation);
 
+		/**
+		 * @brief Transforms the input string to lowercase
+		 * 
+		 * @param input - the string to transform
+		 * @return lowercase input
+		 */
 		std::string tolower(std::string input);
 
+		/**
+		 * @brief Transforms the input to uppercase
+		 * 
+		 * @tparam T 
+		 * @param input - the input to transform (string, c-style string)
+		 * @return uppercase input
+		 */
 		template<typename T>
 		std::string toupper(T input)
 		{

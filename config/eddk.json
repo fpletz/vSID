@@ -6,6 +6,8 @@
         "transAlt": 5000,
         "maxInitialClimb": 7000,
         "customRules" : {},
+        "timeMode": 1,
+        "timezone": "Europe/Berlin",
         "sids": {
             "COL": {
                 "F": {
@@ -22,8 +24,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
                 "X": {
                     "rwy": "14L",
@@ -39,8 +41,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "B": {
                     "rwy": "32R",
@@ -56,8 +58,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "C": {
                     "rwy": "32R",
@@ -73,8 +75,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"D": {
                     "rwy": "24",
@@ -90,8 +92,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"K": {
                     "rwy": "06",
@@ -107,8 +109,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"E": {
                     "rwy": "14R",
@@ -124,8 +126,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"M": {
                     "rwy": "32L",
@@ -141,8 +143,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 }
             },
             "KUMIK": {
@@ -160,8 +162,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
                 "X": {
                     "rwy": "14L",
@@ -177,8 +179,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"Q": {
                     "rwy": "14L",
@@ -194,8 +196,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "B": {
                     "rwy": "32R",
@@ -211,8 +213,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "C": {
                     "rwy": "32R",
@@ -228,8 +230,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"D": {
                     "rwy": "24",
@@ -245,8 +247,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"K": {
                     "rwy": "06",
@@ -262,8 +264,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"E": {
                     "rwy": "14R",
@@ -279,8 +281,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"M": {
                     "rwy": "32L",
@@ -296,8 +298,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 }
             },
 			"NVO": {
@@ -315,8 +317,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
                 "P": {
                     "rwy": "14L",
@@ -332,8 +334,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"Q": {
                     "rwy": "14L",
@@ -349,8 +351,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"W": {
                     "rwy": "14L",
@@ -366,8 +368,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "B": {
                     "rwy": "32R",
@@ -383,8 +385,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "R": {
                     "rwy": "32R",
@@ -400,8 +402,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"D": {
                     "rwy": "24",
@@ -417,8 +419,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"K": {
                     "rwy": "06",
@@ -434,8 +436,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"E": {
                     "rwy": "14R",
@@ -451,8 +453,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"C": {
                     "rwy": "14R",
@@ -468,8 +470,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"V": {
                     "rwy": "14R",
@@ -485,8 +487,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"M": {
                     "rwy": "32L",
@@ -502,8 +504,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 }
             },
 			"PODIP": {
@@ -521,8 +523,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
                 "X": {
                     "rwy": "14L",
@@ -538,8 +540,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"Q": {
                     "rwy": "14L",
@@ -555,8 +557,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "B": {
                     "rwy": "32R",
@@ -572,8 +574,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "C": {
                     "rwy": "32R",
@@ -589,8 +591,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"D": {
                     "rwy": "24",
@@ -606,8 +608,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"K": {
                     "rwy": "06",
@@ -623,8 +625,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"E": {
                     "rwy": "14R",
@@ -640,8 +642,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"M": {
                     "rwy": "32L",
@@ -657,8 +659,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 }
             },
 			"WYP": {
@@ -676,8 +678,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
                 "X": {
                     "rwy": "14L",
@@ -693,8 +695,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "B": {
                     "rwy": "32R",
@@ -710,8 +712,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "C": {
                     "rwy": "32R",
@@ -727,8 +729,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"D": {
                     "rwy": "24",
@@ -744,8 +746,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"K": {
                     "rwy": "06",
@@ -761,8 +763,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"E": {
                     "rwy": "14R",
@@ -778,8 +780,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"M": {
                     "rwy": "32L",
@@ -795,8 +797,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 }
             }
         }
