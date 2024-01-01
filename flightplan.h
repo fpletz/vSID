@@ -1,6 +1,6 @@
 #pragma once
 #include "pch.h"
-#include "EuroScopePlugIn.h"
+#include "es/EuroScopePlugIn.h"
 #include "sid.h"
 
 #include <string>
