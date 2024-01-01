@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <sstream>
 
-#include "EuroScopePlugIn.h"
+#include "es/EuroScopePlugIn.h"
 #include "airport.h"
 #include "constants.h"
 
@@ -18,7 +18,7 @@ namespace vsid
 {
 	const std::string pluginName = "vSID";
 	const std::string pluginVersion = "0.6.0";
-	const std::string pluginAuthor = "Philip Maier, O.B.";
+	const std::string pluginAuthor = "Gameagle";
 	const std::string pluginCopyright = "to be selected";
 	const std::string pluginViewAviso = "";
 
