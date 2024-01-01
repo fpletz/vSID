@@ -70,9 +70,6 @@
     <ClInclude Include="vSIDPlugin.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="es_environment\EuroScopePlugIn.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -98,6 +95,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="time.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="include\es\EuroScopePlugIn.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
