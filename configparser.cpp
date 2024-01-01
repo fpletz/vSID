@@ -65,11 +65,11 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
     GetModuleFileNameA((HINSTANCE)&__ImageBase, path, MAX_PATH);
     PathRemoveFileSpecA(path);
     std::filesystem::path basePath = path;
-    //basePath.concat("\\config");
+
     if (this->vSidConfig.contains("airportConfigs"))
     {
         basePath.append(this->vSidConfig.value("airportConfigs", "")).make_preferred();
-        messageHandler->writeMessage("DEBUG", "airport config: " + basePath.string());
+        //messageHandler->writeMessage("DEBUG", "airport config: " + basePath.string());
     }
     else
     {
@@ -111,6 +111,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                         apt.second.arrAsDep = this->parsedConfig.at(apt.first).value("ArrAsDep", 0);
                         apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
+                        //apt.second.timeMode = this->parsedConfig.at(apt.first).value("timeMode", 0);
                         std::map<std::string, int> customRules;
                         for (auto &el : this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, int>{}))
                         {
@@ -124,14 +125,17 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                             apt.second.settings = savedSettings[apt.first];
                         }
                         else
-                            apt.second.settings = { {"lvp", 0}, {"night", 0}, {"auto", 0} };
+                            apt.second.settings = { {"lvp", 0},
+                                                    {"time", this->parsedConfig.at(apt.first).value("timeMode", 0)},
+                                                    {"auto", 0} 
+                                                    };
 
                         // if there are more settings than lvp / night we have rules
-                        if (apt.second.settings.size() > 2)
+                        if (apt.second.settings.size() > 3)
                         {
                             for (std::pair<std::string, int> setting : apt.second.settings)
                             {
-                                if (setting.first == "lvp" || setting.first == "night") continue;
+                                if (setting.first == "lvp" || setting.first == "night" || setting.first == "time") continue;
                                 apt.second.customRules[setting.first] = setting.second;
                             }
                         }
@@ -181,7 +185,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                                             timeTo
                                                          };
                                 apt.second.sids.push_back(newSid);
-                                if (newSid.timeFrom != -1 && newSid.timeTo != -1) apt.second.nightSids.push_back(newSid);
+                                if (newSid.timeFrom != -1 && newSid.timeTo != -1) apt.second.timeSids.push_back(newSid);
                             }
                         }
                     }
@@ -218,11 +222,11 @@ void vsid::ConfigParser::loadGrpConfig()
     GetModuleFileNameA((HINSTANCE)&__ImageBase, path, MAX_PATH);
     PathRemoveFileSpecA(path);
     std::filesystem::path basePath = path;
-    //basePath.concat("\\config");
+
     if (this->vSidConfig.contains("grp"))
     {
         basePath.append(this->vSidConfig.value("grp", "")).make_preferred();
-        messageHandler->writeMessage("DEBUG", "grp config: " + basePath.string());
+        //messageHandler->writeMessage("DEBUG", "grp config: " + basePath.string());
     }
     else
     {

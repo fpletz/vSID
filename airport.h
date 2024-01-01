@@ -24,7 +24,8 @@ namespace vsid
 		std::set<std::string> arrRwys = {};
 		std::map<std::string, int> customRules = {};
 		std::vector<vsid::sids::sid> sids = {};
-		std::vector<vsid::sids::sid> nightSids = {};
+		std::vector<vsid::sids::sid> timeSids = {};
+		int timeMode = 0;
 		std::string timezone = "";
 		int arrAsDep = 0;
 		int transAlt = 0;
