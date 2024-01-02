@@ -530,7 +530,7 @@
                 }
 			},
 			"ROKMU": {
-                "B": {
+                "P": {
                     "rwy": "25L",
                     "initial": 4000,
                     "climbvia": 0,
