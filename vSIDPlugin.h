@@ -14,10 +14,13 @@
 #include "configparser.h"
 #include "utils.h"
 
+// dev
+#include <chrono>
+// end dev
 namespace vsid
 {
 	const std::string pluginName = "vSID";
-	const std::string pluginVersion = "0.6.0";
+	const std::string pluginVersion = "0.7.0";
 	const std::string pluginAuthor = "Gameagle";
 	const std::string pluginCopyright = "to be selected";
 	const std::string pluginViewAviso = "";
@@ -103,6 +106,12 @@ namespace vsid
 		 */
 		void OnFlightPlanDisconnect(EuroScopePlugIn::CFlightPlan FlightPlan);
 		/**
+		 * @brief Called when a position for radar target is updated
+		 * 
+		 * @param RadarTarget
+		 */
+		void OnRadarTargetPositionUpdate(EuroScopePlugIn::CRadarTarget RadarTarget);
+		/**
 		 * @brief Called whenever a controller position is updated. ~ every 5 seconds
 		 * 
 		 * @param Controller 
@@ -132,6 +141,7 @@ namespace vsid
 		std::map<std::string, vsid::airport> activeAirports;
 		bool debug;
 		std::map<std::string, vsid::fpln::info> processed;
+		std::map<std::string, std::pair< std::chrono::utc_clock::time_point, bool>> removeProcessed;
 		vsid::ConfigParser configParser;
 		std::string configPath;
 		std::map<std::string, std::map<std::string, int>> savedSettings;

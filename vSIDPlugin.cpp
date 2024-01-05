@@ -2,7 +2,7 @@
 
 #include "vSIDPlugin.h"
 #include "flightplan.h"
-#include "time.h"
+#include "timeHandler.h"
 #include "messageHandler.h"
 
 #include <set>
@@ -154,6 +154,7 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 	for(vsid::sids::sid &currSid : this->activeAirports[fplnData.GetOrigin()].sids)
 	{
 		bool rwyMatch = false;
+		bool restriction = false;
 		// skip if current SID does not match found SID wpt
 		if (currSid.waypoint != sidWpt)
 		{	
@@ -202,16 +203,19 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 		{
 			continue;
 		}
+		else restriction = true;
 		// skip if SID has engineNumber requirement and acft doesn't match
 		if (!vsid::utils::containsDigit(currSid.engineCount, fplnData.GetEngineNumber()))
 		{
 			continue;
 		}
+		else restriction = true;
 		// skip if SID has WTC requirement and acft doesn't match
 		if (currSid.wtc != "" && currSid.wtc.find(fplnData.GetAircraftWtc()) == std::string::npos)
 		{
 			continue;
 		}
+		else restriction = true;
 		// skip if SID has mtow requirement and acft is too heavy - if grp config has not yet been loaded load it
 		if (currSid.mtow) // IN DEVELOPMENT
 		{
@@ -229,6 +233,7 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 				break; // acft light enough, no further checks
 			}
 			if (!mtowMatch) continue;
+			else restriction = true;
 		}
 		// skip if sid has night times set but they're not active
 		if (!actTSid.contains(currSid.waypoint) &&
@@ -241,7 +246,7 @@ vsid::sids::sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan Flight
 			setSid = currSid;
 			prio = currSid.prio;
 		}
-		if (currSid.prio < prio && setSid.pilotfiled == currSid.pilotfiled)
+		if (currSid.prio < prio && (setSid.pilotfiled == currSid.pilotfiled || restriction))
 		{
 			setSid = currSid;
 			prio = currSid.prio;
@@ -623,7 +628,14 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 	if (ItemCode == TAG_ITEM_VSID_SIDS)
 	{
 		*pColorCode = EuroScopePlugIn::TAG_COLOR_RGB_DEFINED;
-		std::pair<std::string, std::string> atcBlock = vsid::fpln::getAtcBlock(vsid::utils::split(fplnData.GetRoute(), ' '), fplnData.GetOrigin());	
+		std::pair<std::string, std::string> atcBlock = vsid::fpln::getAtcBlock(vsid::utils::split(fplnData.GetRoute(), ' '), fplnData.GetOrigin());
+
+		if (this->removeProcessed.size() > 0 &&
+			this->removeProcessed.contains(callsign) &&
+			this->removeProcessed[callsign].second)
+		{
+			this->removeProcessed.erase(callsign);
+		}
 
 		if (this->processed.find(callsign) != this->processed.end())
 		{
@@ -850,7 +862,7 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 	{
 		*pColorCode = EuroScopePlugIn::TAG_COLOR_RGB_DEFINED;
 
-		if (this->processed.find(FlightPlan.GetCallsign()) != this->processed.end())
+		if (this->processed.find(callsign) != this->processed.end())
 		{
 			//std::vector<std::string> filedRoute = vsid::utils::split(fplnData.GetRoute(), ' ');
 			std::pair<std::string, std::string> atcBlock = vsid::fpln::getAtcBlock(
@@ -866,7 +878,7 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 				this->processed[callsign].atcRWY = vsid::fpln::findRemarks(fplnData, "VSID/RWY");
 				this->processed[callsign].remarkChecked = true;
 			}
-			if (!this->processed[FlightPlan.GetCallsign()].atcRWY &&
+			if (!this->processed[callsign].atcRWY &&
 				(atcBlock.first == vsid::sids::getName(this->processed[callsign].sid) ||
 				atcBlock.first == vsid::sids::getName(this->processed[callsign].customSid))
 				)
@@ -944,6 +956,20 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 			messageHandler->writeMessage("INFO", "vSID Version " + pluginVersion + " loaded.");
 			return true;
 		}
+		// dev
+		else if (vsid::utils::tolower(command[1]) == "removed")
+		{
+			for (auto elem : this->removeProcessed)
+			{
+				messageHandler->writeMessage("DEBUG", elem.first + " being removed at: " + vsid::time::toString(elem.second.first) + " and is disconnected " + ((elem.second.second) ? "YES" : "NO"));
+			}
+			if (this->removeProcessed.size() == 0)
+			{
+				messageHandler->writeMessage("DEBUG", "Removed list empty");
+			}
+			return true;
+		}
+		// end dev
 		else if (vsid::utils::tolower(command[1]) == "rule")
 		{
 			if (command.size() == 2)
@@ -1144,42 +1170,50 @@ void vsid::VSIDPlugin::OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlight
 	// if we receive updates for flightplans validate entered sid again to sync between controllers
 	// updates are received for any flightplan not just that under control
 
-	// if we want to supress an update that happened and skip sid checking
-	if (this->processed[FlightPlan.GetCallsign()].noFplnUpdate)
-	{
-		this->processed[FlightPlan.GetCallsign()].noFplnUpdate = false;
-		return;
-	}
+	EuroScopePlugIn::CFlightPlanData fplnData = FlightPlan.GetFlightPlanData();
+	std::string callsign = FlightPlan.GetCallsign();
 
 	if (!FlightPlan.IsValid())
 	{
 		return;
 	}
-	if (this->processed.find(FlightPlan.GetCallsign()) != this->processed.end())
+	if (this->processed.find(callsign) != this->processed.end())
 	{
-		EuroScopePlugIn::CFlightPlanData fplnData = FlightPlan.GetFlightPlanData();
+		// if we want to supress an update that happened and skip sid checking
+		if (this->processed[callsign].noFplnUpdate)
+		{
+			this->processed[callsign].noFplnUpdate = false;
+			return;
+		}
+		else
+		{
+			this->processed[callsign].noFplnUpdate = true;
+		}
 		std::vector<std::string> filedRoute = vsid::utils::split(fplnData.GetRoute(), ' ');
 		if (filedRoute.size() > 0)
 		{
 			std::pair<std::string, std::string> atcBlock = vsid::fpln::getAtcBlock(filedRoute, fplnData.GetOrigin());
 
-			if (!this->processed[FlightPlan.GetCallsign()].atcRWY &&
+			if (!this->processed[callsign].atcRWY &&
 				(fplnData.IsAmended() || FlightPlan.GetClearenceFlag() ||
 				atcBlock.first != fplnData.GetOrigin() ||
 				(atcBlock.first == fplnData.GetOrigin() && vsid::fpln::findRemarks(fplnData, "VSID/RWY")))
 				)
 			{
-				this->processed[FlightPlan.GetCallsign()].atcRWY = true;
+				this->processed[callsign].atcRWY = true;
 			}
 
-			if (vsid::fpln::findRemarks(fplnData, "VSID/RWY") && atcBlock.first != fplnData.GetOrigin())
+			if (vsid::fpln::findRemarks(fplnData, "VSID/RWY") &&
+				atcBlock.first != fplnData.GetOrigin() &&
+				ControllerMyself().IsController()
+				)
 			{
 				vsid::fpln::removeRemark(fplnData, "VSID/RWY");
 				if (!fplnData.AmendFlightPlan())
 				{
-					messageHandler->writeMessage("ERROR", "[" + std::string(FlightPlan.GetCallsign()) + "] - Failed to amend Flighplan!");
+					messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to amend Flighplan!");
 				}
-				else this->processed[FlightPlan.GetCallsign()].noFplnUpdate = true;
+				else this->processed[callsign].noFplnUpdate = true;
 			}
 			if (atcBlock.first == fplnData.GetOrigin() && atcBlock.second != "")
 			{
@@ -1206,7 +1240,25 @@ void vsid::VSIDPlugin::OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlight
 
 void vsid::VSIDPlugin::OnFlightPlanDisconnect(EuroScopePlugIn::CFlightPlan FlightPlan)
 {
-	this->processed.erase(FlightPlan.GetCallsign());
+	if (this->processed.contains(FlightPlan.GetCallsign()))
+	{
+		std::string callsign = FlightPlan.GetCallsign();
+		auto now = std::chrono::utc_clock::now() + std::chrono::minutes{ 1 };
+		this->removeProcessed[callsign] = { now, true };
+	}
+}
+
+void vsid::VSIDPlugin::OnRadarTargetPositionUpdate(EuroScopePlugIn::CRadarTarget RadarTarget)
+{
+	std::string callsign = RadarTarget.GetCallsign();
+	if (this->processed.contains(RadarTarget.GetCallsign()) &&
+		RadarTarget.GetGS() >= 50 &&
+		!this->removeProcessed.contains(callsign)
+		)
+	{
+		auto now = std::chrono::utc_clock::now() + std::chrono::minutes{ 10 };
+		this->removeProcessed[callsign] = { now, false };
+	}
 }
 
 void vsid::VSIDPlugin::OnControllerPositionUpdate(EuroScopePlugIn::CController Controller)
@@ -1393,6 +1445,21 @@ void vsid::VSIDPlugin::OnTimer(int Counter)
 	if (msg.first != "" && msg.second != "")
 	{
 		DisplayUserMessage("vSID", msg.first.c_str(), msg.second.c_str(), true, true, false, true, false);
+	}
+
+	if (this->removeProcessed.size() > 0)
+	{
+		auto now = std::chrono::utc_clock::now();
+
+		for (auto it = this->removeProcessed.begin(); it != this->removeProcessed.end();)
+		{
+			if (now > it->second.first)
+			{
+				auto rm = std::erase_if(this->processed, [&](auto item) { return it->first == item.first; });
+				it = this->removeProcessed.erase(it);
+			}
+			else ++it;
+		}
 	}
 }
 /*
