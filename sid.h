@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <map>
 
 namespace vsid
 {
@@ -34,6 +35,7 @@ namespace vsid
 			std::string engineType = "";
 			int engineCount = 0;
 			int mtow = 0;
+			std::map<std::string, bool> acftType = {};
 			std::string customRule = "";
 			SIDArea area = {};
 			std::string equip = "";
