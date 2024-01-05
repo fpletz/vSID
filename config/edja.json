@@ -1,0 +1,158 @@
+{
+    "EDJA": {
+        "elevation": 2079,
+        "runways": "06,24",
+        "ArrAsDep": 0,
+        "transAlt": 5000,
+        "maxInitialClimb": 7000,
+        "customRules" : {},
+        "timeMode": 1,
+		"timezone": "Europe/Berlin",
+        "sids": {
+            "KPT": {
+                "B": {
+                    "rwy": "06",
+                    "initial": 7000,
+                    "climbvia": 1,
+                    "prio": 1,
+                    "pilotfiled": 0,
+                    "wtc": "",
+                    "engineType": "",
+                    "engineCount": 0,
+                    "mtow": 0,
+                    "customRule": "",
+                    "area": "0",
+                    "equip": "0",
+                    "lvp": -1,
+                    "timeFrom": -1,
+                    "timeTo": -1
+                },
+                "A": {
+                    "rwy": "24",
+                    "initial": 7000,
+                    "climbvia": 0,
+                    "prio": 1,
+                    "pilotfiled": 0,
+                    "wtc": "",
+                    "engineType": "",
+                    "engineCount": 0,
+                    "mtow": 0,
+                    "customRule": "",
+                    "area": "0",
+                    "equip": "0",
+                    "lvp": -1,
+                    "timeFrom": -1,
+                    "timeTo": -1
+                }
+			},
+			"LUPOL": {
+                "B": {
+                    "rwy": "06",
+                    "initial": 7000,
+                    "climbvia": 1,
+                    "prio": 1,
+                    "pilotfiled": 0,
+                    "wtc": "",
+                    "engineType": "",
+                    "engineCount": 0,
+                    "mtow": 0,
+                    "customRule": "",
+                    "area": "0",
+                    "equip": "0",
+                    "lvp": -1,
+                    "timeFrom": -1,
+                    "timeTo": -1
+                },
+                "A": {
+                    "rwy": "24",
+                    "initial": 7000,
+                    "climbvia": 1,
+                    "prio": 1,
+                    "pilotfiled": 0,
+                    "wtc": "",
+                    "engineType": "",
+                    "engineCount": 0,
+                    "mtow": 0,
+                    "customRule": "",
+                    "area": "0",
+                    "equip": "0",
+                    "lvp": -1,
+                    "timeFrom": -1,
+                    "timeTo": -1
+                }
+			},
+			"UMTEX": {
+                "B": {
+                    "rwy": "06",
+                    "initial": 7000,
+                    "climbvia": 1,
+                    "prio": 1,
+                    "pilotfiled": 0,
+                    "wtc": "",
+                    "engineType": "",
+                    "engineCount": 0,
+                    "mtow": 0,
+                    "customRule": "",
+                    "area": "0",
+                    "equip": "0",
+                    "lvp": -1,
+                    "timeFrom": -1,
+                    "timeTo": -1
+                },
+                "A": {
+                    "rwy": "24",
+                    "initial": 7000,
+                    "climbvia": 0,
+                    "prio": 1,
+                    "pilotfiled": 0,
+                    "wtc": "",
+                    "engineType": "",
+                    "engineCount": 0,
+                    "mtow": 0,
+                    "customRule": "",
+                    "area": "0",
+                    "equip": "0",
+                    "lvp": -1,
+                    "timeFrom": -1,
+                    "timeTo": -1
+                }
+			},
+			"ALG": {
+                "U": {
+                    "rwy": "06",
+                    "initial": 7000,
+                    "climbvia": 1,
+                    "prio": 99,
+                    "pilotfiled": 0,
+                    "wtc": "",
+                    "engineType": "",
+                    "engineCount": 0,
+                    "mtow": 0,
+                    "customRule": "",
+                    "area": "0",
+                    "equip": "0",
+                    "lvp": -1,
+                    "timeFrom": -1,
+                    "timeTo": -1
+                },
+                "T": {
+                    "rwy": "24",
+                    "initial": 7000,
+                    "climbvia": 1,
+                    "prio": 99,
+                    "pilotfiled": 0,
+                    "wtc": "",
+                    "engineType": "",
+                    "engineCount": 0,
+                    "mtow": 0,
+                    "customRule": "",
+                    "area": "0",
+                    "equip": "0",
+                    "lvp": -1,
+                    "timeFrom": -1,
+                    "timeTo": -1
+                }
+			}
+        }
+    }
+}

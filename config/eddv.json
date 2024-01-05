@@ -6,6 +6,8 @@
         "transAlt": 5000,
         "maxInitialClimb": 7000,
         "customRules" : {},
+        "timeMode": 1,
+        "timezone": "Europe/Berlin",
         "sids": {
             "CEL": {
                 "Y": {
@@ -22,8 +24,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
                 "G": {
                     "rwy": "09R",
@@ -39,8 +41,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "S": {
                     "rwy": "27R",
@@ -56,8 +58,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "F": {
                     "rwy": "27L",
@@ -73,8 +75,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 }
             },
 			"MULDO": {
@@ -92,8 +94,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"Y2": {
                     "rwy": "09L",
@@ -109,8 +111,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
                 "G": {
                     "rwy": "09R",
@@ -126,8 +128,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "S": {
                     "rwy": "27R",
@@ -143,8 +145,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "F": {
                     "rwy": "27L",
@@ -160,8 +162,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 }
             },
 			"NIE": {
@@ -179,8 +181,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
                 "G": {
                     "rwy": "09R",
@@ -196,8 +198,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "S": {
                     "rwy": "27R",
@@ -213,8 +215,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "F": {
                     "rwy": "27L",
@@ -230,8 +232,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 }
             },
 			"POVEL": {
@@ -249,8 +251,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"Y2": {
                     "rwy": "09L",
@@ -266,8 +268,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
                 "H": {
                     "rwy": "09R",
@@ -283,8 +285,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "S1": {
                     "rwy": "27R",
@@ -300,8 +302,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"S2": {
                     "rwy": "27R",
@@ -317,8 +319,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "F": {
                     "rwy": "27L",
@@ -334,8 +336,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 }
             },
 			"VAXEV": {
@@ -353,8 +355,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
                 "G": {
                     "rwy": "09R",
@@ -370,8 +372,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "S1": {
                     "rwy": "27R",
@@ -387,8 +389,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"S2": {
                     "rwy": "27R",
@@ -404,8 +406,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "F": {
                     "rwy": "27L",
@@ -421,8 +423,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 }
             },
 			"WERRA": {
@@ -440,8 +442,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"Y2": {
                     "rwy": "09L",
@@ -457,8 +459,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
                 "G": {
                     "rwy": "09R",
@@ -474,8 +476,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "S1": {
                     "rwy": "27R",
@@ -491,8 +493,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"S2": {
                     "rwy": "27R",
@@ -508,8 +510,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "F": {
                     "rwy": "27L",
@@ -525,8 +527,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 }
             },
 			"WRB": {
@@ -544,8 +546,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"Y2": {
                     "rwy": "09L",
@@ -561,8 +563,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
                 "G": {
                     "rwy": "09R",
@@ -578,8 +580,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "S1": {
                     "rwy": "27R",
@@ -595,8 +597,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"S2": {
                     "rwy": "27R",
@@ -612,8 +614,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 			    "F": {
                     "rwy": "27L",
@@ -629,8 +631,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": "",
-                    "timeTo": ""
+                    "timeFrom": -1,
+                    "timeTo": -1
                 }
             }
         }
