@@ -2,7 +2,7 @@
 //
 
 #pragma once
-#include "EuroScopePlugIn.h"
+#include "es/EuroScopePlugIn.h"
 #include "vSIDPlugin.h"
 
 //#include "utils.h"

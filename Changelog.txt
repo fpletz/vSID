@@ -1,3 +1,19 @@
+[Changelog v0.6.0]
+
+[NEW]
+*	Time ops depending on the configured times in SID considering the apt timezone
+*	Remarks are set if vSID sets an ICAO/RWY block
+	~ if the block is later SID/RWY the remark is removed
+
+[CHANGED]
+*	C++ Version upgraded from 17 to 20
+*	RWY tagItem color coding improved
+	~ based on different alternating factors (isamended, iscleared, has vsid remark, is SID/RWY)
+*	Flightplans are only processed if ADEP is an active apt and GS <= 50 knots
+
+[FIXED]
+*	If a manual rwy was selected autoselection reverted to the default RWY instead of keeping the selected
+
 [Changelog v0.5.0]
 [NEW]
 *	VFR flightplans are now processed but handled differently from IFR flightplans

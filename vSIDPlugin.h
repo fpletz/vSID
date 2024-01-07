@@ -4,35 +4,25 @@
 #include <map>
 #include <memory>
 #include <algorithm>
-//#include <string>
-//#include <vector>
 #include <sstream>
 
-#include "EuroScopePlugIn.h"
+#include "es/EuroScopePlugIn.h"
 #include "airport.h"
 #include "constants.h"
 
-//testing
-//#include "flightplan.h"
-//#include "vSID.h"
+#include "flightplan.h"
 #include "configparser.h"
 #include "utils.h"
 
 namespace vsid
 {
 	const std::string pluginName = "vSID";
-	const std::string pluginVersion = "0.5.0";
-	const std::string pluginAuthor = "Philip Maier, O.B.";
+	const std::string pluginVersion = "0.6.0";
+	const std::string pluginAuthor = "Gameagle";
 	const std::string pluginCopyright = "to be selected";
 	const std::string pluginViewAviso = "";
 
 	class ConfigParser;
-	struct fplnInfo
-	{
-		bool localEdit = false;
-		vsid::sids::sid sid = {};
-		vsid::sids::sid customSid = {};
-	};
 
 	/**
 	 * @brief Main class communicating with ES
@@ -46,7 +36,7 @@ namespace vsid
 
 		bool getDebug() const;
 		/**
-		 * @brief Extract a sid waypoint. ES GetSidName() is used and the last 2 chars substracted
+		 * @brief Extract a sid waypoint. If ES doesn't find a SID the route is compared to available SID waypoints
 		 * 
 		 * @param FlightPlanData 
 		 * @return
@@ -79,6 +69,18 @@ namespace vsid
 		 * @param Area
 		 */
 		void OnFunctionCall(int FunctionId, const char* sItemString, POINT Pt, RECT Area);
+		/**
+		 * @brief Handles events on plane position updates if the flightplan is present in a tagItem
+		 * 
+		 * @param FlightPlan 
+		 * @param RadarTarget 
+		 * @param ItemCode 
+		 * @param TagData 
+		 * @param sItemString 
+		 * @param pColorCode 
+		 * @param pRGB 
+		 * @param pFontSize 
+		 */
 		void OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, EuroScopePlugIn::CRadarTarget RadarTarget, int ItemCode, int TagData, char sItemString[16], int* pColorCode, COLORREF* pRGB, double* pFontSize);
 		/**
 		 * @brief Called when a dot commmand is used and ES couldn't resolve it.
@@ -88,26 +90,54 @@ namespace vsid
 		 * @return
 		 */
 		bool OnCompileCommand(const char* sCommandLine);
+		/**
+		 * @brief Called when something is changed in the flightplan (used for route updates)
+		 * 
+		 * @param FlightPlan 
+		 */
 		void OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlightPlan FlightPlan);
+		/**
+		 * @brief Called when a flightplan disconnects from the network
+		 * 
+		 * @param FlightPlan 
+		 */
 		void OnFlightPlanDisconnect(EuroScopePlugIn::CFlightPlan FlightPlan);
+		/**
+		 * @brief Called whenever a controller position is updated. ~ every 5 seconds
+		 * 
+		 * @param Controller 
+		 */
+		void OnControllerPositionUpdate(EuroScopePlugIn::CController Controller);
+		/**
+		 * @brief Called if a controller disconnects
+		 * 
+		 * @param Controller 
+		 */
 		void OnControllerDisconnect(EuroScopePlugIn::CController Controller);
 		/**
 		 * @brief Called when the user clicks on the ok button of the runway selection dialog
 		 *
 		 */
-		void OnAirportRunwayActivityChanged();		
+		void OnAirportRunwayActivityChanged();
+		/**
+		 * @brief Called once a second
+		 * 
+		 * @param Counter 
+		 * @return * void 
+		 */
 		void OnTimer(int Counter);
 		
 	private:
 		//std::vector<vsid::airport> activeAirports;
 		std::map<std::string, vsid::airport> activeAirports;
 		bool debug;
-		std::map<std::string, vsid::fplnInfo> processed;
+		std::map<std::string, vsid::fpln::info> processed;
 		vsid::ConfigParser configParser;
 		std::string configPath;
 		std::map<std::string, std::map<std::string, int>> savedSettings;
 		// list of ground states set by controllers
 		std::string gsList;
+		std::map<std::string, vsid::controller> actAtc;
 
 		/**
 		 * @brief Loads and updates the active airports with available configs

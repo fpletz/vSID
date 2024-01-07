@@ -39,6 +39,9 @@
     <ClCompile Include="sid.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="time.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vSID.def">
@@ -67,9 +70,6 @@
     <ClInclude Include="vSIDPlugin.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="es_environment\EuroScopePlugIn.h">
-      <Filter>Headerdateien</Filter>
-    </ClInclude>
     <ClInclude Include="stdafx.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
@@ -92,6 +92,12 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="messageHandler.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="time.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="include\es\EuroScopePlugIn.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>
