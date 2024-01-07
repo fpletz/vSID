@@ -1,3 +1,17 @@
+[Changelog v0.7.0]
+
+[NEW]
+*	auto mode (currently only for all active airports)
+*	saving flightplans for a time period after takeoff or after disconnect
+*	resetting IC after a disconnected flightplan reconnected
+*	SID tagItem now works as item in tower tag
+
+[FIXED]
+*	pilotfiled setting in SID overwrote restrictions for the flightplan
+
+[CHANGED]
+*	improved cleaning of flightplan (now up until the sid waypoint)
+
 [Changelog v0.6.0]
 
 [NEW]
