@@ -260,6 +260,7 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 	EuroScopePlugIn::CFlightPlan fpln = FlightPlan;
 	EuroScopePlugIn::CFlightPlanData fplnData = fpln.GetFlightPlanData();
 	EuroScopePlugIn::CFlightPlanControllerAssignedData cad = fpln.GetControllerAssignedData();
+	std::string callsign = fpln.GetCallsign();
 	std::string filedSidWpt = this->findSidWpt(fplnData);
 	std::vector<std::string> filedRoute = vsid::utils::split(std::string(fplnData.GetRoute()), ' ');
 	vsid::sids::sid sidSuggestion = {};
@@ -269,9 +270,9 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 	vsid::fpln::info fplnInfo = {};
 
 	vsid::fpln::clean(filedRoute, fplnData.GetOrigin(), filedSidWpt);
-	if (this->processed.contains(fpln.GetCallsign()))
+	if (this->processed.contains(callsign))
 	{
-		fplnInfo.atcRWY = this->processed[fpln.GetCallsign()].atcRWY;
+		fplnInfo.atcRWY = this->processed[callsign].atcRWY;
 	}
 
 	/* if a sid has been set manually choose this */
@@ -363,35 +364,37 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 		fplnInfo.sid = sidSuggestion;
 		fplnInfo.customSid = sidCustomSuggestion;
 	}
-	this->processed[fpln.GetCallsign()] = fplnInfo;
+	this->processed[callsign] = fplnInfo;
 
 	if(!checkOnly)
 	{	
 		if (!fplnData.SetRoute(vsid::utils::join(filedRoute).c_str()))
 		{
-			messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to change Flighplan!");
+			messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to change Flighplan! - #PFP");
 		}
+		else this->processed[callsign].noFplnUpdate = true;
+
 		if (!fplnData.AmendFlightPlan())
 		{
-			messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to amend Flighplan!");
+			messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to amend Flighplan! - #PFP");
 		}
 		else
 		{
-			this->processed[fpln.GetCallsign()].noFplnUpdate = true;
-			this->processed[fpln.GetCallsign()].atcRWY = true;
+			this->processed[callsign].noFplnUpdate = true;
+			this->processed[callsign].atcRWY = true;
 		}
 		if (sidSuggestion.waypoint != "" && sidCustomSuggestion.waypoint == "" && sidSuggestion.initialClimb)
 		{
 			if (!cad.SetClearedAltitude(sidSuggestion.initialClimb))
 			{
-				messageHandler->writeMessage("ERROR", "Failed to set altitude.");
+				messageHandler->writeMessage("ERROR", "[" + callsign + "] - failed to set altitude - #PFP");
 			}
 		}
 		else if (sidCustomSuggestion.waypoint != "" && sidCustomSuggestion.initialClimb)
 		{
 			if (!cad.SetClearedAltitude(sidCustomSuggestion.initialClimb))
 			{
-				messageHandler->writeMessage("ERROR", "Failed to set altitude.");
+				messageHandler->writeMessage("ERROR", "[" + callsign + "] - failed to set altitude - #PFP");
 			}
 		}
 	}
@@ -596,7 +599,10 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 			
 			if (!fplnData.SetRoute(vsid::utils::join(filedRoute).c_str()))
 			{
-				messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to change Flighplan!");
+				messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to change Flighplan! - #RM");
+			}
+			else
+			{
 			}
 			if (!vsid::fpln::findRemarks(fplnData, "VSID/RWY"))
 			{
@@ -604,7 +610,7 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 			}
 			if (!fplnData.AmendFlightPlan())
 			{
-				messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to amend Flighplan!");
+				messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to amend Flighplan! - #RM");
 			}
 			else
 			{
@@ -635,6 +641,32 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 			this->removeProcessed[callsign].second)
 		{
 			this->removeProcessed.erase(callsign);
+
+			if (this->processed.contains(callsign))
+			{
+				EuroScopePlugIn::CFlightPlanControllerAssignedData cad = FlightPlan.GetControllerAssignedData();
+				if (cad.GetClearedAltitude() == cad.GetFinalAltitude() &&
+					atcBlock.first != "" &&
+					(atcBlock.first == vsid::sids::getName(this->processed[callsign].sid) ||
+					atcBlock.first == vsid::sids::getName(this->processed[callsign].customSid))
+					)
+				{
+					if (!vsid::sids::isEmpty(this->processed[callsign].customSid))
+					{
+						if (!cad.SetClearedAltitude(this->processed[callsign].customSid.initialClimb))
+						{
+							messageHandler->writeMessage("ERROR", "[" + callsign + "] - failed to set altitude #RICS");
+						}
+					}
+					else if (!vsid::sids::isEmpty(this->processed[callsign].sid))
+					{
+						if (!cad.SetClearedAltitude(this->processed[callsign].sid.initialClimb))
+						{
+							messageHandler->writeMessage("ERROR", "[" + callsign + "] - failed to set altitude #RICS");
+						}
+					}
+				}
+			}
 		}
 
 		if (this->processed.find(callsign) != this->processed.end())
@@ -721,15 +753,16 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 		}
 		else if(this->activeAirports.contains(fplnData.GetOrigin()) && RadarTarget.GetGS() <= 50 )
 		{
+			bool checkOnly = !this->activeAirports[fplnData.GetOrigin()].settings["auto"];
 			if (atcBlock.first == fplnData.GetOrigin() &&
 				vsid::fpln::findRemarks(fplnData, "VSID/RWY")
 				)
 			{
-				this->processFlightplan(FlightPlan, true, atcBlock.second);
+				this->processFlightplan(FlightPlan, checkOnly, atcBlock.second);
 			}
 			else
 			{
-				this->processFlightplan(FlightPlan, true);
+				this->processFlightplan(FlightPlan, checkOnly);
 			}
 			
 		}
@@ -1106,36 +1139,54 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 		}
 		else if (vsid::utils::tolower(command[1]) == "auto")
 		{
+			
+			if (!ControllerMyself().IsController())
+			{
+				messageHandler->writeMessage("INFO", "Automode not available for observer");
+				return true;
+			}
 			if (command.size() == 2)
 			{
 				std::ostringstream ss;
-				for (auto it = this->activeAirports.begin(); it != this->activeAirports.end();)
+				ss << "Enabled automode for: ";
+				for (auto it = this->activeAirports.begin(); it != this->activeAirports.end(); ++it)
 				{
-					std::string status = (it->second.settings["auto"]) ? "ON" : "OFF";
-
-					ss << it->first << " Auto: " << status;
-					it++;
-					if (it != this->activeAirports.end()) ss << " / ";
+					if (!it->second.settings["auto"]/* && it->second.controllers.size() == 0*/) // disabled during dev / as obs because it's currently always filled
+					{
+						it->second.settings["auto"] = true;
+						ss << it->first << " ";
+						
+						// check if lower controller online and no clrc flag - if not remove those flightplans from processed
+					}
 				}
 				messageHandler->writeMessage("INFO", ss.str());
+				
+				auto count = std::erase_if(this->processed, [&](auto item) { return !FlightPlanSelect(item.first.c_str()).GetClearenceFlag(); });
+				messageHandler->writeMessage("DEBUG", "Removed " + std::to_string(count) + " flightplans");
 			}
-			else if (command.size() == 3)
+			else if (command.size() > 2 && vsid::utils::tolower(command[2]) == "status")
 			{
-				if (this->activeAirports.count(vsid::utils::toupper(command[2])))
+				std::ostringstream ss;
+				ss << "Automode active for: ";
+				int counter = 0;
+				for (auto it = this->activeAirports.begin(); it != this->activeAirports.end(); ++it)
 				{
-					if (this->activeAirports[vsid::utils::toupper(command[2])].settings["auto"])
+					if (it->second.settings["auto"])
 					{
-						this->activeAirports[vsid::utils::toupper(command[2])].settings["auto"] = 0;
+						ss << it->first << " ";
+						counter++;
 					}
-					else
-					{
-						this->activeAirports[vsid::utils::toupper(command[2])].settings["auto"] = 1;
-					}
-					messageHandler->writeMessage("INFO", vsid::utils::toupper(command[2]) + " Auto: " +
-						((this->activeAirports[vsid::utils::toupper(command[2])].settings["auto"]) ? "ON" : "OFF")
-					);
 				}
-				else messageHandler->writeMessage("INFO", vsid::utils::toupper(command[2]) + " is not in active airports");
+				if (counter > 0) messageHandler->writeMessage("INFO", ss.str());
+				else messageHandler->writeMessage("INFO", "No active automode.");
+			}
+			else if (command.size() > 2 && vsid::utils::tolower(command[2]) == "off")
+			{
+				for (auto it = this->activeAirports.begin(); it != this->activeAirports.end(); ++it)
+				{
+					it->second.settings["auto"] = false;
+				}
+				messageHandler->writeMessage("INFO", "Shutting down automode for all airports.");
 			}
 			return true;
 			}
@@ -1177,7 +1228,7 @@ void vsid::VSIDPlugin::OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlight
 	{
 		return;
 	}
-	if (this->processed.find(callsign) != this->processed.end())
+	if (this->processed.contains(callsign))
 	{
 		// if we want to supress an update that happened and skip sid checking
 		if (this->processed[callsign].noFplnUpdate)
@@ -1211,7 +1262,7 @@ void vsid::VSIDPlugin::OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlight
 				vsid::fpln::removeRemark(fplnData, "VSID/RWY");
 				if (!fplnData.AmendFlightPlan())
 				{
-					messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to amend Flighplan!");
+					messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to amend Flighplan! - #FFDU");
 				}
 				else this->processed[callsign].noFplnUpdate = true;
 			}
@@ -1263,39 +1314,69 @@ void vsid::VSIDPlugin::OnRadarTargetPositionUpdate(EuroScopePlugIn::CRadarTarget
 
 void vsid::VSIDPlugin::OnControllerPositionUpdate(EuroScopePlugIn::CController Controller)
 {
+	std::string atcCallsign = Controller.GetCallsign();
+	std::string atcSI = Controller.GetPositionId();
+	int atcFac = Controller.GetFacility();
+	double atcFreq = Controller.GetPrimaryFrequency();
+	std::string atcIcao = "";
 
-	std::string atcIcao = vsid::utils::split(Controller.GetCallsign(), '_').front();
-	std::string myIcao = vsid::utils::split(ControllerMyself().GetCallsign(), '_').front();
-
-	if (!this->activeAirports.contains(atcIcao) ||
-		Controller.GetPrimaryFrequency() == 0.0 ||
-		Controller.GetPrimaryFrequency() > 199.0) return;
-
-	if (!this->actAtc.contains(Controller.GetCallsign()))
+	//if (atcCallsign == ControllerMyself().GetCallsign() ||
+	//	atcCallsign.find("ATIS") != std::string::npos ||
+	//	atcFac < 2 ||
+	//	//atcFac > ControllerMyself().GetFacility() ||
+	//	atcSI.find_first_of("0123456789") != std::string::npos ||
+	//	atcSI.length() == 0 ||
+	//	Controller.GetPrimaryFrequency() == 0.0 ||
+	//	Controller.GetPrimaryFrequency() > 199.0 ||
+	//	this->actAtc.contains(atcSI)
+	//	)
+	if (!Controller.IsController() ||
+		atcCallsign == ControllerMyself().GetCallsign() ||
+		atcCallsign.find("ATIS") != std::string::npos ||
+		atcSI.find_first_of("0123456789") != std::string::npos ||
+		atcFac < 2 ||
+		atcFac > ControllerMyself().GetFacility() ||
+		atcFreq == 0.0 ||
+		atcFreq > 199.0 ||
+		this->actAtc.contains(atcSI)
+		)
 	{
-		this->actAtc[Controller.GetCallsign()] = { Controller.GetFacility(), Controller.GetPrimaryFrequency() };
-		
-		if (Controller.GetFacility() < ControllerMyself().GetFacility() &&
-			Controller.GetFacility() > 1 &&
-			atcIcao == myIcao)
-		{
-			if (this->activeAirports[atcIcao].settings["auto"] == 1)
-			{
-				this->activeAirports[atcIcao].settings["auto"] = 0;
-				messageHandler->writeMessage("INFO", "Disabling auto mode for " +
-											atcIcao + ". " + std::string(Controller.GetCallsign()) +
-											" now online."
-											);
-			}
-		}
+		return;
 	}
+	//messageHandler->writeMessage("DEBUG", "PosID: " + std::string(Controller.GetPositionId()) + " fac: " + std::to_string(Controller.GetFacility()) + " cs: " + std::string(Controller.GetCallsign()) + " icao: " + atcIcao);
+	if (atcFac < 6)
+	{
+		atcIcao = vsid::utils::split(Controller.GetCallsign(), '_').front();
+	}
+
+	if (!this->activeAirports.contains(atcIcao)) return;
+
+
+	if (!this->activeAirports[atcIcao].controllers.contains(atcSI))
+	{
+		this->activeAirports[atcIcao].controllers[atcSI] = { atcSI, atcFac, atcFreq };
+		this->actAtc[atcSI] = atcIcao;
+	}
+
+	/*if (this->activeAirports[atcIcao].settings["auto"])
+	{
+		this->activeAirports[atcIcao].settings["auto"] = false;
+		messageHandler->writeMessage("INFO", "Disabling auto mode for " +
+			atcIcao + ". " + atcCallsign + " now online."
+		);
+	}*/
 }
 
 void vsid::VSIDPlugin::OnControllerDisconnect(EuroScopePlugIn::CController Controller) // use this to check for lower atc disconnects to start automation again
 {
-	if (this->actAtc.contains(Controller.GetCallsign()))
+	std::string actSI = Controller.GetPositionId();
+	if (this->actAtc.contains(actSI))
 	{
-		this->actAtc.erase(Controller.GetCallsign());
+		if (this->activeAirports[this->actAtc[actSI]].controllers.contains(actSI))
+		{
+			this->activeAirports[this->actAtc[actSI]].controllers.erase(actSI);
+		}
+		this->actAtc.erase(actSI);
 	}
 }
 
