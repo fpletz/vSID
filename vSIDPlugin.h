@@ -147,7 +147,7 @@ namespace vsid
 		std::map<std::string, std::map<std::string, int>> savedSettings;
 		// list of ground states set by controllers
 		std::string gsList;
-		std::map<std::string, vsid::controller> actAtc;
+		std::map<std::string, std::string> actAtc;
 
 		/**
 		 * @brief Loads and updates the active airports with available configs

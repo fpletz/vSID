@@ -12,6 +12,7 @@ namespace vsid
 {
 	struct controller
 	{
+		std::string si = "";
 		int facility = 0;
 		double freq = 0.0;
 	};
@@ -25,11 +26,11 @@ namespace vsid
 		std::map<std::string, int> customRules = {};
 		std::vector<vsid::sids::sid> sids = {};
 		std::vector<vsid::sids::sid> timeSids = {};
-		int timeMode = 0;
 		std::string timezone = "";
 		int arrAsDep = 0;
 		int transAlt = 0;
 		int maxInitialClimb = 0;
 		std::map<std::string, int> settings = {};
+		std::map<std::string, vsid::controller> controllers = {};
 	};
 }
