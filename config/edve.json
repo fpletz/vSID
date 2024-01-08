@@ -13,7 +13,7 @@
                 "U": {
                     "rwy": "08",
                     "initial": 4000,
-                    "climbvia": 1,
+                    "climbvia": 0,
                     "prio": 1,
                     "pilotfiled": 0,
                     "wtc": "",
@@ -30,7 +30,7 @@
                 "T": {
                     "rwy": "26",
                     "initial": 4000,
-                    "climbvia": 1,
+                    "climbvia": 0,
                     "prio": 1,
                     "pilotfiled": 0,
                     "wtc": "",
@@ -49,7 +49,7 @@
                 "U": {
                     "rwy": "08",
                     "initial": 4000,
-                    "climbvia": 1,
+                    "climbvia": 0,
                     "prio": 1,
                     "pilotfiled": 0,
                     "wtc": "",
@@ -63,10 +63,10 @@
                     "timeFrom": -1,
                     "timeTo": -1
                 },
-                "T": {
+                "G": {
                     "rwy": "26",
                     "initial": 4000,
-                    "climbvia": 1,
+                    "climbvia": 0,
                     "prio": 1,
                     "pilotfiled": 0,
                     "wtc": "",
@@ -85,7 +85,7 @@
                 "U": {
                     "rwy": "08",
                     "initial": 4000,
-                    "climbvia": 1,
+                    "climbvia": 0,
                     "prio": 1,
                     "pilotfiled": 0,
                     "wtc": "",
@@ -102,7 +102,7 @@
                 "T": {
                     "rwy": "26",
                     "initial": 4000,
-                    "climbvia": 1,
+                    "climbvia": 0,
                     "prio": 1,
                     "pilotfiled": 0,
                     "wtc": "",
@@ -121,7 +121,7 @@
                 "U": {
                     "rwy": "08",
                     "initial": 4000,
-                    "climbvia": 1,
+                    "climbvia": 0,
                     "prio": 1,
                     "pilotfiled": 0,
                     "wtc": "",
@@ -210,7 +210,7 @@
                 "T": {
                     "rwy": "26",
                     "initial": 4000,
-                    "climbvia": 1,
+                    "climbvia": 0,
                     "prio": 1,
                     "pilotfiled": 0,
                     "wtc": "",
@@ -246,7 +246,7 @@
                 "T": {
                     "rwy": "26",
                     "initial": 4000,
-                    "climbvia": 1,
+                    "climbvia": 0,
                     "prio": 1,
                     "pilotfiled": 0,
                     "wtc": "",

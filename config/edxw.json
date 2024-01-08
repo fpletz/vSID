@@ -10,7 +10,7 @@
 		"timezone": "Europe/Berlin",
         "sids": {
             "OLDIP": {
-                "E": {
+                "A": {
                     "rwy": "14",
                     "initial": 4000,
                     "climbvia": 1,
@@ -27,7 +27,7 @@
                     "timeFrom": -1,
                     "timeTo": -1
                 },
-                "Y": {
+                "B": {
                     "rwy": "32",
                     "initial": 4000,
                     "climbvia": 1,

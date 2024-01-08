@@ -75,8 +75,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": 22,
-                    "timeTo": 6
+                    "timeFrom": -1,
+                    "timeTo": -1
                 },
 				"S": {
                     "rwy": "26L",
@@ -92,8 +92,8 @@
                     "area": "0",
                     "equip": "0",
                     "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "timeFrom": 6,
+                    "timeTo": 22
                 }
 			},
 			"GOLAT": {
