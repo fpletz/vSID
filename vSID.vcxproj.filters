@@ -39,7 +39,7 @@
     <ClCompile Include="sid.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
-    <ClCompile Include="time.cpp">
+    <ClCompile Include="timeHandler.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
   </ItemGroup>
@@ -94,7 +94,7 @@
     <ClInclude Include="messageHandler.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="time.h">
+    <ClInclude Include="timeHandler.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="include\es\EuroScopePlugIn.h">

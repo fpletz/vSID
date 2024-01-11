@@ -1,8 +1,6 @@
 #include "pch.h"
-#include "time.h"
+#include "timeHandler.h"
 #include "messageHandler.h"
-
-#include <chrono>
 
 bool vsid::time::isActive(const std::string& timezone, const int start, const int end)
 {

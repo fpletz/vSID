@@ -108,10 +108,9 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
 
                         apt.second.elevation = this->parsedConfig.at(apt.first).value("elevation", 0);
                         apt.second.allRwys = vsid::utils::split(this->parsedConfig.at(apt.first).value("runways", ""), ',');
-                        apt.second.arrAsDep = this->parsedConfig.at(apt.first).value("ArrAsDep", 0);
+                        apt.second.arrAsDep = this->parsedConfig.at(apt.first).value("ArrAsDep", false);
                         apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
-                        //apt.second.timeMode = this->parsedConfig.at(apt.first).value("timeMode", 0);
                         std::map<std::string, int> customRules;
                         for (auto &el : this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, int>{}))
                         {
@@ -125,15 +124,15 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                             apt.second.settings = savedSettings[apt.first];
                         }
                         else
-                            apt.second.settings = { {"lvp", 0},
-                                                    {"time", this->parsedConfig.at(apt.first).value("timeMode", 0)},
-                                                    {"auto", 0} 
+                            apt.second.settings = { {"lvp", false},
+                                                    {"time", this->parsedConfig.at(apt.first).value("timeMode", false)},
+                                                    {"auto", false} 
                                                     };
 
                         // if there are more settings than lvp / night we have rules
                         if (apt.second.settings.size() > 3)
                         {
-                            for (std::pair<std::string, int> setting : apt.second.settings)
+                            for (std::pair<std::string, bool> setting : apt.second.settings)
                             {
                                 if (setting.first == "lvp" || setting.first == "night" || setting.first == "time") continue;
                                 apt.second.customRules[setting.first] = setting.second;
@@ -150,18 +149,19 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                 std::string desig = sidWpt.key();
                                 std::string rwys = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("rwy", "");
                                 int initial = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("initial", 0);
-                                int via = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("climbvia", 0);
+                                bool via = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("climbvia", false);
                                 int prio = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("prio", 99);
-                                int pilot = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("pilotfiled", 0);
+                                bool pilot = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("pilotfiled", false);
                                 std::string wtc = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("wtc", "");
                                 std::string engineType = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("engineType", "");
+                                std::map<std::string, bool> acftType = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("acftType", std::map<std::string, bool>{});
                                 int engineCount = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("engineCount", 0);
                                 int mtow = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("mtow", 0);
                                 std::string customRule = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("customRule", "");
                                 customRule = vsid::utils::toupper(customRule);
                                 vsid::sids::SIDArea area = {};
                                 std::string equip = "";
-                                int lvp = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("lvp", 0);
+                                int lvp = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("lvp", -1);
                                 int timeFrom = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("timeFrom", -1);
                                 int timeTo = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("timeTo", -1);
                                 
@@ -175,6 +175,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                                             pilot,
                                                             wtc,
                                                             engineType,
+                                                            acftType,
                                                             engineCount,
                                                             mtow,
                                                             customRule,
@@ -210,7 +211,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
     }
     for (std::pair<const std::string, vsid::airport>& apt : activeAirports)
     {
-        if (aptConfig.count(apt.first)) continue;
+        if (aptConfig.contains(apt.first)) continue;
         messageHandler->writeMessage("INFO", "No config found for: " + apt.first);
     }
 }

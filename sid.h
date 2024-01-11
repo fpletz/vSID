@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include <map>
 
 namespace vsid
 {
@@ -27,17 +28,18 @@ namespace vsid
 			std::string designator = "";
 			std::string rwy = "";
 			int initialClimb = 0;
-			int climbvia = 0;
+			bool climbvia = false;
 			int prio = 0;
-			int pilotfiled = 0;
+			bool pilotfiled = false;
 			std::string wtc = "";
 			std::string engineType = "";
+			std::map<std::string, bool> acftType = {};
 			int engineCount = 0;
 			int mtow = 0;
 			std::string customRule = "";
 			SIDArea area = {};
 			std::string equip = "";
-			int lvp = 0;
+			int lvp = -1;
 			int timeFrom = -1;
 			int timeTo = -1;
 		};

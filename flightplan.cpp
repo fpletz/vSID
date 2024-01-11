@@ -1,8 +1,11 @@
 #include "pch.h"
 
 #include "flightplan.h"
-//#include "messageHandler.h"
 #include "utils.h"
+
+// dev
+#include "messageHandler.h"
+// end dev
 
 void vsid::fpln::clean(std::vector<std::string> &filedRoute, const std::string origin, std::string filedSidWpt)
 {
@@ -15,38 +18,13 @@ void vsid::fpln::clean(std::vector<std::string> &filedRoute, const std::string o
 			filedRoute.erase(filedRoute.begin());
 		}
 	}
-	/* if a possible SID block was found check the entire route for more SIDs (e.g. filed) and erase them as well*/
+	/* if a possible SID block was found check the entire route until the sid waypoint is found*/
 	if (filedRoute.size() > 0 && filedSidWpt != "")
 	{
 		for (std::vector<std::string>::iterator it = filedRoute.begin(); it != filedRoute.end();)
 		{
-			if ((it->find(filedSidWpt) != std::string::npos && *it != filedSidWpt) || *it == origin)
-			{
-				it = filedRoute.erase(it);
-			}
-			else ++it;
-			//if (atcBlock.first != "")
-			//{
-			//	if (it->substr(0, it->length() - 2) == atcBlock.first.substr(0, atcBlock.first.length() - 2))
-			//	{
-			//		it = filedRoute.erase(it);
-			//	}
-			//	else
-			//	{
-			//		++it;
-			//	}
-			//}
-			//else
-			//{
-			//	if (it->substr(0, it->length() - 2) == filedSidWpt)
-			//	{
-			//		it = filedRoute.erase(it);
-			//	}
-			//	else
-			//	{
-			//		++it;
-			//	}
-			//}
+			if (*it == filedSidWpt) break;
+			it = filedRoute.erase(it);
 		}
 	}
 }

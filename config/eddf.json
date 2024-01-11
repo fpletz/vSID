@@ -288,7 +288,7 @@
                     "timeFrom": -1,
                     "timeTo": -1
                 },
-                "G": {
+				"G": {
                     "rwy": "25C,25L",
                     "initial": 5000,
                     "climbvia": 1,
@@ -394,7 +394,7 @@
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": 1,
-                    "prio": 99,
+                    "prio": 4,
                     "pilotfiled": 0,
                     "wtc": "",
                     "engineType": "",
@@ -600,7 +600,7 @@
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": 1,
-                    "prio": 99,
+                    "prio": 4,
                     "pilotfiled": 0,
                     "wtc": "",
                     "engineType": "",
@@ -1014,7 +1014,7 @@
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": 1,
-                    "prio": 99,
+                    "prio": 4,
                     "pilotfiled": 0,
                     "wtc": "",
                     "engineType": "",
