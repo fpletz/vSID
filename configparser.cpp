@@ -111,7 +111,6 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                         apt.second.arrAsDep = this->parsedConfig.at(apt.first).value("ArrAsDep", false);
                         apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
-                        //apt.second.timeMode = this->parsedConfig.at(apt.first).value("timeMode", 0);
                         std::map<std::string, int> customRules;
                         for (auto &el : this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, int>{}))
                         {
@@ -162,7 +161,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                 customRule = vsid::utils::toupper(customRule);
                                 vsid::sids::SIDArea area = {};
                                 std::string equip = "";
-                                int lvp = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("lvp", 0);
+                                int lvp = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("lvp", -1);
                                 int timeFrom = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("timeFrom", -1);
                                 int timeTo = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("timeTo", -1);
                                 
