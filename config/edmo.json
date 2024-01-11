@@ -2,20 +2,20 @@
     "EDMO": {
         "elevation": 1947,
         "runways": "02,22",
-        "ArrAsDep": 0,
+        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
         "customRules" : {},
-        "timeMode": 1,
+        "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {
             "ATMAX": {
                 "R": {
                     "rwy": "22",
                     "initial": 7000,
-                    "climbvia": 0,
+                    "climbvia": false,
                     "prio": 1,
-                    "pilotfiled": 0,
+                    "pilotfiled": false,
                     "wtc": "",
                     "engineType": "",
                     "engineCount": 0,
@@ -32,9 +32,9 @@
                 "R": {
                     "rwy": "22",
                     "initial": 7000,
-                    "climbvia": 1,
+                    "climbvia": true,
                     "prio": 1,
-                    "pilotfiled": 0,
+                    "pilotfiled": false,
                     "wtc": "",
                     "engineType": "",
                     "engineCount": 0,
@@ -49,9 +49,9 @@
                 "C": {
                     "rwy": "22",
                     "initial": 7000,
-                    "climbvia": 1,
+                    "climbvia": true,
                     "prio": 99,
-                    "pilotfiled": 0,
+                    "pilotfiled": false,
                     "wtc": "",
                     "engineType": "",
                     "engineCount": 0,

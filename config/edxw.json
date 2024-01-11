@@ -2,20 +2,20 @@
     "EDXW": {
         "elevation": 52,
         "runways": "14,32",
-        "ArrAsDep": 0,
+        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
         "customRules": {},
-        "timeMode": 1,
+        "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {
             "OLDIP": {
                 "A": {
                     "rwy": "14",
                     "initial": 4000,
-                    "climbvia": 1,
+                    "climbvia": true,
                     "prio": 1,
-                    "pilotfiled": 0,
+                    "pilotfiled": false,
                     "wtc": "",
                     "engineType": "",
                     "engineCount": 0,
@@ -30,9 +30,9 @@
                 "B": {
                     "rwy": "32",
                     "initial": 4000,
-                    "climbvia": 1,
+                    "climbvia": true,
                     "prio": 1,
-                    "pilotfiled": 0,
+                    "pilotfiled": false,
                     "wtc": "",
                     "engineType": "",
                     "engineCount": 0,
