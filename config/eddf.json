@@ -184,6 +184,23 @@
                     "climbvia": true,
                     "prio": 99
                 },
+				"W1": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 3,
+                    "pilotfiled": true,
+					"wtc": "LMJ"
+                },
+				"W2": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 3,
+                    "pilotfiled": true,
+					"wtc": "H",
+					"engineCount": 4
+                },
                 "H": {
                     "rwy": "25L",
                     "initial": 7000,
@@ -194,8 +211,7 @@
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 4,
-                    "pilotfiled": true
+                    "prio": 99
                 },
                 "M": {
                     "rwy": "25C",
@@ -240,13 +256,6 @@
                     "initial": 4000,
                     "climbvia": true,
                     "prio": 99
-                },
-                "W": {
-                    "rwy": "25C",
-                    "initial": 7000,
-                    "climbvia": true,
-                    "prio": 3,
-                    "pilotfiled": true
                 }
             },
             "OBOKA": {
@@ -294,26 +303,7 @@
                     "wtc": "H",
                     "engineCount": 2
                 },
-                "H": {
-                    "rwy": "25L",
-                    "initial": 7000,
-                    "climbvia": true,
-                    "prio": 4
-                },
-                "K": {
-                    "rwy": "25L",
-                    "initial": 7000,
-                    "climbvia": true,
-                    "prio": 4,
-                    "pilotfiled": true
-                },
-                "L": {
-                    "rwy": "18",
-                    "initial": 4000,
-                    "climbvia": true,
-                    "prio": 99
-                },
-                "M": {
+				"M": {
                     "rwy": "25C",
                     "initial": 7000,
                     "climbvia": true,
@@ -339,9 +329,32 @@
                     "timeFrom": 22,
                     "timeTo": 7
                 },
-                "R": {
-                    "rwy": "18",
-                    "initial": 4000,
+				"W1": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 3,
+                    "pilotfiled": true,
+					"wtc": "LMJ"
+                },
+				"W2": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 3,
+                    "pilotfiled": true,
+					"wtc": "H",
+					"engineCount": 4
+                },
+                "H": {
+                    "rwy": "25L",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 4
+                },
+                "K": {
+                    "rwy": "25L",
+                    "initial": 7000,
                     "climbvia": true,
                     "prio": 99
                 },
@@ -351,18 +364,23 @@
                     "climbvia": true,
                     "prio": 4
                 },
-                "T": {
+                "L": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
                     "prio": 99
                 },
-                "W": {
-                    "rwy": "25C",
-                    "initial": 7000,
+                "R": {
+                    "rwy": "18",
+                    "initial": 4000,
                     "climbvia": true,
-                    "prio": 3,
-                    "pilotfiled": true
+                    "prio": 99
+                },
+                "T": {
+                    "rwy": "18",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 99
                 }
             },
             "SOBRA": {
@@ -582,6 +600,23 @@
                     "timeFrom": 22,
                     "timeTo": 7
                 },
+				"W1": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 3,
+                    "pilotfiled": true,
+					"wtc": "LMJ"
+                },
+				"W2": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 3,
+                    "pilotfiled": true,
+					"wtc": "H",
+					"engineCount": 4
+                },
                 "R": {
                     "rwy": "18",
                     "initial": 4000,
@@ -599,13 +634,6 @@
                     "initial": 4000,
                     "climbvia": true,
                     "prio": 99
-                },
-                "W": {
-                    "rwy": "25C",
-                    "initial": 7000,
-                    "climbvia": true,
-                    "prio": 3,
-                    "pilotfiled": true
                 }
             },
             "ULKIG": {
