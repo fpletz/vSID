@@ -196,11 +196,18 @@
                     "climbvia": true,
                     "prio": 99
                 },
-                "M": {
+                "M1": {
                     "rwy": "25C",
                     "initial": 7000,
                     "climbvia": true,
                     "prio": 3
+                },
+				"M2": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 1,
+					"lvp":1
                 },
                 "N1": {
                     "rwy": "25C",
@@ -303,11 +310,18 @@
                     "wtc": "H",
                     "engineCount": 2
                 },
-				"M": {
+				"M1": {
                     "rwy": "25C",
                     "initial": 7000,
                     "climbvia": true,
                     "prio": 3
+                },
+				"M2": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 1,
+					"lvp": 1
                 },
                 "N1": {
                     "rwy": "25C",
@@ -574,11 +588,18 @@
                     "climbvia": true,
                     "prio": 99
                 },
-                "M": {
+                "M1": {
                     "rwy": "25C",
                     "initial": 7000,
                     "climbvia": true,
                     "prio": 3
+                },
+				"M2": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 1,
+					"lvp": 1
                 },
                 "N1": {
                     "rwy": "25C",
