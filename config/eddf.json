@@ -10,366 +10,217 @@
         "timezone": "Europe/Berlin",
         "sids": {
             "ANEKI": {
-            "D": {
-                "rwy": "07C,07R",
+            "D1": {
+                "rwy": "07C",
                 "initial": 4000,
                 "climbvia": true,
                 "prio": 2,
-                "pilotfiled": false,
-                "wtc": "HJ",
-                "engineType": "",
-                "engineCount": 0,
-                "mtow": 0,
-                "customRule": "",
-                "area": "0",
-                "equip": "0",
-                "lvp": -1,
-                "timeFrom": -1,
-                "timeTo": -1
+                "wtc": "HJ"
             },
-            "E": {
-                "rwy": "07C,07R",
+			"D2": {
+                "rwy": "07R",
+                "initial": 4000,
+                "climbvia": true,
+                "prio": 4,
+                "wtc": "HJ"
+            },
+            "E1": {
+                "rwy": "07C",
                 "initial": 4000,
                 "climbvia": true,
                 "prio": 2,
-                "pilotfiled": false,
-                "wtc": "LM",
-                "engineType": "",
-                "engineCount": 0,
-                "mtow": 0,
-                "customRule": "",
-                "area": "0",
-                "equip": "0",
-                "lvp": -1,
-                "timeFrom": -1,
-                "timeTo": -1
+                "wtc": "LM"
             },
-            "F": {
+			"E2": {
+                "rwy": "07R",
+                "initial": 4000,
+                "climbvia": true,
+                "prio": 4,
+                "wtc": "LM"
+            },
+            "F1": {
                 "rwy": "25C,25L",
                 "initial": 5000,
                 "climbvia": true,
-                "prio": 2,
-                "pilotfiled": false,
-                "wtc": "",
-                "engineType": "",
-                "engineCount": 0,
-                "mtow": 0,
-                "customRule": "",
-                "area": "0",
-                "equip": "0",
-                "lvp": -1,
-                "timeFrom": -1,
-                "timeTo": -1
+                "prio": 2
+            },
+			"F2": {
+                "rwy": "25L",
+                "initial": 5000,
+                "climbvia": true,
+                "prio": 4
             },
             "L": {
                 "rwy": "18",
                 "initial": 4000,
                 "climbvia": true,
-                "prio": 1,
-                "pilotfiled": false,
-                "wtc": "",
-                "engineType": "",
-                "engineCount": 0,
-                "mtow": 0,
-                "customRule": "",
-                "area": "0",
-                "equip": "0",
-                "lvp": -1,
-                "timeFrom": -1,
-                "timeTo": -1
+                "prio": 1
             },
             "X": {
                 "rwy": "07C",
                 "initial": 4000,
                 "climbvia": true,
-                "prio": 99,
-                "pilotfiled": false,
-                "wtc": "",
-                "engineType": "",
-                "engineCount": 0,
-                "mtow": 0,
-                "customRule": "",
-                "area": "0",
-                "equip": "0",
-                "lvp": -1,
-                "timeFrom": -1,
-                "timeTo": -1
+                "prio": 99
             },
             "Y": {
                 "rwy": "07R",
                 "initial": 4000,
                 "climbvia": true,
-                "prio": 99,
-                "pilotfiled": false,
-                "wtc": "",
-                "engineType": "",
-                "engineCount": 0,
-                "mtow": 0,
-                "customRule": "",
-                "area": "0",
-                "equip": "0",
-                "lvp": -1,
-                "timeFrom": -1,
-                "timeTo": -1
+                "prio": 99
             }
             },
             "CINDY": {
-                "D": {
-                    "rwy": "07C,07R",
+                "D1": {
+                    "rwy": "07C",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 2,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 2
                 },
-                "F": {
-                    "rwy": "25C,25L",
+				"D2": {
+                    "rwy": "07R",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 4
+                },
+                "F1": {
+                    "rwy": "25C",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 2,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 2
+                },
+				"F2": {
+                    "rwy": "25L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 4
                 },
                 "L": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 3,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 3
                 },
                 "S": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 1
                 },
                 "X": {
                     "rwy": "07C",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
                 "Y": {
                     "rwy": "07R",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 }
             },
             "KOMIB": {
-                "D": {
-                        "rwy": "07C,07R",
-                        "initial": 4000,
-                        "climbvia": true,
-                        "prio": 1,
-                        "pilotfiled": false,
-                        "wtc": "",
-                        "engineType": "",
-                        "engineCount": 0,
-                        "mtow": 0,
-                        "customRule": "",
-                        "area": "0",
-                        "equip": "0",
-                        "lvp": -1,
-                        "timeFrom": -1,
-                        "timeTo": -1
+                "D1": {
+                    "rwy": "07C",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 1
+                },
+				"D2": {
+                    "rwy": "07R",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 2
                 }
             },
             "MARUN": {
-                "D": {
-                    "rwy": "07C,07R",
+                "D1": {
+                    "rwy": "07C",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "HJ",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "wtc": "HJ"
                 },
-                "E": {
-                    "rwy": "07C,07R",
+				"D2": {
+                    "rwy": "07R",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 4,
+                    "wtc": "HJ"
+                },
+                "E1": {
+                    "rwy": "07C",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "LM",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "wtc": "LM"
                 },
-                "F": {
-                    "rwy": "25C,25L",
+				"E2": {
+                    "rwy": "07R",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 4,
+                    "wtc": "LM"
+                },
+                "F1": {
+                    "rwy": "25C",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 2,
-                    "pilotfiled": false,
+					"engineCount": 2,
                     "wtc": "H",
-                    "engineType": "",
-                    "engineCount": 2,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+					"lvp": 0
+                },
+				"F2": {
+                    "rwy": "25L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 4,
+					"engineCount": 2,
+                    "wtc": "H",
+					"lvp": 0
                 },
 				"G": {
                     "rwy": "25C,25L",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
                 "H": {
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 4,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 4
                 },
                 "K": {
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 4,
-                    "pilotfiled": true,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
                 "M": {
                     "rwy": "25C",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 3,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 3
                 },
-                "N": {
-                    "rwy": "25C,25L",
+                "N1": {
+                    "rwy": "25C",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 1,
-                    "pilotfiled": false,
                     "wtc": "HJ",
-                    "engineType": "",
                     "engineCount": 34,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
+                    "timeFrom": 22,
+                    "timeTo": 7
+                },
+				"N2": {
+                    "rwy": "25L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 2,
+                    "wtc": "HJ",
+                    "engineCount": 34,
                     "timeFrom": 22,
                     "timeTo": 7
                 },
@@ -377,619 +228,381 @@
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
                 "S": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 4,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 4
                 },
                 "T": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
-                "W": {
+				"W1": {
                     "rwy": "25C",
                     "initial": 7000,
                     "climbvia": true,
                     "prio": 3,
                     "pilotfiled": true,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+					"wtc": "LMJ"
+                },
+				"W2": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 3,
+                    "pilotfiled": true,
+					"wtc": "H",
+					"engineCount": 4
                 }
             },
             "OBOKA": {
-                "D": {
-                    "rwy": "07C,07R",
+                "D1": {
+                    "rwy": "07C",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "HJ",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "wtc": "HJ"
                 },
-                "E": {
-                    "rwy": "07C,07R",
-                    "initial": 5000,
-                    "climbvia": true,
-                    "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "LM",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
-                },
-                "G": {
-                    "rwy": "25C,25L",
+				"D2": {
+                    "rwy": "07R",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 2,
-                    "pilotfiled": false,
+                    "wtc": "HJ"
+                },
+                "E1": {
+                    "rwy": "07C",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 1,
+                    "wtc": "LM"
+                },
+				"E2": {
+                    "rwy": "07R",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 2,
+                    "wtc": "LM"
+                },
+                "G1": {
+                    "rwy": "25C",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 2,
                     "wtc": "H",
-                    "engineType": "",
                     "engineCount": 2,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+					"lvp": 0
+                },
+				"G2": {
+                    "rwy": "25L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 4,
+                    "wtc": "H",
+                    "engineCount": 2,
+					"lvp": 0
+                },
+				"M": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 3
+                },
+				"N1": {
+                    "rwy": "25C",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 1,
+                    "wtc": "HJ",
+                    "engineCount": 34,
+                    "timeFrom": 22,
+                    "timeTo": 7
+                },
+				"N2": {
+                    "rwy": "25L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 2,
+                    "wtc": "HJ",
+                    "engineCount": 34,
+                    "timeFrom": 22,
+                    "timeTo": 7
                 },
                 "H": {
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 4,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 4
                 },
                 "K": {
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 4,
-                    "pilotfiled": true,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
-                },
-                "L": {
-                    "rwy": "18",
-                    "initial": 4000,
-                    "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
-                },
-                "M": {
-                    "rwy": "25C",
-                    "initial": 7000,
-                    "climbvia": true,
-                    "prio": 3,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
-                },
-                "N": {
-                    "rwy": "25C,25L",
-                    "initial": 5000,
-                    "climbvia": true,
-                    "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "HJ",
-                    "engineType": "",
-                    "engineCount": 34,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": 22,
-                    "timeTo": 7
-                },
-                "R": {
-                    "rwy": "18",
-                    "initial": 4000,
-                    "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
                 "S": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 4,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
-                },
-                "T": {
-                    "rwy": "18",
-                    "initial": 4000,
-                    "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
-                },
-                "W": {
-                    "rwy": "25C",
-                    "initial": 7000,
-                    "climbvia": true,
-                    "prio": 3,
-                    "pilotfiled": true,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
-                }
-            },
-            "SOBRA": {
-                "D": {
-                    "rwy": "07C,07R",
-                    "initial": 4000,
-                    "climbvia": true,
-                    "prio": 2,
-                    "pilotfiled": false,
-                    "wtc": "HJ",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
-                },
-                "E": {
-                    "rwy": "07C,07R",
-                    "initial": 4000,
-                    "climbvia": true,
-                    "prio": 2,
-                    "pilotfiled": false,
-                    "wtc": "LM",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
-                },
-                "F": {
-                    "rwy": "25C,25L",
-                    "initial": 5000,
-                    "climbvia": true,
-                    "prio": 3,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 4
                 },
                 "L": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
-                "N": {
-                    "rwy": "25C,25L",
+                "R": {
+                    "rwy": "18",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 99
+                },
+                "T": {
+                    "rwy": "18",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 99
+                },
+				"W1": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 3,
+                    "pilotfiled": true,
+					"wtc": "LMJ"
+                },
+				"W2": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 3,
+                    "pilotfiled": true,
+					"wtc": "H",
+					"engineCount": 4
+                }
+            },
+            "SOBRA": {
+                "D1": {
+                    "rwy": "07C",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 2,
+                    "wtc": "HJ"
+                },
+				"D2": {
+                    "rwy": "07R",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 4,
+                    "wtc": "HJ"
+                },
+                "E1": {
+                    "rwy": "07C",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 2,
+                    "wtc": "LM"
+                },
+				"E2": {
+                    "rwy": "07R",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 4,
+                    "wtc": "LM"
+                },
+                "F1": {
+                    "rwy": "25C",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 1,
-                    "pilotfiled": false,
+                    "prio": 3
+                },
+				"F2": {
+                    "rwy": "25L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 4
+                },
+                "L": {
+                    "rwy": "18",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 1
+                },
+                "N1": {
+                    "rwy": "25C",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 2,
                     "wtc": "HJ",
-                    "engineType": "",
                     "engineCount": 34,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
                     "timeFrom": 22,
                     "timeTo": 7
                 },
-                "P": {
-                    "rwy": "25C,25L",
+				"N2": {
+                    "rwy": "25L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 4,
+                    "wtc": "HJ",
+                    "engineCount": 34,
+                    "timeFrom": 22,
+                    "timeTo": 7
+                },
+                "P1": {
+                    "rwy": "25C",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 3,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "P",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "engineType": "P"
+                },
+				"P2": {
+                    "rwy": "25L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 4,
+                    "engineType": "P"
                 },
                 "U": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
                 "X": {
                     "rwy": "07C",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
                 "Y": {
                     "rwy": "07R",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 }
             },
             "SULUS": {
-                "D": {
-                    "rwy": "07C,07R",
+                "D1": {
+                    "rwy": "07C",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 1
                 },
-                "F": {
-                    "rwy": "25C,25L",
+				"D2": {
+                    "rwy": "07R",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 2
+                },
+                "F1": {
+                    "rwy": "25C",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 3,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 4
+                },
+				"F2": {
+                    "rwy": "25L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 5
                 },
                 "L": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
                 "S": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 2,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 3
                 }
             },
             "TOBAK": {
-                "D": {
-                    "rwy": "07C,07R",
+                "D1": {
+                    "rwy": "07C",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 1
                 },
-                "F": {
-                    "rwy": "25C,25L",
+				"D2": {
+                    "rwy": "07R",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 3
+                },
+                "F1": {
+                    "rwy": "25C",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 2,
-                    "pilotfiled": false,
                     "wtc": "H",
-                    "engineType": "",
                     "engineCount": 2,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+					"lvp": 0
                 },
-                "G": {
-                    "rwy": "25C,25L",
+				"F2": {
+                    "rwy": "25L",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 4,
+                    "wtc": "H",
+                    "engineCount": 2,
+					"lvp": 0
+                },
+                "G1": {
+                    "rwy": "25C",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 99
+                },
+				"G2": {
+                    "rwy": "25L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 99
                 },
                 "H": {
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 4,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 5
                 },
                 "K": {
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 4,
-                    "pilotfiled": true,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
                 "M": {
                     "rwy": "25C",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 3,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 3
                 },
-                "N": {
-                    "rwy": "25C,25L",
+                "N1": {
+                    "rwy": "25C",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 1,
-                    "pilotfiled": false,
                     "wtc": "HJ",
-                    "engineType": "",
                     "engineCount": 34,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
+                    "timeFrom": 22,
+                    "timeTo": 7
+                },
+				"N2": {
+                    "rwy": "25L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 2,
+                    "wtc": "HJ",
+                    "engineCount": 34,
                     "timeFrom": 22,
                     "timeTo": 7
                 },
@@ -997,69 +610,36 @@
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
                 "S": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 4,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 4
                 },
                 "T": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
-                "W": {
+				"W1": {
                     "rwy": "25C",
                     "initial": 7000,
                     "climbvia": true,
                     "prio": 3,
                     "pilotfiled": true,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+					"wtc": "LMJ"
+                },
+				"W2": {
+                    "rwy": "25C",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 3,
+                    "pilotfiled": true,
+					"wtc": "H",
+					"engineCount": 4
                 }
             },
             "ULKIG": {
@@ -1067,35 +647,13 @@
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 1
                 },
                 "S": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 99,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 }
             },
             "FKS": {
@@ -1103,52 +661,19 @@
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
                 "C": {
                     "rwy": "07C,07R",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 },
                 "Q": {
                     "rwy": "25C,25L",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 }
             },
             "TAU": {
@@ -1156,18 +681,7 @@
                     "rwy": "25C,25L",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 }
             },
             "MTR": {
@@ -1175,18 +689,7 @@
                     "rwy": "07C,07R",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 1,
-                    "pilotfiled": false,
-                    "wtc": "",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
-                    "timeFrom": -1,
-                    "timeTo": -1
+                    "prio": 99
                 }
             }
         }
