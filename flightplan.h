@@ -15,8 +15,8 @@ namespace vsid
 			bool atcRWY = false;
 			bool noFplnUpdate = false;
 			bool remarkChecked = false;
-			vsid::sids::sid sid = {};
-			vsid::sids::sid customSid = {};
+			vsid::Sid sid = {};
+			vsid::Sid customSid = {};
 		};
 		/**
 		 * @brief Strip the filed route from SID/RWY and/or SID to have a bare route to populate with set SID.

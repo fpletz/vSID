@@ -2,30 +2,30 @@
 #include "sid.h"
 #include "utils.h"
 
-std::string vsid::sids::getName(const sid &sid)
+std::string vsid::Sid::name() const
 {
-	return (isEmpty(sid)) ? "" : sid.waypoint + sid.number + sid.designator[0];
+	return (this->empty()) ? "" : this->waypoint + this->number + this->designator[0];
 }
 
-std::string vsid::sids::getRwy(const sid& sid)
+std::string vsid::Sid::getRwy() const
 {
-	if (sid.rwy.find(",") != std::string::npos)
+	if (this->rwy.find(",") != std::string::npos)
 	{
-		return vsid::utils::split(sid.rwy, ',').front();
+		return vsid::utils::split(this->rwy, ',').front();
 	}
-	else return sid.rwy;
+	else return this->rwy;
 }
 
-bool vsid::sids::isEmpty(const sid& sid)
+bool vsid::Sid::empty() const
 {
-	return sid.waypoint == "";
+	return waypoint == "";
 }
 
-bool vsid::sids::operator==(const sid& sid1, const sid& sid2)
+bool vsid::Sid::operator==(const Sid& sid)
 {
-	if (sid1.waypoint == sid2.waypoint &&
-		sid1.number == sid2.number &&
-		sid1.designator[0] == sid2.designator[0]
+	if (this->waypoint == sid.waypoint &&
+		this->number == sid.number &&
+		this->designator[0] == sid.designator[0]
 		)
 	{
 		return true;
@@ -33,11 +33,11 @@ bool vsid::sids::operator==(const sid& sid1, const sid& sid2)
 	else return false;
 }
 
-bool vsid::sids::operator!=(const sid& sid1, const sid& sid2)
+bool vsid::Sid::operator!=(const Sid& sid)
 {
-	if (sid1.waypoint != sid2.waypoint ||
-		sid1.number != sid2.number ||
-		sid1.designator[0] != sid2.designator[0]
+	if (this->waypoint != sid.waypoint ||
+		this->number != sid.number ||
+		this->designator[0] != sid.designator[0]
 		)
 	{
 		return true;
