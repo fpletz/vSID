@@ -53,9 +53,8 @@ bool vsid::fpln::findRemarks(const EuroScopePlugIn::CFlightPlanData& fplnData, c
 	return std::string(fplnData.GetRemarks()).find(searchStr) != std::string::npos;
 }
 
-void vsid::fpln::removeRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(&toRemove))
+bool vsid::fpln::removeRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(&toRemove))
 {
-	if (strlen(fplnData.GetRemarks()) == 0) return;
 	std::vector<std::string> remarks = vsid::utils::split(fplnData.GetRemarks(), ' ');
 	for (std::vector<std::string>::iterator it = remarks.begin(); it != remarks.end();)
 	{
@@ -65,12 +64,12 @@ void vsid::fpln::removeRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const 
 		}
 		else if (it != remarks.end()) ++it;
 	}
-	fplnData.SetRemarks(vsid::utils::join(remarks).c_str());
+	return fplnData.SetRemarks(vsid::utils::join(remarks).c_str());
 }
 
-void vsid::fpln::addRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(&toAdd))
+bool vsid::fpln::addRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(&toAdd))
 {
 	std::vector<std::string> remarks = vsid::utils::split(fplnData.GetRemarks(), ' ');
 	remarks.push_back(toAdd);
-	fplnData.SetRemarks(vsid::utils::join(remarks).c_str());
+	return fplnData.SetRemarks(vsid::utils::join(remarks).c_str());
 }

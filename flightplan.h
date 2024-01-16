@@ -54,7 +54,7 @@ namespace vsid
 		 * @param fplnData - flightplan data to remove the remarks from
 		 * @param searchStr - which string to remove
 		 */
-		void removeRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(&toRemove));
+		bool removeRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(&toRemove));
 
 		/**
 		 * @brief Adds the given string to the flightplan remarks
@@ -62,6 +62,6 @@ namespace vsid
 		 * @param fplnData - flightplan data to edit the remarks for
 		 * @param searchStr - which string to add
 		 */
-		void addRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(& toAdd));
+		bool addRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(& toAdd));
 	}
 }
