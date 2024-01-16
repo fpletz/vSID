@@ -264,9 +264,8 @@ vsid::Sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan FlightPlan, 
 			(currSid.timeFrom != -1 || currSid.timeTo != -1)
 			) continue;
 		// if a SID is accepted when filed by a pilot set the SID and break
-		if (currSid.pilotfiled && currSid.name() == fplnData.GetSidName())
+		if (currSid.pilotfiled && currSid.name() == fplnData.GetSidName() && currSid.prio < prio)
 		{
-			messageHandler->writeMessage("DEBUG", fpln.GetCallsign() + std::string(" ES sid: ") + fplnData.GetSidName() + " <- pilotfiled: true");
 			setSid = currSid;
 			prio = currSid.prio;
 		}
@@ -392,19 +391,21 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 
 	if(!checkOnly)
 	{	
+		this->processed[callsign].noFplnUpdate = true;
 		if (!fplnData.SetRoute(vsid::utils::join(filedRoute).c_str()))
 		{
 			messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to change Flighplan! - #PFP");
+			this->processed[callsign].noFplnUpdate = false;
 		}
-		else this->processed[callsign].noFplnUpdate = true;
+		//else this->processed[callsign].noFplnUpdate = true;
 
 		if (!fplnData.AmendFlightPlan())
 		{
 			messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to amend Flighplan! - #PFP");
+			this->processed[callsign].noFplnUpdate = false;
 		}
 		else
 		{
-			this->processed[callsign].noFplnUpdate = true;
 			this->processed[callsign].atcRWY = true;
 		}
 		if (sidSuggestion.waypoint != "" && sidCustomSuggestion.waypoint == "" && sidSuggestion.initialClimb)
@@ -511,17 +512,20 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 				ss << fplnData.GetOrigin() << "/" << depRWY;
 				filedRoute.insert(filedRoute.begin(), ss.str());
 			}
+			this->processed[callsign].noFplnUpdate = true;
 			if (!fplnData.SetRoute(vsid::utils::join(filedRoute).c_str()))
 			{
-				messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to change Flighplan!");
+				messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to change Flighplan! #MSS");
+				this->processed[callsign].noFplnUpdate = false;
 			}
 			if (!fplnData.AmendFlightPlan())
 			{
-				messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to amend Flighplan!");
+				messageHandler->writeMessage("ERROR", "[" + std::string(fpln.GetCallsign()) + "] - Failed to amend Flighplan! #MSS");
+				this->processed[callsign].noFplnUpdate = false;
 			}
 			else
 			{
-				this->processed[callsign].noFplnUpdate = true;
+				//this->processed[callsign].noFplnUpdate = true;
 				this->processed[callsign].atcRWY = true;
 			}
 		}
@@ -578,7 +582,7 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 		{
 			if (!fpln.GetControllerAssignedData().SetClearedAltitude(alt[sItemString]))
 			{
-				messageHandler->writeMessage("ERROR", "Failed to set cleared altitude");
+				messageHandler->writeMessage("ERROR", "Failed to set cleared altitude - #CLM");
 			}
 		}
 	}
@@ -630,15 +634,20 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 			}
 			if (!vsid::fpln::findRemarks(fplnData, "VSID/RWY"))
 			{
-				vsid::fpln::addRemark(fplnData, "VSID/RWY");
+				this->processed[callsign].noFplnUpdate = true;
+				if (!vsid::fpln::addRemark(fplnData, "VSID/RWY"))
+				{
+					messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to set remarks! - #RM");
+					this->processed[callsign].noFplnUpdate = false;
+				}
 			}
 			if (!fplnData.AmendFlightPlan())
 			{
 				messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to amend Flighplan! - #RM");
+				this->processed[callsign].noFplnUpdate = false;
 			}
 			else
 			{
-				this->processed[callsign].noFplnUpdate = true;
 				this->processed[callsign].atcRWY = true;
 			}
 		}
@@ -706,7 +715,8 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 			if (((atcBlock.first == fplnData.GetOrigin() &&
 				this->processed[callsign].atcRWY &&
 				this->processed[callsign].customSid.empty()) ||
-				(this->processed[callsign].sid.empty() &&
+				(atcBlock.first == "" &&
+				this->processed[callsign].sid.empty() &&
 				this->processed[callsign].customSid.empty())) &&
 				std::string(FlightPlan.GetFlightPlanData().GetPlanType()) == "I"
 				)
@@ -795,9 +805,9 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 					checkOnly = true;
 				}
 			}
-
-			if (atcBlock.first == fplnData.GetOrigin() &&
+			if (atcBlock.second != "" &&
 				(vsid::fpln::findRemarks(fplnData, "VSID/RWY") ||
+				atcBlock.first != fplnData.GetOrigin() ||
 				fplnData.IsAmended())
 				)
 			{
@@ -963,17 +973,24 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 				this->processed[callsign].atcRWY = vsid::fpln::findRemarks(fplnData, "VSID/RWY");
 				this->processed[callsign].remarkChecked = true;
 			}
-			if (atcBlock.first == fplnData.GetOrigin() &&
+			else if (atcBlock.first == fplnData.GetOrigin() &&
 				!this->processed[callsign].atcRWY &&
 				fplnData.IsAmended()
 				)
 			{
 				this->processed[callsign].atcRWY = true;
 			}
-			if (!this->processed[callsign].atcRWY &&
+			else if (!this->processed[callsign].atcRWY &&
 				(atcBlock.first == this->processed[callsign].sid.name() ||
 				atcBlock.first == this->processed[callsign].customSid.name())
 				)
+			{
+				this->processed[callsign].atcRWY = true;
+			}
+			else if (!this->processed[callsign].atcRWY && // MONITOR
+					atcBlock.first != fplnData.GetOrigin() &&
+					(fplnData.IsAmended() || FlightPlan.GetClearenceFlag())
+					)
 			{
 				this->processed[callsign].atcRWY = true;
 			}
@@ -1207,7 +1224,7 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 			if (command.size() == 2)
 			{
 				std::ostringstream ss;
-				ss << "Enabled automode for: ";
+				ss << "Automode ON for: ";
 				for (auto it = this->activeAirports.begin(); it != this->activeAirports.end(); ++it)
 				{
 					if (!it->second.settings["auto"] && it->second.controllers.size() == 0)
@@ -1232,7 +1249,6 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 						else return false;
 					}
 				);
-				messageHandler->writeMessage("DEBUG", "Removed " + std::to_string(count) + " flightplans");
 			}
 			else if (command.size() > 2 && vsid::utils::tolower(command[2]) == "status")
 			{
@@ -1256,7 +1272,7 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 				{
 					it->second.settings["auto"] = false;
 				}
-				messageHandler->writeMessage("INFO", "Shutting down automode for all airports.");
+				messageHandler->writeMessage("INFO", "Automode OFF for all airports.");
 			}
 			return true;
 			}
@@ -1300,16 +1316,6 @@ void vsid::VSIDPlugin::OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlight
 	}
 	if (this->processed.contains(callsign))
 	{
-		// if we want to supress an update that happened and skip sid checking
-		if (this->processed[callsign].noFplnUpdate)
-		{
-			this->processed[callsign].noFplnUpdate = false;
-			return;
-		}
-		else
-		{
-			this->processed[callsign].noFplnUpdate = true;
-		}
 		std::vector<std::string> filedRoute = vsid::utils::split(fplnData.GetRoute(), ' ');
 		if (filedRoute.size() > 0)
 		{
@@ -1318,6 +1324,7 @@ void vsid::VSIDPlugin::OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlight
 				atcBlock.first == "")
 			{
 				this->processed.erase(callsign);
+				return;
 			}
 
 			if (!this->processed[callsign].atcRWY &&
@@ -1334,13 +1341,28 @@ void vsid::VSIDPlugin::OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlight
 				ControllerMyself().IsController()
 				)
 			{
-				vsid::fpln::removeRemark(fplnData, "VSID/RWY");
+				this->processed[callsign].noFplnUpdate = true;
+				if (!vsid::fpln::removeRemark(fplnData, "VSID/RWY"))
+				{
+					messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to remove remarks! - #FFDU");
+				}
+				else this->processed[callsign].noFplnUpdate = false;
 				if (!fplnData.AmendFlightPlan())
 				{
 					messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to amend Flighplan! - #FFDU");
 				}
-				else this->processed[callsign].noFplnUpdate = true;
+				else this->processed[callsign].noFplnUpdate = false;
 			}
+
+			// if we want to supress an update that happened and skip sid checking  /////////////// needs further checking - this the right position? now several flightplanupdates again + auto mode ignores set custom rwy when activated
+			/*if (this->processed[callsign].noFplnUpdate)
+			{
+				messageHandler->writeMessage("DEBUG", callsign + " nofplnUpdate true. Disabling.");
+				this->processed[callsign].noFplnUpdate = false;
+				messageHandler->writeMessage("DEBUG", callsign + " nofplnUpdate after disabling " + ((this->processed[callsign].noFplnUpdate) ? "TRUE" : "FALSE"));
+				return;
+			}*/
+
 			if (atcBlock.first == fplnData.GetOrigin() && atcBlock.second != "")
 			{
 				this->processFlightplan(FlightPlan, true, atcBlock.second);
