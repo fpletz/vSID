@@ -61,7 +61,7 @@
                     "initial": 7000,
                     "climbvia": true,
                     "prio": 1,
-                    "customRule": "",
+                    "mtow": 136000,
                     "timeFrom": 6,
                     "timeTo": 22
                 },
