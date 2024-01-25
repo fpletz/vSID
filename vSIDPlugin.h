@@ -20,7 +20,7 @@
 namespace vsid
 {
 	const std::string pluginName = "vSID";
-	const std::string pluginVersion = "0.7.0";
+	const std::string pluginVersion = "0.7.2";
 	const std::string pluginAuthor = "Gameagle";
 	const std::string pluginCopyright = "to be selected";
 	const std::string pluginViewAviso = "";
@@ -52,7 +52,7 @@ namespace vsid
 		 * @param FlightPlan - Flightplan data from ES
 		 * @param atcRwy - The rwy assigned by ATC which shall be considered
 		 */
-		vsid::sids::sid processSid(EuroScopePlugIn::CFlightPlan FlightPlan, std::string atcRwy = "");
+		vsid::Sid processSid(EuroScopePlugIn::CFlightPlan FlightPlan, std::string atcRwy = "");
 		/**
 		 * @brief Tries to set a clean route without SID. SID will then be placed in front
 		 * and color codes for the TagItem set. Processed flightplans are stored.
@@ -62,7 +62,7 @@ namespace vsid
 		 * @param atcRwy - The rwy assigned by ATC which shall be considered
 		 * @param manualSid - manual Sid that has been selected and should be processed
 		 */
-		void processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan, bool checkOnly, std::string atcRwy = "", vsid::sids::sid manualSid = {});
+		void processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan, bool checkOnly, std::string atcRwy = "", vsid::Sid manualSid = {});
 		/**
 		 * @brief Called with every function call (list interaction) inside ES
 		 *

@@ -1,3 +1,16 @@
+[Changelog v0.7.2]
+
+[Fixed]
+*	Automode edits fpln when reloading config
+*	Retrigger automode after fpln changes
+*	If reconnected fpln misses atc block retrigger automode
+
+[Changelog v0.7.1]
+
+[Fixed]
+*	Missmatch between sugested SID and rwy tagItem if ICAO/RWY is present
+*	IC is not detected as correct for custom SIDs if ICAO/RWY is present
+
 [Changelog v0.7.0]
 
 [NEW]

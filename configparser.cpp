@@ -159,36 +159,46 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                 int mtow = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("mtow", 0);
                                 std::string customRule = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("customRule", "");
                                 customRule = vsid::utils::toupper(customRule);
-                                vsid::sids::SIDArea area = {};
+                                //vsid::sids::SIDArea area = {};
                                 std::string equip = "";
                                 int lvp = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("lvp", -1);
                                 int timeFrom = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("timeFrom", -1);
                                 int timeTo = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("timeTo", -1);
                                 
-                                vsid::sids::sid newSid = {  wpt,
-                                                            ' ',
-                                                            desig,
-                                                            rwys,
-                                                            initial,
-                                                            via,
-                                                            prio,
-                                                            pilot,
-                                                            wtc,
-                                                            engineType,
-                                                            acftType,
-                                                            engineCount,
-                                                            mtow,
-                                                            customRule,
-                                                            area,
-                                                            equip,
-                                                            lvp,
-                                                            timeFrom,
-                                                            timeTo
-                                                         };
+                                //vsid::Sid newSid = {  wpt,
+                                //                            ' ',
+                                //                            desig,
+                                //                            rwys,
+                                //                            initial,
+                                //                            via,
+                                //                            prio,
+                                //                            pilot,
+                                //                            wtc,
+                                //                            engineType,
+                                //                            acftType,
+                                //                            engineCount,
+                                //                            mtow,
+                                //                            customRule,
+                                //                            //area,
+                                //                            equip,
+                                //                            lvp,
+                                //                            timeFrom,
+                                //                            timeTo
+                                //                         };
+                                //apt.second.sids.push_back(newSid);
+                                //apt.second.sids.push_back(vsid::Sid::Sid(wpt, ' ', desig, rwys, initial, via, prio, pilot, wtc, engineType, acftType, engineCount, mtow, customRule, equip, lvp, timeFrom, timeTo));
+                                vsid::Sid newSid = { wpt, ' ', desig, rwys, initial, via, prio,
+                                                    pilot, wtc, engineType, acftType, engineCount,
+                                                    mtow, customRule, /*area,*/ equip, lvp,
+                                                    timeFrom, timeTo };
                                 apt.second.sids.push_back(newSid);
                                 if (newSid.timeFrom != -1 && newSid.timeTo != -1) apt.second.timeSids.push_back(newSid);
                             }
                         }
+                        /*for (auto& area : this->parsedConfig.at(apt.first).at("areas").items())
+                        {
+
+                        }*/
                     }
                 }
                 catch (const json::parse_error& e)
