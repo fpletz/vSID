@@ -19,7 +19,7 @@
                 "Q": {
                     "rwy": "07R",
                     "initial": 5000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"Z": {
@@ -31,13 +31,13 @@
 				"N": {
                     "rwy": "25L",
                     "initial": 5000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"A": {
                     "rwy": "25R",
                     "initial": 5000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"M": {
@@ -58,7 +58,7 @@
                 "Q": {
                     "rwy": "07R",
                     "initial": 5000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"Z": {
@@ -71,13 +71,13 @@
 				"N": {
                     "rwy": "25L",
                     "initial": 5000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"A": {
                     "rwy": "25R",
                     "initial": 5000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"M": {
@@ -97,7 +97,7 @@
                 "Q": {
                     "rwy": "07R",
                     "initial": 5000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"Z": {
@@ -110,13 +110,13 @@
 				"N": {
                     "rwy": "25L",
                     "initial": 5000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"A": {
                     "rwy": "25R",
                     "initial": 5000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"M": {
@@ -143,7 +143,7 @@
                 "Q": {
                     "rwy": "07R",
                     "initial": 8000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"Z": {
@@ -156,7 +156,7 @@
 				"N": {
                     "rwy": "25L",
                     "initial": 5000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"A": {
@@ -170,7 +170,7 @@
                 "B": {
                     "rwy": "07L",
                     "initial": 5000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"K": {
@@ -183,7 +183,7 @@
                 "Q": {
                     "rwy": "07R",
                     "initial": 8000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"Z": {
@@ -196,7 +196,7 @@
 				"N": {
                     "rwy": "25L",
                     "initial": 5000,
-                    "climbvia": false,
+                    "climbvia": true,
                     "prio": 1
                 },
 				"A": {
