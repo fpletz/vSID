@@ -4,6 +4,7 @@
 #include "flightplan.h"
 #include "timeHandler.h"
 #include "messageHandler.h"
+#include "area.h"
 
 #include <set>
 #include <algorithm>
@@ -629,9 +630,6 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 			{
 				messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to change Flighplan! - #RM");
 			}
-			else
-			{
-			}
 			if (!vsid::fpln::findRemarks(fplnData, "VSID/RWY"))
 			{
 				this->processed[callsign].noFplnUpdate = true;
@@ -646,6 +644,10 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 				messageHandler->writeMessage("ERROR", "[" + callsign + "] - Failed to amend Flighplan! - #RM");
 				this->processed[callsign].noFplnUpdate = false;
 			}
+			else if (this->activeAirports[fplnData.GetOrigin()].settings["auto"] && this->processed.contains(callsign))
+			{
+				this->processed.erase(callsign);
+			}
 			else
 			{
 				this->processed[callsign].atcRWY = true;
@@ -658,6 +660,17 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 {
 	std::string callsign = FlightPlan.GetCallsign();
 	EuroScopePlugIn::CFlightPlanData fplnData = FlightPlan.GetFlightPlanData();
+
+	// dev
+	/*for (auto& area : this->activeAirports[fplnData.GetOrigin()].areas)
+	{
+		if (area.second.inside(FlightPlan.GetFPTrackPosition().GetPosition()))
+		{
+			messageHandler->writeMessage("DEBUG", callsign + " is in Area: " + area.first);
+			break;
+		}
+	}*/
+	// end dev
 
 	if (!FlightPlan.IsValid())
 	{
@@ -798,8 +811,8 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 			if (!checkOnly)
 			{
 				if (FlightPlan.GetClearenceFlag() ||
-					fplnData.GetPlanType() == "V" ||
-					(atcBlock.first != "" && atcBlock.first != fplnData.GetOrigin())
+					fplnData.GetPlanType() == "V"/* ||
+					(atcBlock.first != "" && atcBlock.first != fplnData.GetOrigin())*/
 					)
 				{
 					checkOnly = true;
@@ -838,25 +851,20 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 			std::string customSidName = this->processed[callsign].customSid.name();
 			std::string atcSid = vsid::fpln::getAtcBlock(vsid::utils::split(fplnData.GetRoute(), ' '), fplnData.GetOrigin()).first;
 			
-			// disabled for now as of no use unless we only check wpt + designator in fplns
-			/*if (atcSid != "" &&
-				atcSid != fplnData.GetOrigin() &&
-				atcSid != sidName &&
-				(vsid::sids::isEmpty(this->processed[callsign].customSid) ||
-				this->processed[callsign].sid == this->processed[callsign].customSid)
-				)
+			// if an unknown Sid is set (non-standard or non-custom) try to find matching Sid in config
+			if (atcSid != "" && atcSid != fplnData.GetOrigin() && atcSid != sidName && atcSid != customSidName)
 			{
-				for (const vsid::sids::sid& sid : this->activeAirports[fplnData.GetOrigin()].sids)
+				for (vsid::Sid& sid : this->activeAirports[fplnData.GetOrigin()].sids)
 				{
 					if (sid.waypoint != atcSid.substr(0, atcSid.length() - 2)) continue;
 					if (sid.designator[0] != atcSid[atcSid.length() - 1]) continue;
+					if (sid.number != atcSid[atcSid.length() - 2]) break;
+					
 					this->processed[callsign].customSid = sid;
-					break;
 				}
-			}*/
+			}
 
 			// determine if climb via is needed depending on customSid
-
 			if (atcSid == "" || atcSid == sidName || atcSid == fplnData.GetOrigin() && sidName != customSidName)
 			{
 				climbVia = this->processed[callsign].sid.climbvia;
@@ -1223,6 +1231,7 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 			}
 			if (command.size() == 2)
 			{
+				int counter = 0;
 				std::ostringstream ss;
 				ss << "Automode ON for: ";
 				for (auto it = this->activeAirports.begin(); it != this->activeAirports.end(); ++it)
@@ -1231,9 +1240,12 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 					{
 						it->second.settings["auto"] = true;
 						ss << it->first << " ";
+						counter++;
 					}
 				}
-				messageHandler->writeMessage("INFO", ss.str());
+
+				if (counter > 0) messageHandler->writeMessage("INFO", ss.str());
+				else messageHandler->writeMessage("INFO", "No new automode. Check .vsid status for active ones.");
 				
 				auto count = std::erase_if(this->processed, [&](auto item) 
 					{
@@ -1609,6 +1621,11 @@ void vsid::VSIDPlugin::UpdateActiveAirports()
 
 void vsid::VSIDPlugin::OnTimer(int Counter)
 {
+	// dev test
+	//vsid::Area test = { {"N050.00.49.004", "E008.31.14.804"}, {"N050.02.05.037", "E008.36.48.302"} , {"N050.03.33.122", "E008.35.56.150"} , {"N050.02.11.531", "E008.30.28.956"} };
+	//test.showline();
+
+	// end dev test
 	std::pair<std::string, std::string> msg = messageHandler->getMessage();
 	if (msg.first != "" && msg.second != "")
 	{
