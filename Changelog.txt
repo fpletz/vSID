@@ -1,15 +1,33 @@
 [Changelog v0.7.2]
 
-[Fixed]
+[NEW]
+*	Areas configurable with lat / lon coordinates from ES
+
+[CHANGED]
+*	Settings save format as settings have increased
+
+[Changelog v0.7.2]
+
+[CHANGED]
+*	if a reconnected fpln misses the atc block it is reprocessed if automode on
+*	if a flightplan changes it retriggers the automode
+
+[FIXED]
 *	Automode edits fpln when reloading config
 *	Retrigger automode after fpln changes
 *	If reconnected fpln misses atc block retrigger automode
+*	active custom rule resulted in red SID coloring
+*	if only ICAO/RWY is in fpln a custom SID did not show initial climb as correct but as custom
+*	initial climb is missing if the assigned SID is not the suggested SID (and not custom based on rwy)
+*	pilotfiled "true" overruled restrictions on SIDs
+
 
 [Changelog v0.7.1]
 
 [Fixed]
 *	Missmatch between sugested SID and rwy tagItem if ICAO/RWY is present
 *	IC is not detected as correct for custom SIDs if ICAO/RWY is present
+
 
 [Changelog v0.7.0]
 
