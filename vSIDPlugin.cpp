@@ -107,7 +107,7 @@ vsid::Sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan FlightPlan, 
 	if (customRuleActive)
 	{
 		std::vector<std::string> sidRules = {};
-		std::map<std::string, int> customRules = this->activeAirports[fplnData.GetOrigin()].customRules;
+		std::map<std::string, bool> customRules = this->activeAirports[fplnData.GetOrigin()].customRules;
 		for (auto it = this->activeAirports[fplnData.GetOrigin()].sids.begin(); it != this->activeAirports[fplnData.GetOrigin()].sids.end();)
 		{
 			if (it->customRule == "" || wptRules.find(it->waypoint) != wptRules.end()) ++it;
@@ -189,6 +189,22 @@ vsid::Sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan FlightPlan, 
 		}
 		// skip if custom rules are inactive but a rule exists in sid
 		if (!customRuleActive && currSid.customRule != "")
+		{
+			continue;
+		}
+		// skip if area is inactive but set
+		if (currSid.area != "" &&
+			this->activeAirports[fplnData.GetOrigin()].areas.contains(currSid.area) &&
+			!this->activeAirports[fplnData.GetOrigin()].areas[currSid.area].isActive)
+		{
+			continue;
+		}
+		// skip if area is active + fpln outside or area
+		if (currSid.area != "" &&
+			this->activeAirports[fplnData.GetOrigin()].areas.contains(currSid.area) &&
+			this->activeAirports[fplnData.GetOrigin()].areas[currSid.area].isActive &&
+			!this->activeAirports[fplnData.GetOrigin()].areas[currSid.area].inside(FlightPlan.GetFPTrackPosition().GetPosition())
+			)
 		{
 			continue;
 		}
@@ -1062,6 +1078,7 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 				"Status - (inop) / "
 				"Level - (inop) / "
 				"auto [icao] - activate automode for icao (inop) /"
+				"area [icao] - toggle area for icao /"
 				"rule [icao] [rulename] - toggle rule for icao / "
 				"night [icao] - toggle night mode for icao /"
 				"lvp [icao] - toggle lvp ops for icao / "
@@ -1091,12 +1108,12 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 		{
 			if (command.size() == 2)
 			{
-				for (std::pair<const std::string, vsid::airport>& airport : this->activeAirports)
+				for (std::pair<const std::string, vsid::Airport>& airport : this->activeAirports)
 				{
 					if (!airport.second.customRules.empty())
 					{
 						std::ostringstream ss;
-						for (std::pair<const std::string, int>& rule : airport.second.customRules)
+						for (std::pair<const std::string, bool>& rule : airport.second.customRules)
 						{
 							std::string status = (rule.second) ? "ON" : "OFF";
 							ss << rule.first << ": " << status << " ";
@@ -1106,7 +1123,7 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 					else messageHandler->writeMessage(airport.first + " Rules", "No rules configured");
 				}
 			}
-			else if (command.size() >= 3 && this->activeAirports.count(vsid::utils::toupper(command[2])))
+			else if (command.size() >= 3 && this->activeAirports.contains(vsid::utils::toupper(command[2])))
 			{
 				std::string icao = vsid::utils::toupper(command[2]);
 				if (command.size() == 3)
@@ -1114,7 +1131,7 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 					if (!this->activeAirports[icao].customRules.empty())
 					{
 						std::ostringstream ss;
-						for (std::pair<const std::string, int>& rule : this->activeAirports[icao].customRules)
+						for (std::pair<const std::string, bool>& rule : this->activeAirports[icao].customRules)
 						{
 							std::string status = (rule.second) ? "ON" : "OFF";
 							ss << rule.first << ": " << status;
@@ -1288,6 +1305,83 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 			}
 			return true;
 			}
+		else if (vsid::utils::tolower(command[1]) == "area")
+		{
+			if (command.size() == 2)
+			{
+				for (std::pair<const std::string, vsid::Airport>& apt : this->activeAirports)
+				{
+					if (!apt.second.areas.empty())
+					{
+						std::ostringstream ss;
+						for (std::pair<const std::string, vsid::Area>& area : apt.second.areas)
+						{
+							std::string status = (area.second.isActive) ? "ON" : "OFF";
+							ss << area.first << ": " << status << " ";
+						}
+						messageHandler->writeMessage(apt.first + " Areas", ss.str());
+					}
+					else messageHandler->writeMessage(apt.first + " Areas", "No area settings configured");
+				}
+			}
+			else if (command.size() >= 3 && this->activeAirports.contains(vsid::utils::toupper(command[2])))
+			{
+				std::string icao = vsid::utils::toupper(command[2]);
+				if (command.size() == 3)
+				{
+					if (!this->activeAirports[icao].areas.empty())
+					{
+						std::ostringstream ss;
+						for (std::pair<const std::string, vsid::Area>& area : this->activeAirports[icao].areas)
+						{
+							std::string status = (area.second.isActive) ? "ON " : "OFF ";
+							ss << area.first << ": " << status;
+						}
+						messageHandler->writeMessage(icao + " Areas", ss.str());
+					}
+					else messageHandler->writeMessage(icao + " Areas", "No area settings configured");
+				}
+				else if (command.size() == 4)
+				{
+					std::string area = vsid::utils::toupper(command[3]);
+					if (!this->activeAirports[icao].areas.empty() && area == "ALL")
+					{
+						std::ostringstream ss;
+						for (std::pair<const std::string, vsid::Area> &el : this->activeAirports[icao].areas)
+						{
+							el.second.isActive = true;
+							ss << el.first << ": " << ((el.second.isActive) ? "ON " : "OFF ");
+						}
+						messageHandler->writeMessage(icao + " Areas", ss.str());
+					}
+					else if (this->activeAirports[icao].areas.contains(area))
+					{
+						this->activeAirports[icao].areas[area].isActive = !this->activeAirports[icao].areas[area].isActive;
+						messageHandler->writeMessage(icao + " Area", area + " " +
+													(this->activeAirports[icao].areas[area].isActive ? "ON" : "OFF")
+													);
+					}
+					else messageHandler->writeMessage(icao + " " + command[3], "Area is unknown");
+					
+					auto count = std::erase_if(this->processed, [&](auto item)
+						{
+							EuroScopePlugIn::CFlightPlan fpln = FlightPlanSelect(item.first.c_str());
+							EuroScopePlugIn::CFlightPlanData fplnData = fpln.GetFlightPlanData();
+							if (!fpln.GetClearenceFlag() &&
+								this->activeAirports.contains(fplnData.GetOrigin()) /* &&
+								this->activeAirports[fplnData.GetOrigin()].settings["auto"]*/
+								)
+							{
+								return true;
+							}
+							else return false;
+						}
+					);
+				}
+			}
+			else messageHandler->writeMessage("INFO", vsid::utils::toupper(command[2]) + " not in active airports");
+			return true;
+		}
 		else if (vsid::utils::tolower(command[1]) == "debug")
 		{
 			if (this->debug == false)
@@ -1488,9 +1582,11 @@ void vsid::VSIDPlugin::UpdateActiveAirports()
 {
 	messageHandler->writeMessage("INFO", "Updating airports...");
 	this->savedSettings.clear();
-	for (std::pair<const std::string, vsid::airport>& airport : this->activeAirports)
+	for (std::pair<const std::string, vsid::Airport>& apt : this->activeAirports)
 	{
-		this->savedSettings.insert({ airport.first, airport.second.settings });
+		this->savedSettings.insert({ apt.first, apt.second.settings });
+		this->savedRules.insert({ apt.first, apt.second.customRules });
+		this->savedAreas.insert({ apt.first, apt.second.areas });
 	}
 	this->SelectActiveSectorfile();
 	this->activeAirports.clear();
@@ -1532,9 +1628,9 @@ void vsid::VSIDPlugin::UpdateActiveAirports()
 	// only load configs if at least one airport has been selected
 	if (this->activeAirports.size() > 0)
 	{
-		this->configParser.loadAirportConfig(this->activeAirports, this->savedSettings);
+		this->configParser.loadAirportConfig(this->activeAirports, this->savedSettings, this->savedRules, this->savedAreas);
 
-		for (std::pair<const std::string, vsid::airport> &airport : this->activeAirports)
+		for (std::pair<const std::string, vsid::Airport> &airport : this->activeAirports)
 		{
 			std::set depRwys = airport.second.depRwys;
 			if (airport.second.arrAsDep)
@@ -1590,7 +1686,7 @@ void vsid::VSIDPlugin::UpdateActiveAirports()
 
 	// health check in case SIDs in config do not match sector file
 	std::map<std::string, std::set<std::string>> incompSid;
-	for (std::pair<const std::string, vsid::airport> &aptElem : this->activeAirports)
+	for (std::pair<const std::string, vsid::Airport> &aptElem : this->activeAirports)
 	{
 		for (vsid::Sid& sid : aptElem.second.sids)
 		{

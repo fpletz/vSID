@@ -17,12 +17,12 @@ namespace vsid
 			std::string rwy = "", int initialClimb = 0, bool climbvia = false, int prio = 99,
 			bool pilotfiled = false, std::string wtc = "", std::string engineType = "",
 			std::map<std::string, bool>acftType = {}, int engineCount = 0, int mtow = 0,
-			std::string customRule = "", std::string equip = "", int lvp = -1, int timeFrom = -1,
-			int timeTo = -1) : waypoint(waypoint), number(number), designator(designator),
+			std::string customRule = "", std::string area = "", std::string equip = "", int lvp = -1,
+			int timeFrom = -1, int timeTo = -1) : waypoint(waypoint), number(number), designator(designator),
 			rwy(rwy), initialClimb(initialClimb), climbvia(climbvia), prio(prio),
 			pilotfiled(pilotfiled), wtc(wtc), engineType(engineType),
 			acftType(acftType), engineCount(engineCount), mtow(mtow),
-			customRule(customRule), equip(equip), lvp(lvp), timeFrom(timeFrom), timeTo(timeTo) {};
+			customRule(customRule), area(area), equip(equip), lvp(lvp), timeFrom(timeFrom), timeTo(timeTo) {};
 
 		std::string waypoint;
 		char number;
@@ -38,7 +38,7 @@ namespace vsid
 		int engineCount;
 		int mtow;
 		std::string customRule;
-		//SIDArea area = {};
+		std::string area;
 		std::string equip;
 		int lvp;
 		int timeFrom;

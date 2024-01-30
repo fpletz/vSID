@@ -20,7 +20,7 @@
 namespace vsid
 {
 	const std::string pluginName = "vSID";
-	const std::string pluginVersion = "0.7.2";
+	const std::string pluginVersion = "0.8.0";
 	const std::string pluginAuthor = "Gameagle";
 	const std::string pluginCopyright = "to be selected";
 	const std::string pluginViewAviso = "";
@@ -138,13 +138,15 @@ namespace vsid
 		
 	private:
 		//std::vector<vsid::airport> activeAirports;
-		std::map<std::string, vsid::airport> activeAirports;
+		std::map<std::string, vsid::Airport> activeAirports;
 		bool debug;
 		std::map<std::string, vsid::fpln::info> processed;
 		std::map<std::string, std::pair< std::chrono::utc_clock::time_point, bool>> removeProcessed;
 		vsid::ConfigParser configParser;
 		std::string configPath;
-		std::map<std::string, std::map<std::string, int>> savedSettings;
+		std::map<std::string, std::map<std::string, bool>> savedSettings;
+		std::map<std::string, std::map<std::string, bool>> savedRules;
+		std::map<std::string, std::map<std::string, vsid::Area>> savedAreas;
 		// list of ground states set by controllers
 		std::string gsList;
 		std::map<std::string, std::string> actAtc;

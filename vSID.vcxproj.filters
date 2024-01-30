@@ -42,6 +42,9 @@
     <ClCompile Include="timeHandler.cpp">
       <Filter>Quelldateien</Filter>
     </ClCompile>
+    <ClCompile Include="area.cpp">
+      <Filter>Quelldateien</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="vSID.def">
@@ -98,6 +101,9 @@
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="include\es\EuroScopePlugIn.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="area.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

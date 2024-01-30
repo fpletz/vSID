@@ -21,8 +21,10 @@ namespace vsid
 		virtual ~ConfigParser();
 
 		//std::vector<std::filesystem::path> loadConfigFiles();
-		void loadAirportConfig(std::map<std::string, vsid::airport> &activeAirports,
-							std::map<std::string, std::map<std::string, int>> &savedSettings
+		void loadAirportConfig(std::map<std::string, vsid::Airport> &activeAirports,
+							std::map<std::string, std::map<std::string, bool>>& savedCustomRules,
+							std::map<std::string, std::map<std::string, bool>>& savedSettings,
+							std::map<std::string, std::map<std::string, vsid::Area>>& savedAreas
 							);
 		void loadMainConfig();
 		void loadGrpConfig();
