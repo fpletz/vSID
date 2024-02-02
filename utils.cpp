@@ -36,7 +36,7 @@ std::vector<std::string> vsid::utils::split(const std::string &string, const cha
 
 	while (std::getline(ss, elem, del))
 	{
-		elems.push_back(elem);
+		elems.push_back(vsid::utils::trim(elem));
 	}
 	return elems;
 }
