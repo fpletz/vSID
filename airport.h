@@ -26,14 +26,15 @@ namespace vsid
 		std::set<std::string> arrRwys = {};
 		std::map<std::string, bool> customRules = {};
 		std::map<std::string, vsid::Area> areas = {};
-		//std::map<std::string, bool> areaSettings = {};
 		std::vector<vsid::Sid> sids = {};
 		std::vector<vsid::Sid> timeSids = {};
 		std::string timezone = "";
-		int arrAsDep = 0;
+		std::map<std::string, int> appSI = {};
+		bool arrAsDep = false;
 		int transAlt = 0;
 		int maxInitialClimb = 0;
 		std::map<std::string, bool> settings = {};
 		std::map<std::string, vsid::Controller> controllers = {};
+		bool forceAuto = false;
 	};
 }

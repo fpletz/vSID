@@ -137,6 +137,14 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                         apt.second.customRules = customRules;
                         customRules.clear();
                         savedCustomRules.clear();
+
+                        std::set<std::string> appSI;
+                        int appSIPrio = 0;
+                        for (std::string& si : vsid::utils::split(this->parsedConfig.at(apt.first).value("appSI", ""), ','))
+                        {
+                            apt.second.appSI[si] = appSIPrio;
+                            appSIPrio++;
+                        }
                         
                         //areas
                         if (this->parsedConfig.at(apt.first).contains("areas"))
