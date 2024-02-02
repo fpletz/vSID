@@ -5,7 +5,7 @@
         "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {"traalg":0},
+        "customRules" : {"traalg":false},
         "timeMode": true,
         "timezone": "Europe/Berlin",
         "sids": {
@@ -14,25 +14,39 @@
                     "rwy": "08L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1
+                    "prio": 2
                 },
-                "E": {
+                "E1": {
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 3
                 },
-			    "S": {
+				"E2": {
+                    "rwy": "08R",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "cargo"
+                },
+			    "S1": {
                     "rwy": "26L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 3
+                },
+				"S2": {
+                    "rwy": "26L",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "cargo"
                 },
 			    "N": {
                     "rwy": "26R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1
+                    "prio": 2
                 }
             },
             "ALG": {
@@ -94,25 +108,39 @@
                     "rwy": "08L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1
+                    "prio": 2
                 },
-                "E": {
+                "E1": {
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 3
                 },
-			    "S": {
+				"E2": {
+                    "rwy": "08R",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "cargo"
+                },
+			    "S1": {
                     "rwy": "26L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 3
+                },
+				"S2": {
+                    "rwy": "26L",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "cargo"
                 },
 			    "N": {
                     "rwy": "26R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1
+                    "prio": 2
                 }
             },
 			"BIBAG": {
@@ -182,27 +210,42 @@
                     "rwy": "08L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 2,
                     "engineType": "TP"
                 },
-                "E": {
+                "E1": {
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 3
                 },
-			    "S": {
+				"E2": {
+                    "rwy": "08R",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "cargo"
+                },
+			    "S1": {
                     "rwy": "26L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 2,
+                    "prio": 3,
                     "engineType": "TP"
+                },
+				"S2": {
+                    "rwy": "26L",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 1,
+                    "engineType": "TP",
+					"area": "cargo"
                 },
 			    "N": {
                     "rwy": "26R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 2,
                     "engineType": "TP"
                 }
             },
@@ -211,25 +254,39 @@
                     "rwy": "08L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1
+                    "prio": 2
                 },
-                "E": {
+                "E1": {
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 1,
+					"area": "cargo"
                 },
-			    "S": {
+				"E2": {
+                    "rwy": "08R",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 3
+                },
+			    "S1": {
                     "rwy": "26L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 3
+                },
+				"S2": {
+                    "rwy": "26L",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "cargo"
                 },
 			    "N": {
                     "rwy": "26R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1
+                    "prio": 2
                 }
             },
 			"INPUD": {
@@ -237,25 +294,39 @@
                     "rwy": "08L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1
+                    "prio": 2
                 },
-                "E": {
+                "E1": {
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 3
                 },
-			    "S": {
+				"E2": {
+                    "rwy": "08R",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "cargo"
+                },
+			    "S1": {
                     "rwy": "26L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 3
+                },
+				"S2": {
+                    "rwy": "26L",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "cargo"
                 },
 				"N": {
                     "rwy": "26R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1
+                    "prio": 2
                 }
             },
 			"KIRDI": {
@@ -502,13 +573,20 @@
                     "rwy": "08L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1
+                    "prio": 2
                 },
-                "E": {
+                "E1": {
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 3
+                },
+				"E2": {
+                    "rwy": "08R",
+                    "initial": 7000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "cargo"
                 },
 			    "S": {
                     "rwy": "26L",
@@ -739,6 +817,15 @@
                     "timeTo": 6
                 }
             }
-        }
+        },
+		"areas": {
+            "cargo": {
+                "active": true,
+                "p1": {"lat": "N048.20.39.848", "lon": "E011.44.43.040"},
+                "p2": {"lat": "N048.20.48.162", "lon": "E011.46.30.262"},
+                "p3": {"lat": "N048.20.59.695", "lon": "E011.46.28.253"},
+                "p4": {"lat": "N048.20.51.680", "lon": "E011.44.41.294"}
+            }
+		}
     }
 }

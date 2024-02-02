@@ -5,7 +5,7 @@
         "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {"high":0},
+        "customRules" : {"high":false},
         "timeMode": true,
         "timezone": "Europe/Berlin",
         "sids": {
@@ -85,17 +85,32 @@
                     "climbvia": false,
                     "prio": 2
                 },
-			    "S": {
+			    "S1": {
                     "rwy": "27R",
                     "initial": 4000,
                     "climbvia": false,
-                    "prio": 1
+                    "prio": 1,
+					"wtc": "HJ"
+                },
+				"S2": {
+                    "rwy": "27R",
+                    "initial": 4000,
+                    "climbvia": false,
+                    "prio": 2,
+                    "customRule": "high"
+                },
+				"S3": {
+                    "rwy": "27R",
+                    "initial": 4000,
+                    "climbvia": false,
+                    "prio": 4,
+					"Remark": "req in case 27L clsd"
                 },
 			    "F": {
                     "rwy": "27L",
                     "initial": 4000,
                     "climbvia": false,
-                    "prio": 2
+                    "prio": 3
                 }
             },
 			"NIE": {
@@ -195,17 +210,32 @@
                 }
             },
 			"VAXEV": {
-                "Y": {
+                "Y1": {
                     "rwy": "09L",
                     "initial": 4000,
                     "climbvia": false,
-                    "prio": 1
+                    "prio": 1,
+                    "wtc": "HJ"
+                },
+				"Y2": {
+                    "rwy": "09L",
+                    "initial": 4000,
+                    "climbvia": false,
+                    "prio": 2,
+                    "customRule": "high"
+                },
+				"Y3": {
+                    "rwy": "09L",
+                    "initial": 4000,
+                    "climbvia": false,
+                    "prio": 4,
+                    "Remark": "req in case 09R clsd"
                 },
                 "G": {
                     "rwy": "09R",
                     "initial": 4000,
                     "climbvia": false,
-                    "prio": 2
+                    "prio": 3
                 },
 			    "S1": {
                     "rwy": "27R",
