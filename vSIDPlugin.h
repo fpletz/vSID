@@ -22,7 +22,7 @@ namespace vsid
 	const std::string pluginName = "vSID";
 	const std::string pluginVersion = "0.8.0";
 	const std::string pluginAuthor = "Gameagle";
-	const std::string pluginCopyright = "to be selected";
+	const std::string pluginCopyright = "(c) 2023";
 	const std::string pluginViewAviso = "";
 
 	class ConfigParser;
@@ -150,6 +150,7 @@ namespace vsid
 		// list of ground states set by controllers
 		std::string gsList;
 		std::map<std::string, std::string> actAtc;
+		std::set<std::string> ignoreAtc;
 
 		/**
 		 * @brief Loads and updates the active airports with available configs
