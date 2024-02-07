@@ -474,8 +474,8 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 */
 
 void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, POINT Pt, RECT Area) {
-
-	// if logged in as observer disable functions - DISABLED DURING DEVELOPMENT
+	
+	// if logged in as observer disable functions
 	if (!ControllerMyself().IsController())
 	{
 		return;
@@ -698,6 +698,7 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 
 void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, EuroScopePlugIn::CRadarTarget RadarTarget, int ItemCode, int TagData, char sItemString[16], int* pColorCode, COLORREF* pRGB, double* pFontSize)
 {
+	
 	std::string callsign = FlightPlan.GetCallsign();
 	EuroScopePlugIn::CFlightPlanData fplnData = FlightPlan.GetFlightPlanData();
 
@@ -1294,11 +1295,11 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 							ss << it->first << " ";
 							counter++;
 						}
-						else if (ControllerMyself().GetFacility() >= 6 &&
+						else if (ControllerMyself().GetFacility() >= 5 &&
 							std::none_of(it->second.controllers.begin(), it->second.controllers.end(), [&](auto controller)
 								{
-
-									if ((it->second.appSI.contains(ControllerMyself().GetPositionId()) &&
+									if (controller.second.facility < ControllerMyself().GetFacility() || 
+										(it->second.appSI.contains(ControllerMyself().GetPositionId()) &&
 										it->second.appSI.contains(controller.second.si) &&
 										it->second.appSI[ControllerMyself().GetPositionId()] > it->second.appSI[controller.second.si]) ||
 										(!it->second.appSI.contains(ControllerMyself().GetPositionId()) &&
@@ -1365,6 +1366,7 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 			{
 				for (std::vector<std::string>::iterator it = command.begin() + 2; it != command.end(); ++it)
 				{
+					*it = vsid::utils::toupper(*it);
 					if (this->activeAirports.contains(*it))
 					{
 						this->activeAirports[*it].settings["auto"] = !this->activeAirports[*it].settings["auto"];
@@ -1606,8 +1608,7 @@ void vsid::VSIDPlugin::OnControllerPositionUpdate(EuroScopePlugIn::CController C
 	std::string atcSI = Controller.GetPositionId();
 	int atcFac = Controller.GetFacility();
 	double atcFreq = Controller.GetPrimaryFrequency();
-	std::string atcIcao = "";
-	EuroScopePlugIn::CController atcMyself = ControllerMyself();
+	
 
 	if (!Controller.IsController() ||
 		atcCallsign == ControllerMyself().GetCallsign() ||
@@ -1624,12 +1625,14 @@ void vsid::VSIDPlugin::OnControllerPositionUpdate(EuroScopePlugIn::CController C
 		return;
 	}
 
+	EuroScopePlugIn::CController atcMyself = ControllerMyself();
+	std::set<std::string> atcIcaos;
 	if (atcFac < 6)
 	{
-		atcIcao = vsid::utils::split(Controller.GetCallsign(), '_').front();
+		atcIcaos.insert(vsid::utils::split(Controller.GetCallsign(), '_').front());
 	}
 
-	if (atcFac >= 6 && !this->actAtc.contains(atcSI) && !this->ignoreAtc.contains(atcSI))
+	if (atcFac >= 5 && !this->actAtc.contains(atcSI) && !this->ignoreAtc.contains(atcSI))
 	{
 		bool ignore = true;
 		for (std::pair<const std::string, vsid::Airport> &apt : this->activeAirports)
@@ -1637,7 +1640,7 @@ void vsid::VSIDPlugin::OnControllerPositionUpdate(EuroScopePlugIn::CController C
 			if (apt.second.appSI.contains(atcSI))
 			{
 				ignore = false;
-				atcIcao = apt.first;
+				atcIcaos.insert(apt.first);
 			}
 		}
 		if (ignore)
@@ -1647,31 +1650,39 @@ void vsid::VSIDPlugin::OnControllerPositionUpdate(EuroScopePlugIn::CController C
 		}
 	}
 
-	if (!this->activeAirports.contains(atcIcao)) return;
+	//if (!this->activeAirports.contains(atcIcao)) return;
 
-	if (!this->activeAirports[atcIcao].controllers.contains(atcSI))
+	if (std::none_of(atcIcaos.begin(), atcIcaos.end(), [&](auto atcIcao)
+		{
+			return this->activeAirports.contains(atcIcao);
+		})) return;
+
+	for (const std::string& atcIcao : atcIcaos)
 	{
-		this->activeAirports[atcIcao].controllers[atcSI] = { atcSI, atcFac, atcFreq };
-		this->actAtc[atcSI] = atcIcao;
-	}
+		if (!this->activeAirports[atcIcao].controllers.contains(atcSI))
+		{
+			this->activeAirports[atcIcao].controllers[atcSI] = { atcSI, atcFac, atcFreq };
+			this->actAtc[atcSI] = vsid::utils::join(atcIcaos, ',');
+		}
 
-	if (this->activeAirports[atcIcao].settings["auto"] &&
-		!this->activeAirports[atcIcao].forceAuto &&
-		(
-			(atcFac < 6 && atcFac < atcMyself.GetFacility()) ||
-			(atcFac >= 6 &&
-				(this->activeAirports[atcIcao].appSI.contains(atcMyself.GetPositionId()) &&
-				this->activeAirports[atcIcao].appSI.contains(atcSI) &&
-				this->activeAirports[atcIcao].appSI[atcMyself.GetPositionId()] > this->activeAirports[atcIcao].appSI[atcSI]) ||
-				this->activeAirports[atcIcao].appSI.contains(atcSI)
+		if (this->activeAirports[atcIcao].settings["auto"] &&
+			!this->activeAirports[atcIcao].forceAuto &&
+			(
+				(atcFac < 6 && atcFac < atcMyself.GetFacility()) ||
+				(atcFac >= 6 &&
+					(this->activeAirports[atcIcao].appSI.contains(atcMyself.GetPositionId()) &&
+						this->activeAirports[atcIcao].appSI.contains(atcSI) &&
+						this->activeAirports[atcIcao].appSI[atcMyself.GetPositionId()] > this->activeAirports[atcIcao].appSI[atcSI]) ||
+					this->activeAirports[atcIcao].appSI.contains(atcSI)
+					)
+				)
 			)
-		)
-	)
-	{
-		this->activeAirports[atcIcao].settings["auto"] = false;
-		messageHandler->writeMessage("INFO", "Disabling auto mode for " +
-									atcIcao + ". " + atcCallsign + " now online."
-									);
+		{
+			this->activeAirports[atcIcao].settings["auto"] = false;
+			messageHandler->writeMessage("INFO", "Disabling auto mode for " +
+				atcIcao + ". " + atcCallsign + " now online."
+			);
+		}
 	}
 }
 
