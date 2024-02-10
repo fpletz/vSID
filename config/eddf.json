@@ -102,11 +102,24 @@
                 }
             },
             "KOMIB": {
-                "D": {
-                    "rwy": "07C,07R",
+                "D1": {
+                    "rwy": "07C",
                     "initial": 4000,
                     "climbvia": true,
                     "prio": 10
+                },
+				"D2": {
+                    "rwy": "07R",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 11
+                },
+				"D1": {
+                    "rwy": "07R",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "south"
                 }
             },
             "MARUN": {
