@@ -600,11 +600,24 @@
                 }
             },
             "SULUS": {
-                "D": {
-                    "rwy": "07C,07R",
+                "D1": {
+                    "rwy": "07C",
                     "initial": 4000,
                     "climbvia": true,
                     "prio": 10
+                },
+				"D2": {
+                    "rwy": "07R",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 11
+                },
+				"D3": {
+                    "rwy": "07R",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "south"
                 },
                 "F1": {
                     "rwy": "25C,25L",
@@ -629,7 +642,7 @@
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 11
+                    "prio": 12
                 }
             },
             "TOBAK": {
