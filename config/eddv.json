@@ -55,6 +55,13 @@
                     "rwy": "27R",
                     "initial": 4000,
                     "climbvia": false,
+					"prio": 1,
+					"area": "gat"
+                },
+				"S4": {
+                    "rwy": "27R",
+                    "initial": 4000,
+                    "climbvia": false,
                     "prio": 4,
                     "Remark": "req in case 27L clsd"
                 },
@@ -100,6 +107,13 @@
                     "customRule": "high"
                 },
 				"S3": {
+                    "rwy": "27R",
+                    "initial": 4000,
+                    "climbvia": false,
+					"prio": 1,
+					"area": "gat"
+                },
+				"S4": {
                     "rwy": "27R",
                     "initial": 4000,
                     "climbvia": false,
@@ -159,6 +173,13 @@
                     "rwy": "27R",
                     "initial": 4000,
                     "climbvia": false,
+					"prio": 1,
+					"area": "gat"
+                },
+				"S4": {
+                    "rwy": "27R",
+                    "initial": 4000,
+                    "climbvia": false,
                     "prio": 4,
                     "Remark": "req in case 27L clsd"
                 },
@@ -201,6 +222,13 @@
                     "initial": 4000,
                     "climbvia": false,
                     "prio": 3
+                },
+				"S3": {
+                    "rwy": "27R",
+                    "initial": 4000,
+                    "climbvia": false,
+					"prio": 1,
+					"area": "gat"
                 },
 			    "F": {
                     "rwy": "27L",
@@ -250,6 +278,13 @@
                     "climbvia": false,
                     "prio": 3
                 },
+				"S3": {
+                    "rwy": "27R",
+                    "initial": 4000,
+                    "climbvia": false,
+					"prio": 1,
+					"area": "gat"
+                },
 			    "F": {
                     "rwy": "27L",
                     "initial": 4000,
@@ -289,6 +324,13 @@
                     "initial": 4000,
                     "climbvia": false,
                     "prio": 3
+                },
+				"S3": {
+                    "rwy": "27R",
+                    "initial": 4000,
+                    "climbvia": false,
+					"prio": 1,
+					"area": "gat"
                 },
 			    "F": {
                     "rwy": "27L",
@@ -330,6 +372,13 @@
                     "climbvia": false,
                     "prio": 3
                 },
+				"S3": {
+                    "rwy": "27R",
+                    "initial": 4000,
+                    "climbvia": false,
+					"prio": 1,
+					"area": "gat"
+                },
 			    "F": {
                     "rwy": "27L",
                     "initial": 4000,
@@ -337,6 +386,15 @@
                     "prio": 2
                 }
             }
-        }
+        },
+		"areas": {
+            "gat": {
+                "active": true,
+                "p1": {"lat": "N052.27.45.959", "lon": "E009.41.24.335"},
+                "p2": {"lat": "N052.27.53.827", "lon": "E009.41.57.205"},
+                "p3": {"lat": "N052.27.48.973", "lon": "E009.42.00.071"},
+                "p4": {"lat": "N052.27.42.124", "lon": "E009.41.26.679"}
+            }
+		}
     }
 }

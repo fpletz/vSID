@@ -114,7 +114,7 @@
                     "climbvia": true,
                     "prio": 11
                 },
-				"D1": {
+				"D3": {
                     "rwy": "07R",
                     "initial": 4000,
                     "climbvia": true,
@@ -584,7 +584,8 @@
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 99
+                    "prio": 1,
+					"pilotfiled": true
                 },
                 "X": {
                     "rwy": "07C",
