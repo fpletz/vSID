@@ -109,6 +109,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                         aptConfig.insert(apt.first);
 
                         // general settings
+                        apt.second.icao = apt.first;
                         apt.second.elevation = this->parsedConfig.at(apt.first).value("elevation", 0);
                         apt.second.allRwys = vsid::utils::split(this->parsedConfig.at(apt.first).value("runways", ""), ',');
                         apt.second.arrAsDep = this->parsedConfig.at(apt.first).value("ArrAsDep", false);
@@ -118,6 +119,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                         std::map<std::string, bool> customRules;
                         //std::map<std::string, bool> areaSettings;
                         // customRules
+
                         for (auto &el : this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, bool>{}))
                         {
                             std::pair<std::string, bool> rule = { vsid::utils::toupper(el.first), el.second };
@@ -327,7 +329,7 @@ void vsid::ConfigParser::loadGrpConfig()
 
 COLORREF vsid::ConfigParser::getColor(std::string color)
 {
-    if (auto const &elem = this->colors.find(color); elem != this->colors.end())
+    if (this->colors.contains(color))
     {
         return this->colors[color];
     }
