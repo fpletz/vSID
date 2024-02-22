@@ -20,7 +20,7 @@
 namespace vsid
 {
 	const std::string pluginName = "vSID";
-	const std::string pluginVersion = "0.8.0";
+	const std::string pluginVersion = "0.8.0-cd8fea0";
 	const std::string pluginAuthor = "Gameagle";
 	const std::string pluginCopyright = "(c) 2023";
 	const std::string pluginViewAviso = "";
@@ -37,13 +37,13 @@ namespace vsid
 		VSIDPlugin();
 		virtual ~VSIDPlugin();
 
-		bool getDebug() const;
 		/**
 		 * @brief Extract a sid waypoint. If ES doesn't find a SID the route is compared to available SID waypoints
 		 * 
 		 * @param FlightPlanData 
 		 * @return
 		 */
+		void detectPlugins();
 		std::string findSidWpt(EuroScopePlugIn::CFlightPlanData FlightPlanData);
 		/**
 		 * @brief Search for a matching SID depending on current RWYs in use, SID wpt
@@ -93,6 +93,7 @@ namespace vsid
 		 * @return
 		 */
 		bool OnCompileCommand(const char* sCommandLine);
+		EuroScopePlugIn::CRadarScreen* OnRadarScreenCreated(const char* sDisplayName, bool NeedRadarContent, bool GeoReferenced, bool CanBeSaved, bool CanBeCreated);
 		/**
 		 * @brief Called when something is changed in the flightplan (used for route updates)
 		 * 
@@ -137,10 +138,12 @@ namespace vsid
 		void OnTimer(int Counter);
 		
 	private:
-		//std::vector<vsid::airport> activeAirports;
 		std::map<std::string, vsid::Airport> activeAirports;
-		bool debug;
-		std::map<std::string, vsid::fpln::info> processed;
+		std::map<std::string, vsid::fpln::Info> processed;
+		/**
+		 * @param std::map<std::string,> callsign
+		 * @param std::pair<,bool> fpln is disconnected
+		 */
 		std::map<std::string, std::pair< std::chrono::utc_clock::time_point, bool>> removeProcessed;
 		vsid::ConfigParser configParser;
 		std::string configPath;
@@ -151,7 +154,9 @@ namespace vsid
 		std::string gsList;
 		std::map<std::string, std::string> actAtc;
 		std::set<std::string> ignoreAtc;
-
+		bool topskyLoaded;
+		bool ccamsLoaded;
+		EuroScopePlugIn::CRadarScreen* radarScreen; // needed to be able to call ES functions
 		/**
 		 * @brief Loads and updates the active airports with available configs
 		 *
