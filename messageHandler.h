@@ -11,6 +11,14 @@ namespace vsid
 	 */
 	class MessageHandler
 	{
+		enum Level
+		{
+			Debug,
+			Info,
+			Warning,
+			Error
+		};
+
 	public:
 		MessageHandler();
 		virtual ~MessageHandler();
@@ -33,6 +41,10 @@ namespace vsid
 		 * 
 		 */
 		void dropMessage();
+		void openConsole();
+		void closeConsole();
+		int getLevel() const;
+		void setLevel(std::string lvl);
 
 	private:
 		/**
@@ -40,7 +52,8 @@ namespace vsid
 		 * 
 		 */
 		std::vector<std::pair<std::string, std::string>> msg;
-		bool debug;
+		FILE* consoleFile = {}; // console file
+		Level currentLevel = Level::Debug;
 	};
 	//namespace messagehandler
 	//{
