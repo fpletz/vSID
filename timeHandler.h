@@ -2,6 +2,7 @@
 
 #include <string>
 #include <chrono>
+#include <format>
 namespace vsid
 {
 	namespace time
@@ -15,6 +16,8 @@ namespace vsid
 		 * @return if the restricted SID is active
 		 */
 		bool isActive(const std::string& timezone, const int start, const int end);
+
+		std::chrono::time_point<std::chrono::utc_clock, std::chrono::seconds> getUtcNow();
 
 		template<typename T, typename U>
 		std::string toString(const std::chrono::time_point<T, U>& timePoint)
