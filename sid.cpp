@@ -7,6 +7,11 @@ std::string vsid::Sid::name() const
 	return (this->empty()) ? "" : this->waypoint + this->number + this->designator[0];
 }
 
+std::string vsid::Sid::fullName() const
+{
+	return (this->empty()) ? "" : this->waypoint + this->number + this->designator;
+}
+
 std::string vsid::Sid::getRwy() const
 {
 	if (this->rwy.find(",") != std::string::npos)

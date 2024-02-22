@@ -49,6 +49,7 @@ namespace vsid
 		 * @param sid - the sid object to check
 		 */
 		std::string name() const;
+		std::string fullName() const;
 		/**
 		 * @brief Gets the runway associated with a sid
 		 *
