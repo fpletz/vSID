@@ -1,13 +1,13 @@
 #pragma once
 
+#include "area.h"
+#include "sid.h"
+
 #include <string>
-//#include <map>
 #include <vector>
 #include <map>
 #include <set>
-
-#include "area.h"
-#include "sid.h"
+#include <algorithm>
 
 namespace vsid
 {
@@ -36,5 +36,31 @@ namespace vsid
 		std::map<std::string, bool> settings = {};
 		std::map<std::string, vsid::Controller> controllers = {};
 		bool forceAuto = false;
+		inline bool hasLowerAtc(const EuroScopePlugIn::CController &myself)
+		{
+			if (std::all_of(controllers.begin(), controllers.end(), [&](auto controller)
+				{
+					return controller.second.facility > myself.GetFacility();
+				}))
+			{
+				return false;
+			}
+			else if (myself.GetFacility() >= 5 &&
+				std::none_of(controllers.begin(), controllers.end(), [&](auto controller)
+					{
+						if (controller.second.facility < myself.GetFacility() ||
+							(appSI.contains(myself.GetPositionId()) &&
+							appSI.contains(controller.second.si) &&
+							appSI[myself.GetPositionId()] > appSI[controller.second.si]) ||
+							(!appSI.contains(myself.GetPositionId()) &&
+							appSI.contains(controller.second.si))
+							) return true;
+						else return false;
+					}))
+			{
+				return false;
+			}
+			else return true;
+		}
 	};
 }
