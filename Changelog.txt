@@ -3,9 +3,19 @@
 [NEW]
 *	Areas configurable with lat / lon coordinates from ES
 *	auto mode now works also for app/ctr with lower controller detection and app/ctr priorities in settings
+*	tagItem Squawk (needs to be combined with a function, e.g. CCAMS) - text only
 
 [CHANGED]
 *	Settings save format as settings have increased
+*	detection of active airports to not use runways
+*	allow automode force only if at least one lower controller is online
+
+[FIXED]
+
+*	FP cleaning removed entire route for filed speed-level group with SID waypoint
+*	tagItem SID was flashing for "VFR" and "NO SID"
+*	tagItem SID was slow in showing the text for "VFR" and "NO SID" (has to be monitored)
+*	automode now changes SID when rwy at airport changes
 
 [Changelog v0.7.2]
 
