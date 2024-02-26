@@ -1003,6 +1003,11 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 					//messageHandler->writeMessage("DEBUG", "check only switch. plan type: " + std::string(fplnData.GetPlanType()));
 					checkOnly = true;
 				}
+				else if (!FlightPlan.GetClearenceFlag())
+				{
+					// prevent automode to use rwys set before
+					atcBlock.second = "";
+				}
 			}
 			if (atcBlock.second != "" &&
 				(vsid::fpln::findRemarks(fplnData, "VSID/RWY") ||
@@ -1264,12 +1269,12 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 				"version / "
 				"Status - (inop) / "
 				"Level - (inop) / "
-				"auto [icao] - activate automode for icao (inop) /"
+				"auto [icao] - activate automode for icao - sets force mode if lower atc online /"
 				"area [icao] - toggle area for icao /"
 				"rule [icao] [rulename] - toggle rule for icao / "
 				"night [icao] - toggle night mode for icao /"
 				"lvp [icao] - toggle lvp ops for icao / "
-				"Debug - toggle debug mode (inop)");
+				"Debug - toggle debug mode");
 			return true;
 		}
 		if (vsid::utils::tolower(command[1]) == "version")
