@@ -11,7 +11,6 @@ void vsid::fpln::clean(std::vector<std::string> &filedRoute, const std::string o
 {
 	std::pair<std::string, std::string> atcBlock = getAtcBlock(filedRoute, origin);
 
-
 	if (filedRoute.size() > 0)
 	{
 		if (filedRoute.front().find('/') != std::string::npos && filedRoute.front().find("/N") == std::string::npos)
