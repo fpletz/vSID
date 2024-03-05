@@ -23,6 +23,7 @@ void vsid::fpln::clean(std::vector<std::string> &filedRoute, const std::string o
 	{
 		for (std::vector<std::string>::iterator it = filedRoute.begin(); it != filedRoute.end();)
 		{
+			*it = vsid::utils::split(*it, '/').front(); // to fetch wrong speed/level groups
 			if (*it == filedSidWpt) break;
 			it = filedRoute.erase(it);
 		}

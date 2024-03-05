@@ -1,15 +1,44 @@
+[Changelog v0.8.0]
+
+[NEW]
+*	Areas configurable with lat / lon coordinates from ES
+*	auto mode now works also for app/ctr with lower controller detection and app/ctr priorities in settings
+*	tagItem Squawk (needs to be combined with a function, e.g. CCAMS) - text only
+
+[CHANGED]
+*	Settings save format as settings have increased
+*	detection of active airports to not use runways
+*	allow automode force only if at least one lower controller is online
+
+[FIXED]
+
+*	FP cleaning removed entire route for filed speed-level group with SID waypoint
+*	tagItem SID was flashing for "VFR" and "NO SID"
+*	tagItem SID was slow in showing the text for "VFR" and "NO SID" (has to be monitored)
+*	automode now changes SID when rwy at airport changes
+
 [Changelog v0.7.2]
 
-[Fixed]
+[CHANGED]
+*	if a reconnected fpln misses the atc block it is reprocessed if automode on
+*	if a flightplan changes it retriggers the automode
+
+[FIXED]
 *	Automode edits fpln when reloading config
 *	Retrigger automode after fpln changes
 *	If reconnected fpln misses atc block retrigger automode
+*	active custom rule resulted in red SID coloring
+*	if only ICAO/RWY is in fpln a custom SID did not show initial climb as correct but as custom
+*	initial climb is missing if the assigned SID is not the suggested SID (and not custom based on rwy)
+*	pilotfiled "true" overruled restrictions on SIDs
+
 
 [Changelog v0.7.1]
 
 [Fixed]
 *	Missmatch between sugested SID and rwy tagItem if ICAO/RWY is present
 *	IC is not detected as correct for custom SIDs if ICAO/RWY is present
+
 
 [Changelog v0.7.0]
 

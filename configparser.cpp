@@ -56,8 +56,10 @@ void vsid::ConfigParser::loadMainConfig()
     }
 }
 
-void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> &activeAirports,
-                                        std::map<std::string, std::map<std::string, int>>& savedSettings
+void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> &activeAirports,
+                                        std::map<std::string, std::map<std::string, bool>>& savedCustomRules,
+                                        std::map<std::string, std::map<std::string, bool>>& savedSettings,
+                                        std::map<std::string, std::map<std::string, vsid::Area>>& savedAreas
                                         )
 {
     // get the current path where plugins .dll is stored
@@ -85,7 +87,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
 
     std::vector<std::filesystem::path> files;
     std::set<std::string> aptConfig;
-    for (std::pair<const std::string, vsid::airport> &apt : activeAirports)
+    for (std::pair<const std::string, vsid::Airport> &apt : activeAirports)
     {
         for (const std::filesystem::path& entry : std::filesystem::directory_iterator(basePath))
         {
@@ -106,40 +108,105 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                     {
                         aptConfig.insert(apt.first);
 
+                        // general settings
+                        apt.second.icao = apt.first;
                         apt.second.elevation = this->parsedConfig.at(apt.first).value("elevation", 0);
                         apt.second.allRwys = vsid::utils::split(this->parsedConfig.at(apt.first).value("runways", ""), ',');
                         apt.second.arrAsDep = this->parsedConfig.at(apt.first).value("ArrAsDep", false);
                         apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
-                        std::map<std::string, int> customRules;
-                        for (auto &el : this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, int>{}))
+                        apt.second.timezone = this->parsedConfig.at(apt.first).value("timezone", "");
+                        std::map<std::string, bool> customRules;
+                        //std::map<std::string, bool> areaSettings;
+                        // customRules
+
+                        for (auto &el : this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, bool>{}))
                         {
-                            std::pair<std::string, int> rule = { vsid::utils::toupper(el.first), el.second };
+                            std::pair<std::string, bool> rule = { vsid::utils::toupper(el.first), el.second };
                             customRules.insert(rule);
+                        }
+                        // overwrite loaded rule settings from config with current values at the apt
+                        if (savedCustomRules.contains(apt.first))
+                        {
+                            for (std::pair<const std::string, bool>& rule : savedCustomRules[apt.first])
+                            {
+                                if (customRules.contains(rule.first))
+                                {
+                                    customRules[rule.first] = rule.second;
+                                }
+                            }
                         }
                         apt.second.customRules = customRules;
                         customRules.clear();
-                        if (savedSettings.find(apt.first) != savedSettings.end())
+                        savedCustomRules.clear();
+
+                        std::set<std::string> appSI;
+                        int appSIPrio = 0;
+                        for (std::string& si : vsid::utils::split(this->parsedConfig.at(apt.first).value("appSI", ""), ','))
+                        {
+                            apt.second.appSI[si] = appSIPrio;
+                            appSIPrio++;
+                        }
+                        
+                        //areas
+                        if (this->parsedConfig.at(apt.first).contains("areas"))
+                        {
+                            for (auto& area : this->parsedConfig.at(apt.first).at("areas").items())
+                            {
+                                std::vector<std::pair<std::string, std::string>> coords;
+                                bool isActive;
+                                for (auto& coord : this->parsedConfig.at(apt.first).at("areas").at(area.key()).items())
+                                {
+                                    if (coord.key() == "active")
+                                    {
+                                        isActive = this->parsedConfig.at(apt.first).at("areas").at(area.key()).value("active", false);
+                                        continue;
+                                    }
+                                    std::string lat = this->parsedConfig.at(apt.first).at("areas").at(area.key()).at(coord.key()).value("lat", "");
+                                    std::string lon = this->parsedConfig.at(apt.first).at("areas").at(area.key()).at(coord.key()).value("lon", "");
+
+                                    if (lat == "" || lon == "")
+                                    {
+                                        messageHandler->writeMessage("ERROR", "Couldn't read LAT or LON value for \"" +
+                                            coord.key() + "\" in area \"" + area.key() + "\" at \"" +
+                                            apt.first + "\"");
+                                        break;
+                                    }
+                                    coords.push_back({ lat, lon });
+                                }
+                                if (coords.size() < 3)
+                                {
+                                    messageHandler->writeMessage("ERROR", "Area \"" + area.key() + "\" in \"" +
+                                        apt.first + "\" has not enough points configured (less than 3).");
+                                    continue;
+                                }
+                                if (savedAreas.contains(apt.first))
+                                {
+                                    if (savedAreas[apt.first].contains(vsid::utils::toupper(area.key())))
+                                    {
+                                        isActive = savedAreas[apt.first][vsid::utils::toupper(area.key())].isActive;
+                                    }
+                                }
+                                apt.second.areas.insert({ vsid::utils::toupper(area.key()), vsid::Area{coords, isActive} });
+                            }
+                        }
+                        savedAreas.clear();
+
+                        // airport settings
+                        if (savedSettings.contains(apt.first))
                         {
                             apt.second.settings = savedSettings[apt.first];
                         }
                         else
+                        {
                             apt.second.settings = { {"lvp", false},
                                                     {"time", this->parsedConfig.at(apt.first).value("timeMode", false)},
-                                                    {"auto", false} 
-                                                    };
-
-                        // if there are more settings than lvp / night we have rules
-                        if (apt.second.settings.size() > 3)
-                        {
-                            for (std::pair<std::string, bool> setting : apt.second.settings)
-                            {
-                                if (setting.first == "lvp" || setting.first == "night" || setting.first == "time") continue;
-                                apt.second.customRules[setting.first] = setting.second;
-                            }
+                                                    {"auto", false}
+                            };
                         }
-                        apt.second.timezone = this->parsedConfig.at(apt.first).value("timezone", "");
+                        savedSettings.clear();
 
+                        // sids
                         for (auto &sid : this->parsedConfig.at(apt.first).at("sids").items())
                         {
                             std::string wpt = sid.key();
@@ -159,55 +226,41 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
                                 int mtow = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("mtow", 0);
                                 std::string customRule = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("customRule", "");
                                 customRule = vsid::utils::toupper(customRule);
-                                //vsid::sids::SIDArea area = {};
+                                std::string area = vsid::utils::toupper(this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("area", ""));
                                 std::string equip = "";
                                 int lvp = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("lvp", -1);
                                 int timeFrom = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("timeFrom", -1);
                                 int timeTo = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("timeTo", -1);
                                 
-                                //vsid::Sid newSid = {  wpt,
-                                //                            ' ',
-                                //                            desig,
-                                //                            rwys,
-                                //                            initial,
-                                //                            via,
-                                //                            prio,
-                                //                            pilot,
-                                //                            wtc,
-                                //                            engineType,
-                                //                            acftType,
-                                //                            engineCount,
-                                //                            mtow,
-                                //                            customRule,
-                                //                            //area,
-                                //                            equip,
-                                //                            lvp,
-                                //                            timeFrom,
-                                //                            timeTo
-                                //                         };
-                                //apt.second.sids.push_back(newSid);
-                                //apt.second.sids.push_back(vsid::Sid::Sid(wpt, ' ', desig, rwys, initial, via, prio, pilot, wtc, engineType, acftType, engineCount, mtow, customRule, equip, lvp, timeFrom, timeTo));
                                 vsid::Sid newSid = { wpt, ' ', desig, rwys, initial, via, prio,
                                                     pilot, wtc, engineType, acftType, engineCount,
-                                                    mtow, customRule, /*area,*/ equip, lvp,
+                                                    mtow, customRule, area, equip, lvp,
                                                     timeFrom, timeTo };
                                 apt.second.sids.push_back(newSid);
                                 if (newSid.timeFrom != -1 && newSid.timeTo != -1) apt.second.timeSids.push_back(newSid);
                             }
                         }
-                        /*for (auto& area : this->parsedConfig.at(apt.first).at("areas").items())
-                        {
-
-                        }*/
                     }
                 }
                 catch (const json::parse_error& e)
                 {
-                    messageHandler->writeMessage("ERROR", "Failed to load airport config (" + apt.first + "): " + std::string(e.what()));
+                    messageHandler->writeMessage("ERROR", "[Parse] Failed to load airport config (" + apt.first + "): " + std::string(e.what()));
                 }
                 catch (const json::type_error& e)
                 {
-                    messageHandler->writeMessage("ERROR", "Failed to load airport config (" + apt.first + "): " + std::string(e.what()));
+                    messageHandler->writeMessage("ERROR", "[Type] Failed to load airport config (" + apt.first + "): " + std::string(e.what()));
+                }
+                catch (const json::out_of_range& e)
+                {
+                    messageHandler->writeMessage("ERROR", "[Range] Failed to load airport config (" + apt.first + "): " + std::string(e.what()));
+                }
+                catch (const json::other_error& e)
+                {
+                    messageHandler->writeMessage("ERROR", "[Other] Failed to load airport config (" + apt.first + "): " + std::string(e.what()));
+                }
+                catch (const std::exception &e)
+                {
+                    messageHandler->writeMessage("ERROR", "Failure in config (" + apt.first + "): " + std::string(e.what()));
                 }
 
                 /* DOCUMENTATION on how to get all values below a key
@@ -219,7 +272,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::airport> 
             }
         }
     }
-    for (std::pair<const std::string, vsid::airport>& apt : activeAirports)
+    for (std::pair<const std::string, vsid::Airport>& apt : activeAirports)
     {
         if (aptConfig.contains(apt.first)) continue;
         messageHandler->writeMessage("INFO", "No config found for: " + apt.first);
@@ -276,7 +329,7 @@ void vsid::ConfigParser::loadGrpConfig()
 
 COLORREF vsid::ConfigParser::getColor(std::string color)
 {
-    if (auto const &elem = this->colors.find(color); elem != this->colors.end())
+    if (this->colors.contains(color))
     {
         return this->colors[color];
     }

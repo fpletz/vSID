@@ -36,7 +36,7 @@ std::vector<std::string> vsid::utils::split(const std::string &string, const cha
 
 	while (std::getline(ss, elem, del))
 	{
-		elems.push_back(elem);
+		elems.push_back(vsid::utils::trim(elem));
 	}
 	return elems;
 }
@@ -93,9 +93,9 @@ std::vector<std::string> vsid::utils::splitRoute(std::string& string)
 	return elems;
 }
 
-bool vsid::utils::isIcaoInVector(const std::vector<vsid::airport>& airportVector, const std::string& toSearch)
+bool vsid::utils::isIcaoInVector(const std::vector<vsid::Airport>& airportVector, const std::string& toSearch)
 {
-	for (const vsid::airport &elem : airportVector)
+	for (const vsid::Airport &elem : airportVector)
 	{
 		if (elem.icao == toSearch)
 		{

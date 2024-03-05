@@ -193,6 +193,7 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="area.cpp" />
     <ClCompile Include="configparser.cpp" />
     <ClCompile Include="flightplan.cpp" />
     <ClCompile Include="messageHandler.cpp" />
@@ -213,6 +214,7 @@
     <None Include="vSID.def" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="area.h" />
     <ClInclude Include="configparser.h" />
     <ClInclude Include="airport.h" />
     <ClInclude Include="constants.h" />

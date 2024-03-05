@@ -72,7 +72,7 @@ namespace vsid
 		 * @return true - if the icao was found in active airports
 		 * @return false - if the icao was NOT found in active airports
 		 */
-		bool isIcaoInVector(const std::vector<vsid::airport>& airportVector, const std::string& toSearch);
+		bool isIcaoInVector(const std::vector<vsid::Airport>& airportVector, const std::string& toSearch);
 		/**
 		 * @brief Checks if a number is contained in another number, e.g. if 2 is in 123
 		 * 
