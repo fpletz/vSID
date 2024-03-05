@@ -8,10 +8,6 @@ namespace vsid
 	class Sid
 	{
 	public:
-		/*Sid() : waypoint(""), number(' '), designator(""), rwy(""), initialClimb(0),
-				climbvia(false), prio(99), pilotfiled(false), wtc(""), engineType(""),
-				acftType(std::map<std::string, bool>{}), engineCount(0), mtow(0),
-				customRule(""), equip(""), lvp(-1), timeFrom(-1), timeTo(-1) {};*/
 
 		Sid(std::string waypoint = "", char number = ' ', std::string designator = "",
 			std::string rwy = "", int initialClimb = 0, bool climbvia = false, int prio = 99,
@@ -49,11 +45,14 @@ namespace vsid
 		 * @param sid - the sid object to check
 		 */
 		std::string name() const;
+		/**
+		 * @brief Return the full name of a sid (including indexed designators)
+		 * 
+		 */
 		std::string fullName() const;
 		/**
 		 * @brief Gets the runway associated with a sid
 		 *
-		 * @param sid - the sid object
 		 * @return runway if single or first runway if multiple
 		 */
 		std::string getRwy() const;

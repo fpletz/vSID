@@ -36,6 +36,12 @@ namespace vsid
 		std::map<std::string, bool> settings = {};
 		std::map<std::string, vsid::Controller> controllers = {};
 		bool forceAuto = false;
+
+		/**
+		 * @brief Checks if another controller with a lower facility is online
+		 * 
+		 * @param myself - Controller().ControllerMyself()
+		 */
 		inline bool hasLowerAtc(const EuroScopePlugIn::CController &myself)
 		{
 			if (std::all_of(controllers.begin(), controllers.end(), [&](auto controller)
