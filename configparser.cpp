@@ -29,12 +29,10 @@ void vsid::ConfigParser::loadMainConfig()
     }
     catch(const json::parse_error &e)
     {
-        //vsid::messagehandler::LogMessage("ERROR", "Failed to parse main config: " + std::string(e.what()));
         messageHandler->writeMessage("ERROR", "Failed to parse main config: " + std::string(e.what()));
     }
     catch (const json::type_error& e)
     {
-        //vsid::messagehandler::LogMessage("ERROR", "Failed to parse main config: " + std::string(e.what()));
         messageHandler->writeMessage("ERROR", "Failed to parse main config: " + std::string(e.what()));
     }
     try
@@ -71,7 +69,6 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
     if (this->vSidConfig.contains("airportConfigs"))
     {
         basePath.append(this->vSidConfig.value("airportConfigs", "")).make_preferred();
-        //messageHandler->writeMessage("DEBUG", "airport config: " + basePath.string());
     }
     else
     {
@@ -117,7 +114,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
                         apt.second.timezone = this->parsedConfig.at(apt.first).value("timezone", "");
                         std::map<std::string, bool> customRules;
-                        //std::map<std::string, bool> areaSettings;
+
                         // customRules
 
                         for (auto &el : this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, bool>{}))
@@ -218,7 +215,19 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                                 int initial = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("initial", 0);
                                 bool via = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("climbvia", false);
                                 int prio = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("prio", 99);
-                                bool pilot = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("pilotfiled", false);
+                                bool pilotfiled = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("pilotfiled", false);
+                                std::map<std::string, std::string> actArrRwy;
+                                if (this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).contains("actArrRwy"))
+                                {
+                                    actArrRwy["all"] = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).at("actArrRwy").value("all", "");
+                                    actArrRwy["any"] = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).at("actArrRwy").value("any", "");
+                                }
+                                std::map<std::string, std::string> actDepRwy;
+                                if (this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).contains("actDepRwy"))
+                                {
+                                    actDepRwy["all"] = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).at("actDepRwy").value("all", "");
+                                    actDepRwy["any"] = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).at("actDepRwy").value("any", "");
+                                }
                                 std::string wtc = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("wtc", "");
                                 std::string engineType = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("engineType", "");
                                 std::map<std::string, bool> acftType = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("acftType", std::map<std::string, bool>{});
@@ -233,7 +242,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                                 int timeTo = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("timeTo", -1);
                                 
                                 vsid::Sid newSid = { wpt, ' ', desig, rwys, initial, via, prio,
-                                                    pilot, wtc, engineType, acftType, engineCount,
+                                                    pilotfiled, actArrRwy, actDepRwy, wtc, engineType, acftType, engineCount,
                                                     mtow, customRule, area, equip, lvp,
                                                     timeFrom, timeTo };
                                 apt.second.sids.push_back(newSid);
@@ -276,6 +285,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
     {
         if (aptConfig.contains(apt.first)) continue;
         messageHandler->writeMessage("INFO", "No config found for: " + apt.first);
+        activeAirports.erase(apt.first); // CHECK - remove unconfigured airports
     }
 }
 
