@@ -3,10 +3,6 @@
 #include "flightplan.h"
 #include "utils.h"
 
-// dev
-#include "messageHandler.h"
-// end dev
-
 void vsid::fpln::clean(std::vector<std::string> &filedRoute, const std::string origin, std::string filedSidWpt)
 {
 	std::pair<std::string, std::string> atcBlock = getAtcBlock(filedRoute, origin);

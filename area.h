@@ -29,8 +29,6 @@ namespace vsid
 		using Line = std::pair<Point, Point>;
 		std::vector<Line> lines;
 
-		//std::vector<Line> area;
-
 		Point toPoint(std::pair<std::string, std::string> &pos);
 		double toDeg(std::string& coord);
 	};

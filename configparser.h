@@ -8,10 +8,7 @@
 #include <map>
 
 using json = nlohmann::ordered_json;
-/**
- * @brief Class to manage a single flightplan
- *
- */
+
 namespace vsid
 {
 	class ConfigParser
@@ -33,6 +30,10 @@ namespace vsid
 							std::map<std::string, std::map<std::string, bool>>& savedSettings,
 							std::map<std::string, std::map<std::string, vsid::Area>>& savedAreas
 							);
+		/**
+		 * @brief Loads vsid config
+		 *
+		 */
 		void loadMainConfig();
 		/**
 		 * @brief Loads the grp config

@@ -74,5 +74,5 @@ namespace vsid
 		Level currentLevel = Level::Debug;
 	};
 
-	extern std::unique_ptr< vsid::MessageHandler> messageHandler; // definition - needs to be extern to be accessible from all files
+	extern std::unique_ptr<vsid::MessageHandler> messageHandler; // definition - needs to be extern to be accessible from all files
 }

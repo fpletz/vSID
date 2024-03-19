@@ -6,8 +6,6 @@
 #include <string>
 #include <algorithm>
 
-//#include "vSID.h"
-
 namespace vsid
 {
 	namespace utils

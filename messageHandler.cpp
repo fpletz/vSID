@@ -31,8 +31,6 @@ std::pair<std::string, std::string> vsid::MessageHandler::getMessage()
 	if (this->msg.size() > 0)
 	{
 		std::pair<std::string, std::string> tmp = { this->msg.front().first, this->msg.front().second };
-		/*std::ostringstream ss;
-		ss << this->msg.front().first << ": " << this->msg.front().second;*/
 		this->msg.erase(this->msg.begin());
 		return tmp;
 	}
@@ -92,7 +90,5 @@ void vsid::MessageHandler::setLevel(std::string lvl)
 		this->closeConsole();
 	}
 }
-
-//vsid::MessageHandler *vsid::messageHandler = new vsid::MessageHandler();
 
 std::unique_ptr<vsid::MessageHandler> vsid::messageHandler(new vsid::MessageHandler()); // declaration

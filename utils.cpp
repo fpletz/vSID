@@ -2,10 +2,6 @@
 #include "utils.h"
 
 #include <sstream>
-//#include "airport.h"
-//#include "vSID.h"
-
-
 #include <algorithm>
 
 std::string vsid::utils::ltrim(const std::string& string)
@@ -49,7 +45,6 @@ std::string vsid::utils::join(const std::vector<std::string>& toJoin, const char
 	{
 		ss << elem << del;
 	}
-	//std::copy(toJoin.begin(), toJoin.end(), std::ostream_iterator<std::string>(ss, &del)); - causes strange symbol for &del in release version
 	std::string joinedStr = ss.str();
 	return joinedStr.erase(joinedStr.length() - 1, 1);
 }
@@ -62,8 +57,6 @@ std::string vsid::utils::join(const std::set<std::string>& toJoin, char del)
 	{
 		ss << elem << del;
 	}
-
-	//std::copy(toJoin.begin(), toJoin.end(), std::ostream_iterator<std::string>(ss, &del)); - causes strange symbol for &del in release version
 	std::string joinedStr = ss.str();
 	return joinedStr.erase(joinedStr.length() - 1, 1);
 }
