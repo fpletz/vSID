@@ -2,10 +2,9 @@
     "EDDP": {
         "elevation": 470,
         "runways": "08L,08R,26L,26R",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 8000,
-        "customRules" : {},
+        "appSI": "TRS,TRN,GER,HOF",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

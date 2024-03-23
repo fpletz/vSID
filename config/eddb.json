@@ -2,11 +2,10 @@
     "EDDB": {
         "elevation": 156,
         "runways": "07L,07R,25L,25R",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules": {},
         "timeMode": true,
+		"appSI": "FLG,BOR,MAR,MRZ",
 		"timezone": "Europe/Berlin",
         "sids": {
             "ARSAP": {

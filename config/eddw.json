@@ -2,10 +2,9 @@
     "EDDW": {
         "elevation": 14,
         "runways": "09,27",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules": {},
+        "appSI": "",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

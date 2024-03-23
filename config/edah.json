@@ -2,12 +2,11 @@
     "EDAH": {
         "elevation": 93,
         "runways": "10,28",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules": {},
         "timeMode": true,
 		"timezone": "Europe/Berlin",
+		"appSI": "MRZ,MAR",
         "sids": {
             "MASOR": {
                 "A": {

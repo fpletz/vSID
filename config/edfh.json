@@ -2,10 +2,9 @@
     "EDFH": {
         "elevation": 1649,
         "runways": "03,21",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "EIF,PFA,RUD,GIN,KTG",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

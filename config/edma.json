@@ -2,10 +2,9 @@
     "EDMA": {
         "elevation": 1515,
         "runways": "07,25",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

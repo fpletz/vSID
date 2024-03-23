@@ -2,10 +2,10 @@
     "EDDM": {
         "elevation": 1487,
         "runways": "26R,26L,08R,08L",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
         "customRules" : {"traalg":false},
+		"appSI": "ZUG",
         "timeMode": true,
         "timezone": "Europe/Berlin",
         "sids": {

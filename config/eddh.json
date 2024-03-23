@@ -2,11 +2,10 @@
     "EDDH": {
         "elevation": 53,
         "runways": "33,23,15,05",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
         "timeMode": true,
+		"appSI": "HEI,ALR",
         "timezone": "Europe/Berlin",
         "sids": {
             "AMLUH": {
