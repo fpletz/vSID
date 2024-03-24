@@ -2,10 +2,9 @@
     "LSZH": {
         "elevation": 1417,
         "runways": "10,14,16,28,32,34",
-        "ArrAsDep": false,
         "transAlt": 7000,
         "maxInitialClimb": 7000,
-        "customRules": {},
+        "appSI": "",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {
@@ -18,12 +17,14 @@
                 "F": {
                     "rwy": "34",
                     "initial": 5000,
-                    "prio": 1
+                    "prio": 1,
+					"actArrRwy": {"any": "28"}
                 },
 				"H": {
                     "rwy": "34",
                     "initial": 5000,
-                    "prio": 1
+                    "prio": 1,
+					"actArrRwy": {"any": "34"}
                 },
 				"J": {
                     "rwy": "34",
@@ -33,12 +34,14 @@
 				"L": {
                     "rwy": "32",
                     "initial": 5000,
-                    "prio": 1
+                    "prio": 1,
+					"actArrRwy": {"any": "28"}
                 },
 				"N": {
                     "rwy": "32",
                     "initial": 5000,
-                    "prio": 1
+                    "prio": 2,
+					"actArrRwy": {"any": "34"}
                 },
 				"P": {
                     "rwy": "32",

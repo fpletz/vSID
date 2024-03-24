@@ -5,7 +5,7 @@
         "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-		"appSI": "DLA,DLD,BOT,PADH,RHR,MNS",
+		"appSI": "DLA,DLD,BOT,PADH",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

@@ -6,7 +6,7 @@
         "maxInitialClimb": 7000,
         "timeMode": true,
 		"timezone": "Europe/Berlin",
-		"appSI": "MRZ,MAR",
+		"appSI": "MRZ,MAR,BOR",
         "sids": {
             "MASOR": {
                 "A": {

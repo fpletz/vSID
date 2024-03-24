@@ -4,7 +4,7 @@
         "runways": "06,24",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "appSI": "",
+        "appSI": "ARFA,ZUG,TRU,RDG,",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

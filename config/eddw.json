@@ -4,7 +4,7 @@
         "runways": "09,27",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "appSI": "",
+        "appSI": "FRI,EIDE,ALR,EIDW",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {
