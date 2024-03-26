@@ -191,16 +191,7 @@
                     "initial": 7000,
                     "climbvia": true,
                     "prio": 2,
-                    "pilotfiled": false,
-					"acftType": {},
                     "wtc": "HJ",
-                    "engineType": "",
-                    "engineCount": 0,
-                    "mtow": 0,
-                    "customRule": "",
-                    "area": "0",
-                    "equip": "0",
-                    "lvp": -1,
                     "timeFrom": 22,
                     "timeTo": 6
                 }
