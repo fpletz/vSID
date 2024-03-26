@@ -9,11 +9,11 @@ vsid::MessageHandler::MessageHandler() {}
 
 vsid::MessageHandler::~MessageHandler() { this->closeConsole(); }
 
-void vsid::MessageHandler::writeMessage(std::string sender, std::string msg)
+void vsid::MessageHandler::writeMessage(std::string sender, std::string msg, DebugArea debugArea)
 {
 	try
 	{
-		if (this->currentLevel == Level::Debug && sender == "DEBUG")
+		if (this->currentLevel == Level::Debug && (this->debugArea ==  debugArea || this->debugArea == DebugArea::All) && sender == "DEBUG")
 		{
 			std::cout << sender << ": " << msg << '\n';
 		}
@@ -89,6 +89,26 @@ void vsid::MessageHandler::setLevel(std::string lvl)
 		this->currentLevel = Level::Info;
 		this->closeConsole();
 	}
+}
+
+bool vsid::MessageHandler::setDebugArea(std::string debugArea)
+{
+
+	if (debugArea == "ALL")
+	{
+		this->debugArea = DebugArea::All;
+		return true;
+	}
+	else if (debugArea == "SID") { 
+		this->debugArea = DebugArea::Sid;
+		return true;
+	}
+	else if (debugArea == "DEV")
+	{
+		this->debugArea = DebugArea::Dev;
+		return true;
+	}
+	else return false;
 }
 
 std::unique_ptr<vsid::MessageHandler> vsid::messageHandler(new vsid::MessageHandler()); // declaration
