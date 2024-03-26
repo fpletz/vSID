@@ -109,7 +109,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                         apt.second.icao = apt.first;
                         apt.second.elevation = this->parsedConfig.at(apt.first).value("elevation", 0);
                         apt.second.allRwys = vsid::utils::split(this->parsedConfig.at(apt.first).value("runways", ""), ',');
-                        apt.second.arrAsDep = this->parsedConfig.at(apt.first).value("ArrAsDep", false);
+                        //apt.second.arrAsDep = this->parsedConfig.at(apt.first).value("ArrAsDep", false);
                         apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
                         apt.second.timezone = this->parsedConfig.at(apt.first).value("timezone", "");
@@ -151,12 +151,18 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                             for (auto& area : this->parsedConfig.at(apt.first).at("areas").items())
                             {
                                 std::vector<std::pair<std::string, std::string>> coords;
-                                bool isActive;
+                                bool isActive = false;
+                                bool arrAsDep = false;
                                 for (auto& coord : this->parsedConfig.at(apt.first).at("areas").at(area.key()).items())
                                 {
                                     if (coord.key() == "active")
                                     {
                                         isActive = this->parsedConfig.at(apt.first).at("areas").at(area.key()).value("active", false);
+                                        continue;
+                                    }
+                                    else if (coord.key() == "arrAsDep")
+                                    {
+                                        arrAsDep = this->parsedConfig.at(apt.first).at("areas").at(area.key()).value("arrAsDep", false);
                                         continue;
                                     }
                                     std::string lat = this->parsedConfig.at(apt.first).at("areas").at(area.key()).at(coord.key()).value("lat", "");
@@ -184,7 +190,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                                         isActive = savedAreas[apt.first][vsid::utils::toupper(area.key())].isActive;
                                     }
                                 }
-                                apt.second.areas.insert({ vsid::utils::toupper(area.key()), vsid::Area{coords, isActive} });
+                                apt.second.areas.insert({ vsid::utils::toupper(area.key()), vsid::Area{coords, isActive, arrAsDep} });
                             }
                         }
                         savedAreas.clear();
@@ -281,11 +287,17 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
             }
         }
     }
-    for (std::pair<const std::string, vsid::Airport>& apt : activeAirports)
+
+    // airport health check - remove apt without config
+
+    for (std::map<std::string, vsid::Airport>::iterator it = activeAirports.begin(); it != activeAirports.end();)
     {
-        if (aptConfig.contains(apt.first)) continue;
-        messageHandler->writeMessage("INFO", "No config found for: " + apt.first);
-        activeAirports.erase(apt.first); // CHECK - remove unconfigured airports
+        if (aptConfig.contains(it->first)) ++it;
+        else
+        {
+            messageHandler->writeMessage("INFO", "No config found for: " + it->first);
+            it = activeAirports.erase(it);
+        }
     }
 }
 
@@ -351,4 +363,3 @@ COLORREF vsid::ConfigParser::getColor(std::string color)
         return rgbColor;
     }
 }
-

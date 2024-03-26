@@ -6,7 +6,7 @@
 
 #include <algorithm>
 
-vsid::Area::Area(std::vector<std::pair<std::string, std::string>> &coords, bool isActive)
+vsid::Area::Area(std::vector<std::pair<std::string, std::string>> &coords, bool isActive, bool arrAsDep)
 {
 	for (std::pair<std::string, std::string>& coord : coords)
 	{
@@ -29,6 +29,7 @@ vsid::Area::Area(std::vector<std::pair<std::string, std::string>> &coords, bool 
 		this->lines.push_back({ p1, p2 });
 	}
 	this->isActive = isActive;
+	this->arrAsDep = arrAsDep;
 }
 
 void vsid::Area::showline()
