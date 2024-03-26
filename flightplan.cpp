@@ -2,6 +2,7 @@
 
 #include "flightplan.h"
 #include "utils.h"
+#include "messageHandler.h"
 
 void vsid::fpln::clean(std::vector<std::string> &filedRoute, const std::string origin, std::string filedSidWpt)
 {
@@ -69,4 +70,35 @@ bool vsid::fpln::addRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std
 	std::vector<std::string> remarks = vsid::utils::split(fplnData.GetRemarks(), ' ');
 	remarks.push_back(toAdd);
 	return fplnData.SetRemarks(vsid::utils::join(remarks).c_str());
+}
+
+bool vsid::fpln::findScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toSearch)
+{
+	return std::string(cad.GetScratchPadString()).find(vsid::utils::toupper(toSearch));
+}
+
+bool vsid::fpln::setScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toAdd)
+{
+	std::string scratch = cad.GetScratchPadString();
+	scratch += toAdd;
+
+	if (!cad.SetScratchPadString(scratch.c_str())) return false;
+	else return true;
+}
+
+bool vsid::fpln::removeScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toRemove)
+{
+	std::string scratch = cad.GetScratchPadString();
+	size_t pos = scratch.find(vsid::utils::toupper(toRemove));
+
+	if (pos != std::string::npos)
+	{
+		std::string newScratch = scratch.substr(0, pos);
+		if (newScratch != scratch)
+		{
+			if (!cad.SetScratchPadString(newScratch.c_str())) return false;
+			else return true;
+		}
+	}
+	return false; // default / fallback state
 }
