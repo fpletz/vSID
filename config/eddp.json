@@ -165,39 +165,27 @@
                     "rwy": "08L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 5
+                    "prio": 2
                 },
 				"Q2": {
                     "rwy": "08L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 2,
-					"acftType": {"B741": false, "B742": false, "B743": false, "B744": false, "B748": false, "A388": false, "A346": false, "B77W": false, "B773": false},
-					"area": "north"
-                },
-				"X1": {
-                    "rwy": "08L",
-                    "initial": 7000,
-                    "climbvia": false,
-                    "prio": 4,
-                    "timeFrom": 6,
-                    "timeTo": 22
-                },
-				"X2": {
-                    "rwy": "08L",
-                    "initial": 7000,
-                    "climbvia": false,
                     "prio": 1,
-                    "timeFrom": 6,
-                    "timeTo": 22,
 					"acftType": {"B741": false, "B742": false, "B743": false, "B744": false, "B748": false, "A388": false, "A346": false, "B77W": false, "B773": false},
 					"area": "north"
+                },
+				"X": {
+                    "rwy": "08L",
+                    "initial": 7000,
+                    "climbvia": false,
+                    "prio": 99
                 },
                 "E": {
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": false,
-                    "prio": 3
+                    "prio": 1
                 },
 				"N1": {
                     "rwy": "26R",
@@ -225,39 +213,27 @@
                     "rwy": "08L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 5
+                    "prio": 2
                 },
 				"Q2": {
                     "rwy": "08L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 2,
-					"acftType": {"B741": false, "B742": false, "B743": false, "B744": false, "B748": false, "A388": false, "A346": false, "B77W": false, "B773": false},
-					"area": "north"
-                },
-				"X1": {
-                    "rwy": "08L",
-                    "initial": 7000,
-                    "climbvia": false,
-                    "prio": 4,
-                    "timeFrom": 6,
-                    "timeTo": 22
-                },
-				"X2": {
-                    "rwy": "08L",
-                    "initial": 7000,
-                    "climbvia": false,
                     "prio": 1,
-                    "timeFrom": 6,
-                    "timeTo": 22,
 					"acftType": {"B741": false, "B742": false, "B743": false, "B744": false, "B748": false, "A388": false, "A346": false, "B77W": false, "B773": false},
 					"area": "north"
+                },
+				"X": {
+                    "rwy": "08L",
+                    "initial": 7000,
+                    "climbvia": false,
+                    "prio": 99
                 },
                 "E": {
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": false,
-                    "prio": 3
+                    "prio": 1
                 },
 				"N1": {
                     "rwy": "26R",
