@@ -4,7 +4,7 @@
         "runways": "25C,25L,07C,07R,18",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {"allnorth":false},
+        "customRules" : {"allnorth":false, "sulus18": false},
         "timeMode": true,
         "timezone": "Europe/Berlin",
 		"appSI": "GIN,DKB",
@@ -208,7 +208,7 @@
                     "rwy": "25L",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 21,
+                    "prio": 20,
 					"engineCount": 2,
                     "wtc": "H",
 					"lvp": 0
@@ -241,7 +241,7 @@
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 22
+                    "prio": 21
                 },
 				"H2": {
                     "rwy": "25L",
@@ -306,7 +306,7 @@
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 20,
+                    "prio": 22,
 					"actArrRwy": {"any": "25C,25L,25R"}
                 },
 				"S2": {
@@ -315,6 +315,14 @@
                     "climbvia": true,
                     "prio": 1,
 					"area": "west18",
+					"actArrRwy": {"any": "25C,25L,25R"}
+                },
+				"S3": {
+                    "rwy": "18",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "gat18",
 					"actArrRwy": {"any": "25C,25L,25R"}
                 },
                 "R": {
@@ -417,7 +425,7 @@
                     "rwy": "25L",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 21,
+                    "prio": 20,
                     "wtc": "H",
                     "engineCount": 2,
 					"lvp": 0
@@ -488,7 +496,7 @@
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 22
+                    "prio": 21
                 },
 				"H2": {
                     "rwy": "25L",
@@ -508,7 +516,7 @@
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 20,
+                    "prio": 22,
 					"actArrRwy": {"any": "25C,25L,25R"}
                 },
 				"S2": {
@@ -517,6 +525,14 @@
                     "climbvia": true,
                     "prio": 1,
 					"area": "west18",
+					"actArrRwy": {"any": "25C,25L,25R"}
+                },
+				"S3": {
+                    "rwy": "18",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "gat18",
 					"actArrRwy": {"any": "25C,25L,25R"}
                 },
                 "L": {
@@ -660,11 +676,18 @@
                     "climbvia": true,
                     "prio": 99
                 },
-                "S": {
+                "S1": {
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
                     "prio": 12
+                },
+				"S2": {
+                    "rwy": "18",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 1,
+					"customRule": "sulus18"
                 }
             },
             "TOBAK": {
@@ -700,7 +723,7 @@
                     "rwy": "25L",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 21,
+                    "prio": 20,
                     "wtc": "H",
                     "engineCount": 2,
 					"lvp": 0
@@ -739,7 +762,7 @@
                     "rwy": "25L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 22
+                    "prio": 21
                 },
 				"H2": {
                     "rwy": "25L",
@@ -811,7 +834,7 @@
                     "rwy": "18",
                     "initial": 4000,
                     "climbvia": true,
-                    "prio": 20,
+                    "prio": 22,
 					"actArrRwy": {"any": "25C,25L,25R"}
                 },
 				"S2": {
@@ -820,6 +843,14 @@
                     "climbvia": true,
                     "prio": 1,
 					"area": "west18",
+					"actArrRwy": {"any": "25C,25L,25R"}
+                },
+				"S3": {
+                    "rwy": "18",
+                    "initial": 4000,
+                    "climbvia": true,
+                    "prio": 1,
+					"area": "gat18",
 					"actArrRwy": {"any": "25C,25L,25R"}
                 },
                 "T": {
@@ -910,6 +941,13 @@
                 "p2": {"lat": "N050.00.57.274", "lon": "E008.31.51.757"},
                 "p3": {"lat": "N050.01.29.503", "lon": "E008.31.37.669"},
                 "p4": {"lat": "N050.02.25.495", "lon": "E008.35.35.910"}
+            },
+			"gat18": {
+                "active": false,
+                "p1": {"lat": "N050.01.20.130", "lon": "E008.32.13.123"},
+                "p2": {"lat": "N050.01.27.213", "lon": "E008.32.09.044"},
+                "p3": {"lat": "N050.01.22.360", "lon": "E008.31.46.469"},
+                "p4": {"lat": "N050.01.14.974", "lon": "E008.31.50.622"}
             }
         }
     }
