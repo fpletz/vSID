@@ -5,6 +5,7 @@
 #include "utils.h"
 
 #include <algorithm>
+#include <stdexcept>
 
 vsid::Area::Area(std::vector<std::pair<std::string, std::string>> &coords, bool isActive, bool arrAsDep)
 {
@@ -51,13 +52,25 @@ vsid::Area::Point vsid::Area::toPoint(std::pair<std::string, std::string> &pos)
 double vsid::Area::toDeg(std::string& coord)
 {
 	std::vector<std::string> dms = vsid::utils::split(coord, '.');
+	int multi = 0; // default state in exception case
 
-	int multi = (dms.front().find('S') != std::string::npos || dms.front().find('W') != std::string::npos) ? -1 : 1;
+	try
+	{
+		multi = (dms.at(0).find('S') != std::string::npos || dms.at(0).find('W') != std::string::npos) ? -1 : 1;
+	}
+	catch (std::out_of_range)
+	{
+		messageHandler->writeMessage("ERROR", "Failed to get multiplier while calculating coordinate: " + coord);
+	}
 
 	double deg = std::stod(dms[0].substr(1, dms[0].length()));
 	double min = std::stod(dms[1]) / 60;
 	double sec = (std::stod(dms[2]) + std::stod("0." + dms[3])) / 3600;
 
+	if (multi == 0)
+	{
+		messageHandler->writeMessage("WARNING", "Coordinate \"" + coord + "\" will be multiplied with 0 which will render false results!");
+	}
 	return (deg + min + sec) * multi;
 }
 

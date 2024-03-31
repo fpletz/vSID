@@ -14,11 +14,13 @@ std::string vsid::Sid::fullName() const
 
 std::string vsid::Sid::getRwy() const
 {
-	if (this->rwy.find(",") != std::string::npos)
+	return vsid::utils::split(this->rwy, ',').at(0);
+
+	/*if (this->rwy.find(",") != std::string::npos)
 	{
 		return vsid::utils::split(this->rwy, ',').front();
 	}
-	else return this->rwy;
+	else return this->rwy;*/
 }
 
 bool vsid::Sid::empty() const
