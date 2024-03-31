@@ -32,9 +32,15 @@ namespace vsid
 		 * 
 		 */
 		template<typename T, typename U>
-		std::string toString(const std::chrono::time_point<T, U>& timePoint)
+		std::string toFullString(const std::chrono::time_point<T, U>& timePoint)
 		{
 			return std::string(std::format("{:%Y.%m.%d %H:%M:%S}", timePoint));
+		}
+
+		template<typename T, typename U>
+		std::string toTimeString(const std::chrono::time_point<T, U>& timePoint)
+		{
+			return std::string(std::format("{:%H:%M:%S}", timePoint));
 		}
 	}
 }
