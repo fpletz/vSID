@@ -1,4 +1,6 @@
 #pragma once
+
+#include <chrono>
 #include <string>
 #include <vector>
 #include <map>
@@ -14,15 +16,12 @@
 #include "configparser.h"
 #include "utils.h"
 
-// dev
-#include <chrono>
-// end dev
 namespace vsid
 {
 	const std::string pluginName = "vSID";
-	const std::string pluginVersion = "0.8.0-cd8fea0";
+	const std::string pluginVersion = "0.8.0";
 	const std::string pluginAuthor = "Gameagle";
-	const std::string pluginCopyright = "(c) 2023";
+	const std::string pluginCopyright = "(c) 2024";
 	const std::string pluginViewAviso = "";
 
 	class ConfigParser;
@@ -100,6 +99,13 @@ namespace vsid
 		 * @param FlightPlan 
 		 */
 		void OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlightPlan FlightPlan);
+		/**
+		 * @brief Called when something is changed in the controller assigned data
+		 *
+		 * @param FlightPlan - the flight plan reference whose controller assigned data is updated
+		 * @param DataType - the type of the data updated (CTR_DATA_TYPE ...)
+		 */
+		void OnFlightPlanControllerAssignedDataUpdate(EuroScopePlugIn::CFlightPlan FlightPlan, int DataType);
 		/**
 		 * @brief Called when a flightplan disconnects from the network
 		 * 
