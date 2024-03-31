@@ -1,8 +1,8 @@
 #include "pch.h"
 
 #include "flightplan.h"
-//#include "messageHandler.h"
 #include "utils.h"
+#include "messageHandler.h"
 
 void vsid::fpln::clean(std::vector<std::string> &filedRoute, const std::string origin, std::string filedSidWpt)
 {
@@ -15,38 +15,14 @@ void vsid::fpln::clean(std::vector<std::string> &filedRoute, const std::string o
 			filedRoute.erase(filedRoute.begin());
 		}
 	}
-	/* if a possible SID block was found check the entire route for more SIDs (e.g. filed) and erase them as well*/
+	/* if a possible SID block was found check the entire route until the sid waypoint is found*/
 	if (filedRoute.size() > 0 && filedSidWpt != "")
 	{
 		for (std::vector<std::string>::iterator it = filedRoute.begin(); it != filedRoute.end();)
 		{
-			if ((it->find(filedSidWpt) != std::string::npos && *it != filedSidWpt) || *it == origin)
-			{
-				it = filedRoute.erase(it);
-			}
-			else ++it;
-			//if (atcBlock.first != "")
-			//{
-			//	if (it->substr(0, it->length() - 2) == atcBlock.first.substr(0, atcBlock.first.length() - 2))
-			//	{
-			//		it = filedRoute.erase(it);
-			//	}
-			//	else
-			//	{
-			//		++it;
-			//	}
-			//}
-			//else
-			//{
-			//	if (it->substr(0, it->length() - 2) == filedSidWpt)
-			//	{
-			//		it = filedRoute.erase(it);
-			//	}
-			//	else
-			//	{
-			//		++it;
-			//	}
-			//}
+			*it = vsid::utils::split(*it, '/').front(); // to fetch wrong speed/level groups
+			if (*it == filedSidWpt) break;
+			it = filedRoute.erase(it);
 		}
 	}
 }
@@ -75,9 +51,8 @@ bool vsid::fpln::findRemarks(const EuroScopePlugIn::CFlightPlanData& fplnData, c
 	return std::string(fplnData.GetRemarks()).find(searchStr) != std::string::npos;
 }
 
-void vsid::fpln::removeRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(&toRemove))
+bool vsid::fpln::removeRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(&toRemove))
 {
-	if (strlen(fplnData.GetRemarks()) == 0) return;
 	std::vector<std::string> remarks = vsid::utils::split(fplnData.GetRemarks(), ' ');
 	for (std::vector<std::string>::iterator it = remarks.begin(); it != remarks.end();)
 	{
@@ -87,12 +62,43 @@ void vsid::fpln::removeRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const 
 		}
 		else if (it != remarks.end()) ++it;
 	}
-	fplnData.SetRemarks(vsid::utils::join(remarks).c_str());
+	return fplnData.SetRemarks(vsid::utils::join(remarks).c_str());
 }
 
-void vsid::fpln::addRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(&toAdd))
+bool vsid::fpln::addRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(&toAdd))
 {
 	std::vector<std::string> remarks = vsid::utils::split(fplnData.GetRemarks(), ' ');
 	remarks.push_back(toAdd);
-	fplnData.SetRemarks(vsid::utils::join(remarks).c_str());
+	return fplnData.SetRemarks(vsid::utils::join(remarks).c_str());
+}
+
+bool vsid::fpln::findScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toSearch)
+{
+	return std::string(cad.GetScratchPadString()).find(vsid::utils::toupper(toSearch));
+}
+
+bool vsid::fpln::setScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toAdd)
+{
+	std::string scratch = cad.GetScratchPadString();
+	scratch += toAdd;
+
+	if (!cad.SetScratchPadString(scratch.c_str())) return false;
+	else return true;
+}
+
+bool vsid::fpln::removeScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toRemove)
+{
+	std::string scratch = cad.GetScratchPadString();
+	size_t pos = scratch.find(vsid::utils::toupper(toRemove));
+
+	if (pos != std::string::npos)
+	{
+		std::string newScratch = scratch.substr(0, pos);
+		if (newScratch != scratch)
+		{
+			if (!cad.SetScratchPadString(newScratch.c_str())) return false;
+			else return true;
+		}
+	}
+	return false; // default / fallback state
 }

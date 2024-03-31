@@ -15,13 +15,30 @@ namespace vsid
 		MessageHandler();
 		virtual ~MessageHandler();
 
+		enum Level
+		{
+			Debug,
+			Info,
+			Warning,
+			Error
+		};
+
+		enum DebugArea
+		{
+			All,
+			Sid,
+			Rwy,
+			Atc,
+			Dev
+		};
+
 		/**
 		 * @brief Writes message to the local storage - this can be used to forward messages to ES chat
 		 * 
 		 * @param sender front of msg, usually a level of DEBUG, ERROR, WARNING, INFO
 		 * @param msg 
 		 */
-		void writeMessage(std::string sender, std::string msg);
+		void writeMessage(std::string sender, std::string msg, DebugArea debugArea = DebugArea::All);
 		/**
 		 * @brief Retrieve the first message from the local message stack
 		 * 
@@ -33,6 +50,32 @@ namespace vsid
 		 * 
 		 */
 		void dropMessage();
+		/**
+		 * @brief Opens a console for debugging messages
+		 * 
+		 */
+		void openConsole();
+		/**
+		 * @brief Closes a opened console
+		 * 
+		 */
+		void closeConsole();
+		/**
+		 * @brief Get the current message Level
+		 * 
+		 * @return int 
+		 */
+		Level getLevel() const;
+		/**
+		 * @brief Set the current message Level
+		 * 
+		 * @param lvl - "DEBUG" / "INFO"
+		 */
+		void setLevel(std::string lvl);
+
+		inline DebugArea getDebugArea() const { return this->debugArea; }
+
+		bool setDebugArea(std::string debugArea);
 
 	private:
 		/**
@@ -40,26 +83,10 @@ namespace vsid
 		 * 
 		 */
 		std::vector<std::pair<std::string, std::string>> msg;
-		bool debug;
+		FILE* consoleFile = {}; // console file
+		Level currentLevel = Level::Debug;
+		DebugArea debugArea = DebugArea::All;
 	};
-	//namespace messagehandler
-	//{
-	//	/**
-	//	 * @brief Logs message in the message field inside ES (tab "vSID")
-	//	 * 
-	//	 * @param level - DEBUG | INFO | WARNING | ERROR
-	//	 * @param msg - the actual msg that is logged / written
-	//	 */
-	//	void LogMessage(std::string level, std::string msg);
-	//	/**
-	//	 * @brief Logs message in the message field inside ES (tab "Message")
-	//	 * 	 
-	//	 * @param msg - the actual msg that is logged / written
-	//	 */
-	//	void LogMessage(std::string msg);
-	//}
 
-	//extern vsid::MessageHandler *messageHandler;
-
-	extern std::unique_ptr< vsid::MessageHandler> messageHandler; // definition - needs to be extern to be accessible from all files
+	extern std::unique_ptr<vsid::MessageHandler> messageHandler; // definition - needs to be extern to be accessible from all files
 }

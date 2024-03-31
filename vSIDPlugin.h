@@ -1,4 +1,6 @@
 #pragma once
+
+#include <chrono>
 #include <string>
 #include <vector>
 #include <map>
@@ -17,9 +19,9 @@
 namespace vsid
 {
 	const std::string pluginName = "vSID";
-	const std::string pluginVersion = "0.6.0";
+	const std::string pluginVersion = "0.8.0";
 	const std::string pluginAuthor = "Gameagle";
-	const std::string pluginCopyright = "to be selected";
+	const std::string pluginCopyright = "(c) 2024";
 	const std::string pluginViewAviso = "";
 
 	class ConfigParser;
@@ -34,13 +36,13 @@ namespace vsid
 		VSIDPlugin();
 		virtual ~VSIDPlugin();
 
-		bool getDebug() const;
 		/**
 		 * @brief Extract a sid waypoint. If ES doesn't find a SID the route is compared to available SID waypoints
 		 * 
 		 * @param FlightPlanData 
 		 * @return
 		 */
+		void detectPlugins();
 		std::string findSidWpt(EuroScopePlugIn::CFlightPlanData FlightPlanData);
 		/**
 		 * @brief Search for a matching SID depending on current RWYs in use, SID wpt
@@ -49,7 +51,7 @@ namespace vsid
 		 * @param FlightPlan - Flightplan data from ES
 		 * @param atcRwy - The rwy assigned by ATC which shall be considered
 		 */
-		vsid::sids::sid processSid(EuroScopePlugIn::CFlightPlan FlightPlan, std::string atcRwy = "");
+		vsid::Sid processSid(EuroScopePlugIn::CFlightPlan FlightPlan, std::string atcRwy = "");
 		/**
 		 * @brief Tries to set a clean route without SID. SID will then be placed in front
 		 * and color codes for the TagItem set. Processed flightplans are stored.
@@ -59,7 +61,7 @@ namespace vsid
 		 * @param atcRwy - The rwy assigned by ATC which shall be considered
 		 * @param manualSid - manual Sid that has been selected and should be processed
 		 */
-		void processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan, bool checkOnly, std::string atcRwy = "", vsid::sids::sid manualSid = {});
+		void processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan, bool checkOnly, std::string atcRwy = "", vsid::Sid manualSid = {});
 		/**
 		 * @brief Called with every function call (list interaction) inside ES
 		 *
@@ -90,6 +92,7 @@ namespace vsid
 		 * @return
 		 */
 		bool OnCompileCommand(const char* sCommandLine);
+		EuroScopePlugIn::CRadarScreen* OnRadarScreenCreated(const char* sDisplayName, bool NeedRadarContent, bool GeoReferenced, bool CanBeSaved, bool CanBeCreated);
 		/**
 		 * @brief Called when something is changed in the flightplan (used for route updates)
 		 * 
@@ -97,11 +100,24 @@ namespace vsid
 		 */
 		void OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlightPlan FlightPlan);
 		/**
+		 * @brief Called when something is changed in the controller assigned data
+		 *
+		 * @param FlightPlan - the flight plan reference whose controller assigned data is updated
+		 * @param DataType - the type of the data updated (CTR_DATA_TYPE ...)
+		 */
+		void OnFlightPlanControllerAssignedDataUpdate(EuroScopePlugIn::CFlightPlan FlightPlan, int DataType);
+		/**
 		 * @brief Called when a flightplan disconnects from the network
 		 * 
 		 * @param FlightPlan 
 		 */
 		void OnFlightPlanDisconnect(EuroScopePlugIn::CFlightPlan FlightPlan);
+		/**
+		 * @brief Called when a position for radar target is updated
+		 * 
+		 * @param RadarTarget
+		 */
+		void OnRadarTargetPositionUpdate(EuroScopePlugIn::CRadarTarget RadarTarget);
 		/**
 		 * @brief Called whenever a controller position is updated. ~ every 5 seconds
 		 * 
@@ -128,17 +144,25 @@ namespace vsid
 		void OnTimer(int Counter);
 		
 	private:
-		//std::vector<vsid::airport> activeAirports;
-		std::map<std::string, vsid::airport> activeAirports;
-		bool debug;
-		std::map<std::string, vsid::fpln::info> processed;
+		std::map<std::string, vsid::Airport> activeAirports;
+		std::map<std::string, vsid::fpln::Info> processed;
+		/**
+		 * @param std::map<std::string,> callsign
+		 * @param std::pair<,bool> fpln is disconnected
+		 */
+		std::map<std::string, std::pair< std::chrono::utc_clock::time_point, bool>> removeProcessed;
 		vsid::ConfigParser configParser;
 		std::string configPath;
-		std::map<std::string, std::map<std::string, int>> savedSettings;
+		std::map<std::string, std::map<std::string, bool>> savedSettings;
+		std::map<std::string, std::map<std::string, bool>> savedRules;
+		std::map<std::string, std::map<std::string, vsid::Area>> savedAreas;
 		// list of ground states set by controllers
 		std::string gsList;
-		std::map<std::string, vsid::controller> actAtc;
-
+		std::map<std::string, std::string> actAtc;
+		std::set<std::string> ignoreAtc;
+		bool topskyLoaded;
+		bool ccamsLoaded;
+		EuroScopePlugIn::CRadarScreen* radarScreen; // needed to be able to call ES functions
 		/**
 		 * @brief Loads and updates the active airports with available configs
 		 *

@@ -6,8 +6,6 @@
 #include <string>
 #include <algorithm>
 
-//#include "vSID.h"
-
 namespace vsid
 {
 	namespace utils
@@ -72,7 +70,7 @@ namespace vsid
 		 * @return true - if the icao was found in active airports
 		 * @return false - if the icao was NOT found in active airports
 		 */
-		bool isIcaoInVector(const std::vector<vsid::airport>& airportVector, const std::string& toSearch);
+		bool isIcaoInVector(const std::vector<vsid::Airport>& airportVector, const std::string& toSearch);
 		/**
 		 * @brief Checks if a number is contained in another number, e.g. if 2 is in 123
 		 * 
@@ -101,16 +99,10 @@ namespace vsid
 
 		/**
 		 * @brief Transforms the input to uppercase
-		 * 
-		 * @tparam T 
-		 * @param input - the input to transform (string, c-style string)
+		 *  
+		 * @param input - the input to transform
 		 * @return uppercase input
 		 */
-		template<typename T>
-		std::string toupper(T input)
-		{
-			std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return std::toupper(c); });
-			return input;
-		}
+		std::string toupper(std::string input);
 	}
 }

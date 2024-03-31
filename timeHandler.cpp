@@ -1,8 +1,6 @@
 #include "pch.h"
-#include "time.h"
+#include "timeHandler.h"
 #include "messageHandler.h"
-
-#include <chrono>
 
 bool vsid::time::isActive(const std::string& timezone, const int start, const int end)
 {
@@ -31,4 +29,9 @@ bool vsid::time::isActive(const std::string& timezone, const int start, const in
 		messageHandler->writeMessage("ERROR", "Timezone failed - " + std::string(e.what()) + ": " + timezone);
 	}
 	return false;
+}
+
+std::chrono::time_point<std::chrono::utc_clock, std::chrono::seconds> vsid::time::getUtcNow()
+{
+	return std::chrono::ceil<std::chrono::seconds>(std::chrono::utc_clock::now());
 }
