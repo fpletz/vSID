@@ -12,12 +12,16 @@ namespace vsid
 	{
 		
 	public:
-		Area(std::vector<std::pair<std::string, std::string>> &coords, bool isActive);
-		Area() { this->isActive = false; };
+		Area(std::vector<std::pair<std::string, std::string>> &coords, bool isActive, bool arrAsDep);
+		Area() { 
+			this->isActive = false;
+			this->arrAsDep = false;
+		};
 
 		void showline();
 		bool inside(const EuroScopePlugIn::CPosition& fplnPos);
 		bool isActive;
+		bool arrAsDep;
 	private:
 		struct Point
 		{
@@ -28,8 +32,6 @@ namespace vsid
 
 		using Line = std::pair<Point, Point>;
 		std::vector<Line> lines;
-
-		//std::vector<Line> area;
 
 		Point toPoint(std::pair<std::string, std::string> &pos);
 		double toDeg(std::string& coord);

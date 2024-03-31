@@ -11,12 +11,12 @@ namespace vsid
 
 		Sid(std::string waypoint = "", char number = ' ', std::string designator = "",
 			std::string rwy = "", int initialClimb = 0, bool climbvia = false, int prio = 99,
-			bool pilotfiled = false, std::string wtc = "", std::string engineType = "",
+			bool pilotfiled = false, std::map<std::string, std::string> actArrRwy = {}, std::map<std::string, std::string> actDepRwy = {}, std::string wtc = "", std::string engineType = "",
 			std::map<std::string, bool>acftType = {}, int engineCount = 0, int mtow = 0,
 			std::string customRule = "", std::string area = "", std::string equip = "", int lvp = -1,
 			int timeFrom = -1, int timeTo = -1) : waypoint(waypoint), number(number), designator(designator),
 			rwy(rwy), initialClimb(initialClimb), climbvia(climbvia), prio(prio),
-			pilotfiled(pilotfiled), wtc(wtc), engineType(engineType),
+			pilotfiled(pilotfiled), actArrRwy(actArrRwy), actDepRwy(actDepRwy), wtc(wtc), engineType(engineType),
 			acftType(acftType), engineCount(engineCount), mtow(mtow),
 			customRule(customRule), area(area), equip(equip), lvp(lvp), timeFrom(timeFrom), timeTo(timeTo) {};
 
@@ -28,6 +28,8 @@ namespace vsid
 		bool climbvia;
 		int prio;
 		bool pilotfiled;
+		std::map<std::string, std::string> actArrRwy;
+		std::map<std::string, std::string> actDepRwy;
 		std::string wtc;
 		std::string engineType;
 		std::map<std::string, bool> acftType;

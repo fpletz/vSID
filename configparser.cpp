@@ -29,12 +29,10 @@ void vsid::ConfigParser::loadMainConfig()
     }
     catch(const json::parse_error &e)
     {
-        //vsid::messagehandler::LogMessage("ERROR", "Failed to parse main config: " + std::string(e.what()));
         messageHandler->writeMessage("ERROR", "Failed to parse main config: " + std::string(e.what()));
     }
     catch (const json::type_error& e)
     {
-        //vsid::messagehandler::LogMessage("ERROR", "Failed to parse main config: " + std::string(e.what()));
         messageHandler->writeMessage("ERROR", "Failed to parse main config: " + std::string(e.what()));
     }
     try
@@ -71,7 +69,6 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
     if (this->vSidConfig.contains("airportConfigs"))
     {
         basePath.append(this->vSidConfig.value("airportConfigs", "")).make_preferred();
-        //messageHandler->writeMessage("DEBUG", "airport config: " + basePath.string());
     }
     else
     {
@@ -87,11 +84,21 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
 
     std::vector<std::filesystem::path> files;
     std::set<std::string> aptConfig;
+
+   /* for (const std::filesystem::path& entry : std::filesystem::recursive_directory_iterator(basePath)) // needs further evaluation - can cause slow loading
+    {
+        if (!std::filesystem::is_directory(entry) && entry.extension() == ".json")
+        {
+            this->configPaths.insert(entry);
+        }
+    }*/
+
     for (std::pair<const std::string, vsid::Airport> &apt : activeAirports)
     {
         for (const std::filesystem::path& entry : std::filesystem::directory_iterator(basePath))
+        //for (const std::filesystem::path& entry : this->configPaths)
         {
-            if (entry.extension() == ".json")
+            if (!std::filesystem::is_directory(entry) && entry.extension() == ".json")
             {
                 std::ifstream configFile(entry.string());
 
@@ -109,15 +116,15 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                         aptConfig.insert(apt.first);
 
                         // general settings
+
                         apt.second.icao = apt.first;
                         apt.second.elevation = this->parsedConfig.at(apt.first).value("elevation", 0);
                         apt.second.allRwys = vsid::utils::split(this->parsedConfig.at(apt.first).value("runways", ""), ',');
-                        apt.second.arrAsDep = this->parsedConfig.at(apt.first).value("ArrAsDep", false);
                         apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
-                        apt.second.timezone = this->parsedConfig.at(apt.first).value("timezone", "");
+                        apt.second.timezone = this->parsedConfig.at(apt.first).value("timezone", "Etc/UTC");
                         std::map<std::string, bool> customRules;
-                        //std::map<std::string, bool> areaSettings;
+
                         // customRules
 
                         for (auto &el : this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, bool>{}))
@@ -154,12 +161,18 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                             for (auto& area : this->parsedConfig.at(apt.first).at("areas").items())
                             {
                                 std::vector<std::pair<std::string, std::string>> coords;
-                                bool isActive;
+                                bool isActive = false;
+                                bool arrAsDep = false;
                                 for (auto& coord : this->parsedConfig.at(apt.first).at("areas").at(area.key()).items())
                                 {
                                     if (coord.key() == "active")
                                     {
                                         isActive = this->parsedConfig.at(apt.first).at("areas").at(area.key()).value("active", false);
+                                        continue;
+                                    }
+                                    else if (coord.key() == "arrAsDep")
+                                    {
+                                        arrAsDep = this->parsedConfig.at(apt.first).at("areas").at(area.key()).value("arrAsDep", false);
                                         continue;
                                     }
                                     std::string lat = this->parsedConfig.at(apt.first).at("areas").at(area.key()).at(coord.key()).value("lat", "");
@@ -187,7 +200,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                                         isActive = savedAreas[apt.first][vsid::utils::toupper(area.key())].isActive;
                                     }
                                 }
-                                apt.second.areas.insert({ vsid::utils::toupper(area.key()), vsid::Area{coords, isActive} });
+                                apt.second.areas.insert({ vsid::utils::toupper(area.key()), vsid::Area{coords, isActive, arrAsDep} });
                             }
                         }
                         savedAreas.clear();
@@ -218,7 +231,19 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                                 int initial = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("initial", 0);
                                 bool via = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("climbvia", false);
                                 int prio = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("prio", 99);
-                                bool pilot = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("pilotfiled", false);
+                                bool pilotfiled = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("pilotfiled", false);
+                                std::map<std::string, std::string> actArrRwy;
+                                if (this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).contains("actArrRwy"))
+                                {
+                                    actArrRwy["all"] = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).at("actArrRwy").value("all", "");
+                                    actArrRwy["any"] = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).at("actArrRwy").value("any", "");
+                                }
+                                std::map<std::string, std::string> actDepRwy;
+                                if (this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).contains("actDepRwy"))
+                                {
+                                    actDepRwy["all"] = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).at("actDepRwy").value("all", "");
+                                    actDepRwy["any"] = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).at("actDepRwy").value("any", "");
+                                }
                                 std::string wtc = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("wtc", "");
                                 std::string engineType = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("engineType", "");
                                 std::map<std::string, bool> acftType = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("acftType", std::map<std::string, bool>{});
@@ -233,7 +258,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                                 int timeTo = this->parsedConfig.at(apt.first).at("sids").at(sid.key()).at(sidWpt.key()).value("timeTo", -1);
                                 
                                 vsid::Sid newSid = { wpt, ' ', desig, rwys, initial, via, prio,
-                                                    pilot, wtc, engineType, acftType, engineCount,
+                                                    pilotfiled, actArrRwy, actDepRwy, wtc, engineType, acftType, engineCount,
                                                     mtow, customRule, area, equip, lvp,
                                                     timeFrom, timeTo };
                                 apt.second.sids.push_back(newSid);
@@ -272,10 +297,17 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
             }
         }
     }
-    for (std::pair<const std::string, vsid::Airport>& apt : activeAirports)
+
+    // airport health check - remove apt without config
+
+    for (std::map<std::string, vsid::Airport>::iterator it = activeAirports.begin(); it != activeAirports.end();)
     {
-        if (aptConfig.contains(apt.first)) continue;
-        messageHandler->writeMessage("INFO", "No config found for: " + apt.first);
+        if (aptConfig.contains(it->first)) ++it;
+        else
+        {
+            messageHandler->writeMessage("INFO", "No config found for: " + it->first);
+            it = activeAirports.erase(it);
+        }
     }
 }
 
@@ -287,15 +319,9 @@ void vsid::ConfigParser::loadGrpConfig()
     PathRemoveFileSpecA(path);
     std::filesystem::path basePath = path;
 
-    if (this->vSidConfig.contains("grp"))
+    if (!this->vSidConfig.empty())
     {
         basePath.append(this->vSidConfig.value("grp", "")).make_preferred();
-        //messageHandler->writeMessage("DEBUG", "grp config: " + basePath.string());
-    }
-    else
-    {
-        messageHandler->writeMessage("ERROR", "No config path for GRP in main config");
-        return;
     }
 
     if (!std::filesystem::exists(basePath))
@@ -341,4 +367,3 @@ COLORREF vsid::ConfigParser::getColor(std::string color)
         return rgbColor;
     }
 }
-

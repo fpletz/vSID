@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "messageHandler.h"
+#include "timeHandler.h"
 
 #include <sstream>
 #include <iostream> // dev
@@ -9,13 +10,13 @@ vsid::MessageHandler::MessageHandler() {}
 
 vsid::MessageHandler::~MessageHandler() { this->closeConsole(); }
 
-void vsid::MessageHandler::writeMessage(std::string sender, std::string msg)
+void vsid::MessageHandler::writeMessage(std::string sender, std::string msg, DebugArea debugArea)
 {
 	try
 	{
-		if (this->currentLevel == Level::Debug && sender == "DEBUG")
+		if (this->currentLevel == Level::Debug && (this->debugArea ==  debugArea || this->debugArea == DebugArea::All) && sender == "DEBUG")
 		{
-			std::cout << sender << ": " << msg << '\n';
+			std::cout << "[" << vsid::time::toTimeString(vsid::time::getUtcNow()) << "] " << msg << '\n';
 		}
 		else if (/*this->currentLevel != Level::Debug && */sender != "DEBUG") this->msg.push_back(std::pair<std::string, std::string>(sender, msg));
 	}
@@ -31,8 +32,6 @@ std::pair<std::string, std::string> vsid::MessageHandler::getMessage()
 	if (this->msg.size() > 0)
 	{
 		std::pair<std::string, std::string> tmp = { this->msg.front().first, this->msg.front().second };
-		/*std::ostringstream ss;
-		ss << this->msg.front().first << ": " << this->msg.front().second;*/
 		this->msg.erase(this->msg.begin());
 		return tmp;
 	}
@@ -62,19 +61,21 @@ void vsid::MessageHandler::openConsole()
 
 void vsid::MessageHandler::closeConsole()
 {
-	try
+	if (this->consoleFile != NULL)
 	{
-		fclose(this->consoleFile);
-		FreeConsole();
-	}
-	catch (std::exception& e)
-	{
-		this->msg.push_back(std::pair<std::string, std::string>("ERROR", e.what()));
-	}
-	
+		try
+		{
+			fclose(this->consoleFile);
+			FreeConsole();
+		}
+		catch (std::exception& e)
+		{
+			this->msg.push_back(std::pair<std::string, std::string>("ERROR", e.what()));
+		}
+	}	
 }
 
-int vsid::MessageHandler::getLevel() const
+vsid::MessageHandler::Level vsid::MessageHandler::getLevel() const
 {
 	return this->currentLevel;
 }
@@ -93,6 +94,34 @@ void vsid::MessageHandler::setLevel(std::string lvl)
 	}
 }
 
-//vsid::MessageHandler *vsid::messageHandler = new vsid::MessageHandler();
+bool vsid::MessageHandler::setDebugArea(std::string debugArea)
+{
+
+	if (debugArea == "ALL")
+	{
+		this->debugArea = DebugArea::All;
+		return true;
+	}
+	else if (debugArea == "SID") { 
+		this->debugArea = DebugArea::Sid;
+		return true;
+	}
+	else if (debugArea == "RWY")
+	{
+		this->debugArea = DebugArea::Rwy;
+		return true;
+	}
+	else if (debugArea == "ATC")
+	{
+		this->debugArea = DebugArea::Atc;
+		return true;
+	}
+	else if (debugArea == "DEV")
+	{
+		this->debugArea = DebugArea::Dev;
+		return true;
+	}
+	else return false;
+}
 
 std::unique_ptr<vsid::MessageHandler> vsid::messageHandler(new vsid::MessageHandler()); // declaration

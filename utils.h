@@ -6,8 +6,6 @@
 #include <string>
 #include <algorithm>
 
-//#include "vSID.h"
-
 namespace vsid
 {
 	namespace utils
@@ -101,16 +99,10 @@ namespace vsid
 
 		/**
 		 * @brief Transforms the input to uppercase
-		 * 
-		 * @tparam T 
-		 * @param input - the input to transform (string, c-style string)
+		 *  
+		 * @param input - the input to transform
 		 * @return uppercase input
 		 */
-		template<typename T>
-		std::string toupper(T input)
-		{
-			std::transform(input.begin(), input.end(), input.begin(), [](unsigned char c) { return std::toupper(c); });
-			return input;
-		}
+		std::string toupper(std::string input);
 	}
 }

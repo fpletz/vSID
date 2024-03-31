@@ -16,6 +16,7 @@ namespace vsid
 			bool atcRWY = false;
 			bool noFplnUpdate = false;
 			bool remarkChecked = false;
+			bool autoWarning = false;
 			vsid::Sid sid = {};
 			vsid::Sid customSid = {};
 			std::chrono::time_point<std::chrono::utc_clock, std::chrono::seconds> lastUpdate;
@@ -66,5 +67,11 @@ namespace vsid
 		 * @param searchStr - which string to add
 		 */
 		bool addRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(& toAdd));
+
+		bool findScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toSearch);
+
+		bool setScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toAdd);
+
+		bool removeScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toRemove);
 	}
 }
