@@ -1,5 +1,5 @@
 Every contributor accepts and acknowledges that code ownership transfers to the original author "Gameagle" (Philip Maier).
-In case the original author becomes absent for more than 90 days code ownership is transferred to "Vatsim Germany" and the license might be changed to their discretion.
+In case the original author becomes absent for more than 90 days without prior notice code ownership is transferred to "Vatsim Germany" and the license might be changed to their discretion.
 
 THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDER BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
