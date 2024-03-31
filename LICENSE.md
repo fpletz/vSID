@@ -1,3 +1,4 @@
+Copyright © 2023-2024 Gameagle (Philip Maier)
 Every contributor accepts and acknowledges that code ownership transfers to the original author "Gameagle" (Philip Maier).
 In case the original author becomes absent for more than 90 days without prior notice code ownership is transferred to "Vatsim Germany" and the license might be changed to their discretion.
 
