@@ -84,11 +84,21 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
 
     std::vector<std::filesystem::path> files;
     std::set<std::string> aptConfig;
+
+   /* for (const std::filesystem::path& entry : std::filesystem::recursive_directory_iterator(basePath)) // needs further evaluation - can cause slow loading
+    {
+        if (!std::filesystem::is_directory(entry) && entry.extension() == ".json")
+        {
+            this->configPaths.insert(entry);
+        }
+    }*/
+
     for (std::pair<const std::string, vsid::Airport> &apt : activeAirports)
     {
         for (const std::filesystem::path& entry : std::filesystem::directory_iterator(basePath))
+        //for (const std::filesystem::path& entry : this->configPaths)
         {
-            if (entry.extension() == ".json")
+            if (!std::filesystem::is_directory(entry) && entry.extension() == ".json")
             {
                 std::ifstream configFile(entry.string());
 
@@ -106,13 +116,13 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                         aptConfig.insert(apt.first);
 
                         // general settings
+
                         apt.second.icao = apt.first;
                         apt.second.elevation = this->parsedConfig.at(apt.first).value("elevation", 0);
                         apt.second.allRwys = vsid::utils::split(this->parsedConfig.at(apt.first).value("runways", ""), ',');
-                        //apt.second.arrAsDep = this->parsedConfig.at(apt.first).value("ArrAsDep", false);
                         apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
-                        apt.second.timezone = this->parsedConfig.at(apt.first).value("timezone", "");
+                        apt.second.timezone = this->parsedConfig.at(apt.first).value("timezone", "Etc/UTC");
                         std::map<std::string, bool> customRules;
 
                         // customRules
@@ -309,15 +319,9 @@ void vsid::ConfigParser::loadGrpConfig()
     PathRemoveFileSpecA(path);
     std::filesystem::path basePath = path;
 
-    if (this->vSidConfig.contains("grp"))
+    if (!this->vSidConfig.empty())
     {
         basePath.append(this->vSidConfig.value("grp", "")).make_preferred();
-        //messageHandler->writeMessage("DEBUG", "grp config: " + basePath.string());
-    }
-    else
-    {
-        messageHandler->writeMessage("ERROR", "No config path for GRP in main config");
-        return;
     }
 
     if (!std::filesystem::exists(basePath))

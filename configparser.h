@@ -49,6 +49,7 @@ namespace vsid
 		COLORREF getColor(std::string color);
 		json grpConfig;
 	private:
+		std::set<std::filesystem::path> configPaths;
 		std::map<std::string, COLORREF> colors;
 		json parsedConfig;
 		json vSidConfig;
