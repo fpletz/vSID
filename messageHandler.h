@@ -27,6 +27,8 @@ namespace vsid
 		{
 			All,
 			Sid,
+			Rwy,
+			Atc,
 			Dev
 		};
 
@@ -63,7 +65,7 @@ namespace vsid
 		 * 
 		 * @return int 
 		 */
-		int getLevel() const;
+		Level getLevel() const;
 		/**
 		 * @brief Set the current message Level
 		 * 

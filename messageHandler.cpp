@@ -1,6 +1,7 @@
 #include "pch.h"
 
 #include "messageHandler.h"
+#include "timeHandler.h"
 
 #include <sstream>
 #include <iostream> // dev
@@ -15,7 +16,7 @@ void vsid::MessageHandler::writeMessage(std::string sender, std::string msg, Deb
 	{
 		if (this->currentLevel == Level::Debug && (this->debugArea ==  debugArea || this->debugArea == DebugArea::All) && sender == "DEBUG")
 		{
-			std::cout << sender << ": " << msg << '\n';
+			std::cout << "[" << vsid::time::toTimeString(vsid::time::getUtcNow()) << "] " << msg << '\n';
 		}
 		else if (/*this->currentLevel != Level::Debug && */sender != "DEBUG") this->msg.push_back(std::pair<std::string, std::string>(sender, msg));
 	}
@@ -60,19 +61,21 @@ void vsid::MessageHandler::openConsole()
 
 void vsid::MessageHandler::closeConsole()
 {
-	try
+	if (this->consoleFile != NULL)
 	{
-		fclose(this->consoleFile);
-		FreeConsole();
-	}
-	catch (std::exception& e)
-	{
-		this->msg.push_back(std::pair<std::string, std::string>("ERROR", e.what()));
-	}
-	
+		try
+		{
+			fclose(this->consoleFile);
+			FreeConsole();
+		}
+		catch (std::exception& e)
+		{
+			this->msg.push_back(std::pair<std::string, std::string>("ERROR", e.what()));
+		}
+	}	
 }
 
-int vsid::MessageHandler::getLevel() const
+vsid::MessageHandler::Level vsid::MessageHandler::getLevel() const
 {
 	return this->currentLevel;
 }
@@ -101,6 +104,16 @@ bool vsid::MessageHandler::setDebugArea(std::string debugArea)
 	}
 	else if (debugArea == "SID") { 
 		this->debugArea = DebugArea::Sid;
+		return true;
+	}
+	else if (debugArea == "RWY")
+	{
+		this->debugArea = DebugArea::Rwy;
+		return true;
+	}
+	else if (debugArea == "ATC")
+	{
+		this->debugArea = DebugArea::Atc;
 		return true;
 	}
 	else if (debugArea == "DEV")
