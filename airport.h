@@ -30,7 +30,7 @@ namespace vsid
 		std::vector<vsid::Sid> timeSids = {};
 		std::string timezone = "";
 		std::map<std::string, int> appSI = {};
-		bool arrAsDep = false;
+		//bool arrAsDep = false;
 		int transAlt = 0;
 		int maxInitialClimb = 0;
 		std::map<std::string, bool> settings = {};
@@ -42,11 +42,16 @@ namespace vsid
 		 * 
 		 * @param myself - Controller().ControllerMyself()
 		 */
-		inline bool hasLowerAtc(const EuroScopePlugIn::CController &myself)
+		inline bool hasLowerAtc(const EuroScopePlugIn::CController &myself, bool toActivate = false)
 		{
 			if (std::all_of(controllers.begin(), controllers.end(), [&](auto controller)
 				{
-					return controller.second.facility > myself.GetFacility();
+					if (toActivate)
+					{
+						return controller.second.facility > myself.GetFacility();
+					}
+					else return controller.second.facility >= myself.GetFacility();
+					
 				}))
 			{
 				return false;
@@ -54,14 +59,24 @@ namespace vsid
 			else if (myself.GetFacility() >= 5 &&
 				std::none_of(controllers.begin(), controllers.end(), [&](auto controller)
 					{
-						if (controller.second.facility < myself.GetFacility() ||
-							(appSI.contains(myself.GetPositionId()) &&
+						if (controller.second.facility < myself.GetFacility()) return true;
+						else if (appSI.contains(myself.GetPositionId()) &&
 							appSI.contains(controller.second.si) &&
-							appSI[myself.GetPositionId()] > appSI[controller.second.si]) ||
-							(!appSI.contains(myself.GetPositionId()) &&
-							appSI.contains(controller.second.si))
-							) return true;
+							(appSI[myself.GetPositionId()] > appSI[controller.second.si] && !toActivate) ||
+							appSI[myself.GetPositionId()] >= appSI[controller.second.si] && toActivate)
+							 return true;
+						else if (!appSI.contains(myself.GetPositionId()) &&
+							appSI.contains(controller.second.si)) return true;
 						else return false;
+
+						/*if (controller.second.facility < myself.GetFacility() ||
+							(appSI.contains(myself.GetPositionId()) &&
+								appSI.contains(controller.second.si) &&
+								appSI[myself.GetPositionId()] > appSI[controller.second.si]) ||
+							(!appSI.contains(myself.GetPositionId()) &&
+								appSI.contains(controller.second.si))
+							) return true;
+						else return false;*/
 					}))
 			{
 				return false;
