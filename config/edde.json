@@ -2,11 +2,10 @@
     "EDDE": {
         "elevation": 1034,
         "runways": "09,27",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
         "timeMode": true,
+		"appSI": "TRS,GER,MEI,HAL,HOF",
 		"timezone": "Europe/Berlin",
         "sids": {
             "ERSIL": {

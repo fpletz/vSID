@@ -2,10 +2,9 @@
     "EDFM": {
         "elevation": 309,
         "runways": "09,27",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "NKRL,NKRH,BAD,DKB,KTG",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

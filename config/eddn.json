@@ -2,10 +2,9 @@
     "EDDN": {
         "elevation": 1044,
         "runways": "10,28",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "FRK,BBG,HOF,RDG",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

@@ -5,18 +5,26 @@
         "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "customRules" : {"high":false},
         "timeMode": true,
         "timezone": "Europe/Berlin",
+		"appSI": "DKA,NOR,PADH",
         "sids": {
             "COL": {
-                "F": {
+                "F1": {
                     "rwy": "14L",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 2
                 },
-                "X": {
+				"F2": {
+                    "rwy": "14L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 2,
+					"customRule": "high"
+                },
+                "X1": {
                     "rwy": "14L",
                     "initial": 5000,
                     "climbvia": true,
@@ -25,17 +33,34 @@
                     "engineType": "J",
                     "engineCount": 3
                 },
-			    "B": {
+				"X2": {
+                    "rwy": "14L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 1,
+                    "wtc": "H",
+                    "engineType": "J",
+                    "engineCount": 3,
+					"customRule": "high"
+                },
+			    "B1": {
                     "rwy": "32R",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 3
+                },
+				"B2": {
+                    "rwy": "32R",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 3,
+					"customRule": "high"
                 },
 			    "C": {
                     "rwy": "32R",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 2,
                     "mtow": 98000
                 },
 				"D": {
@@ -61,6 +86,14 @@
                     "rwy": "14R",
                     "initial": 5000,
                     "climbvia": true,
+                    "prio": 1,
+                    "wtc": "LM",
+					"customRule": "high"
+                },
+				"E3": {
+                    "rwy": "14R",
+                    "initial": 5000,
+                    "climbvia": true,
                     "prio": 4
                 },
 				"M1": {
@@ -71,6 +104,14 @@
                     "wtc": "L"
                 },
 				"M2": {
+                    "rwy": "32L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 1,
+                    "wtc": "LM",
+					"customRule": "high"
+                },
+				"M3": {
                     "rwy": "32L",
                     "initial": 5000,
                     "climbvia": true,
@@ -84,7 +125,7 @@
                     "climbvia": true,
                     "prio": 3
                 },
-                "X": {
+                "X1": {
                     "rwy": "14L",
                     "initial": 5000,
                     "climbvia": true,
@@ -93,23 +134,47 @@
                     "engineType": "J",
                     "engineCount": 3
                 },
-				"Q": {
+				"X2": {
+                    "rwy": "14L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 1,
+                    "wtc": "H",
+                    "engineType": "J",
+                    "engineCount": 3,
+					"customRule": "high"
+                },
+				"Q1": {
                     "rwy": "14L",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 2
                 },
-			    "B": {
+				"Q2": {
+                    "rwy": "14L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 2,
+					"customRule": "high"
+                },
+			    "B1": {
                     "rwy": "32R",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 3
+                },
+				"B2": {
+                    "rwy": "32R",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 3,
+					"customRule": "high"
                 },
 			    "C": {
                     "rwy": "32R",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 2,
                     "mtow": 98000
                 },
 				"D": {
@@ -135,6 +200,14 @@
                     "rwy": "14R",
                     "initial": 5000,
                     "climbvia": true,
+                    "prio": 1,
+                    "wtc": "LM",
+					"customRule": "high"
+                },
+				"E3": {
+                    "rwy": "14R",
+                    "initial": 5000,
+                    "climbvia": true,
                     "prio": 4
                 },
 				"M1": {
@@ -145,6 +218,14 @@
                     "wtc": "L"
                 },
 				"M2": {
+                    "rwy": "32L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 1,
+                    "wtc": "LM",
+					"customRule": "high"
+                },
+				"M3": {
                     "rwy": "32L",
                     "initial": 5000,
                     "climbvia": true,
@@ -164,11 +245,18 @@
                     "climbvia": false,
                     "prio": 99
                 },
-				"Q": {
+				"Q1": {
                     "rwy": "14L",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 2
+                },
+				"Q2": {
+                    "rwy": "14L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 2,
+					"customRule": "high"
                 },
 				"W": {
                     "rwy": "14L",
@@ -182,20 +270,20 @@
                     "climbvia": true,
                     "prio": 3
                 },
-			    "R": {
+			    "R1": {
                     "rwy": "32R",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 2
                 },
-				"D1": {
-                    "rwy": "24",
+				"R2": {
+                    "rwy": "32R",
                     "initial": 5000,
-                    "climbvia": false,
-                    "prio": 1,
-                    "wtc": "LM"
+                    "climbvia": true,
+                    "prio": 2,
+					"customRule": "high"
                 },
-				"D2": {
+				"D": {
                     "rwy": "24",
                     "initial": 5000,
                     "climbvia": false,
@@ -230,6 +318,14 @@
                     "rwy": "14R",
                     "initial": 5000,
                     "climbvia": true,
+                    "prio": 1,
+                    "wtc": "LM",
+					"customRule": "high"
+                },
+				"E3": {
+                    "rwy": "14R",
+                    "initial": 5000,
+                    "climbvia": true,
                     "prio": 4
                 },
 				"M1": {
@@ -240,6 +336,14 @@
                     "wtc": "L"
                 },
 				"M2": {
+                    "rwy": "32L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 1,
+                    "wtc": "LM",
+					"customRule": "high"
+                },
+				"M3": {
                     "rwy": "32L",
                     "initial": 5000,
                     "climbvia": true,
@@ -253,7 +357,7 @@
                     "climbvia": true,
                     "prio": 3
                 },
-                "X": {
+                "X1": {
                     "rwy": "14L",
                     "initial": 5000,
                     "climbvia": true,
@@ -262,23 +366,47 @@
                     "engineType": "J",
                     "engineCount": 3
                 },
-				"Q": {
+				"X2": {
+                    "rwy": "14L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 1,
+                    "wtc": "H",
+                    "engineType": "J",
+                    "engineCount": 3,
+					"customRule": "high"
+                },
+				"Q1": {
                     "rwy": "14L",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 2
                 },
-			    "B": {
+				"Q2": {
+                    "rwy": "14L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 2,
+					"customRule": "high"
+                },
+			    "B1": {
                     "rwy": "32R",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 3
+                },
+				"B2": {
+                    "rwy": "32R",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 3,
+					"customRule": "high"
                 },
 			    "C": {
                     "rwy": "32R",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 2,
                     "mtow": 98000
                 },
 				"D": {
@@ -304,6 +432,14 @@
                     "rwy": "14R",
                     "initial": 5000,
                     "climbvia": true,
+                    "prio": 1,
+                    "wtc": "LM",
+					"customRule": "high"
+                },
+				"E3": {
+                    "rwy": "14R",
+                    "initial": 5000,
+                    "climbvia": true,
                     "prio": 4
                 },
 				"M1": {
@@ -314,6 +450,14 @@
                     "wtc": "L"
                 },
 				"M2": {
+                    "rwy": "32L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 1,
+                    "wtc": "LM",
+					"customRule": "high"
+                },
+				"M3": {
                     "rwy": "32L",
                     "initial": 5000,
                     "climbvia": true,
@@ -321,13 +465,20 @@
                 }
             },
 			"WYP": {
-                "F": {
+                "F1": {
                     "rwy": "14L",
                     "initial": 5000,
                     "climbvia": true,
                     "prio": 2
                 },
-                "X": {
+				"F2": {
+                    "rwy": "14L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 2,
+					"customRule": "high"
+                },
+                "X1": {
                     "rwy": "14L",
                     "initial": 5000,
                     "climbvia": true,
@@ -336,17 +487,34 @@
                     "engineType": "J",
                     "engineCount": 3
                 },
-			    "B": {
+				"X2": {
+                    "rwy": "14L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 1,
+                    "wtc": "H",
+                    "engineType": "J",
+                    "engineCount": 3,
+					"customRule": "high"
+                },
+			    "B1": {
                     "rwy": "32R",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 2
+                    "prio": 3
+                },
+				"B2": {
+                    "rwy": "32R",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 3,
+					"customRule": "high"
                 },
 			    "C": {
                     "rwy": "32R",
                     "initial": 5000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 2,
                     "mtow": 98000
                 },
 				"D": {
@@ -372,6 +540,14 @@
                     "rwy": "14R",
                     "initial": 5000,
                     "climbvia": true,
+                    "prio": 1,
+                    "wtc": "LM",
+					"customRule": "high"
+                },
+				"E3": {
+                    "rwy": "14R",
+                    "initial": 5000,
+                    "climbvia": true,
                     "prio": 4
                 },
 				"M1": {
@@ -382,6 +558,14 @@
                     "wtc": "L"
                 },
 				"M2": {
+                    "rwy": "32L",
+                    "initial": 5000,
+                    "climbvia": true,
+                    "prio": 1,
+                    "wtc": "LM",
+					"customRule": "high"
+                },
+				"M3": {
                     "rwy": "32L",
                     "initial": 5000,
                     "climbvia": true,

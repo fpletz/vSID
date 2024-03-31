@@ -2,10 +2,9 @@
     "EDLP": {
         "elevation": 699,
         "runways": "06,24",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "PADL,HMM,PADH",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

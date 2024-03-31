@@ -2,10 +2,9 @@
     "EDLV": {
         "elevation": 106,
         "runways": "09,27",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "BOT,DLD,DLA,DLT,PADH",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

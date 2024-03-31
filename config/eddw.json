@@ -2,10 +2,9 @@
     "EDDW": {
         "elevation": 14,
         "runways": "09,27",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules": {},
+        "appSI": "FRI,EIDE,ALR,EIDW",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {
@@ -20,13 +19,13 @@
                     "rwy": "27",
                     "initial": 4000,
                     "climbvia": false,
-                    "prio": 1
+                    "prio": 2
                 },
                 "L": {
                     "rwy": "27",
                     "initial": 4000,
                     "climbvia": false,
-                    "prio": 2,
+                    "prio": 1,
                     "pilotfiled": true
                 }
 			},
@@ -41,13 +40,13 @@
                     "rwy": "27",
                     "initial": 4000,
                     "climbvia": false,
-                    "prio": 1
+                    "prio": 2
                 },
                 "L": {
                     "rwy": "27",
                     "initial": 4000,
                     "climbvia": false,
-                    "prio": 2,
+                    "prio": 1,
                     "pilotfiled": true
                 }
 			},
@@ -62,13 +61,13 @@
                     "rwy": "27",
                     "initial": 4000,
                     "climbvia": false,
-                    "prio": 1
+                    "prio": 2
                 },
                 "L": {
                     "rwy": "27",
                     "initial": 4000,
                     "climbvia": false,
-                    "prio": 2,
+                    "prio": 1,
                     "pilotfiled": true
                 }
 			},
@@ -83,13 +82,13 @@
                     "rwy": "27",
                     "initial": 4000,
                     "climbvia": false,
-                    "prio": 1
+                    "prio": 2
                 },
                 "L": {
                     "rwy": "27",
                     "initial": 4000,
                     "climbvia": false,
-                    "prio": 2,
+                    "prio": 1,
                     "pilotfiled": true
                 }
 			},

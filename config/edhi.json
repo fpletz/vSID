@@ -2,10 +2,9 @@
     "EDHI": {
         "elevation": 21,
         "runways": "05,23",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "HEI,ALR",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

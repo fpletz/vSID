@@ -2,10 +2,9 @@
     "EDDR": {
         "elevation": 1058,
         "runways": "09,27",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 8000,
-        "customRules" : {},
+        "appSI": "PFA,EIF,RUD,GIN,KTG",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

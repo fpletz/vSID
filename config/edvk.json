@@ -2,10 +2,9 @@
     "EDVK": {
         "elevation": 860,
         "runways": "09,27",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "HRZ,DST,EIDW",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {
