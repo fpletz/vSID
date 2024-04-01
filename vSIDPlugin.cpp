@@ -172,7 +172,6 @@ vsid::Sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan FlightPlan, 
 			if (it->customRule == "" || wptRules.contains(it->waypoint)) ++it;
 			if (it == this->activeAirports[icao].sids.end()) break;
 
-			bool arrAsDep = false;
 			std::set<std::string> depRwys = this->activeAirports[icao].depRwys;
 			std::vector<std::string> sidRules = vsid::utils::split(it->customRule, ',');
 			std::vector<std::string> sidRwys = vsid::utils::split(it->rwy, ',');
@@ -257,8 +256,14 @@ vsid::Sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan FlightPlan, 
 					else return false;
 				}))
 			{
-				std::set<std::string> arrRwys = this->activeAirports[icao].arrRwys;
-				depRwys.merge(arrRwys);
+				for (std::string& area : sidAreas)
+				{
+					if (this->activeAirports[icao].areas.contains(area) && this->activeAirports[icao].areas[area].arrAsDep)
+					{
+						std::set<std::string> arrRwys = this->activeAirports[icao].arrRwys;
+						depRwys.merge(arrRwys);
+					}
+				}
 			}
 		}
 
