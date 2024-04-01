@@ -4,11 +4,18 @@
 *	Areas configurable with lat / lon coordinates from ES
 *	auto mode now works also for app/ctr with lower controller detection and app/ctr priorities in settings
 *	tagItem Squawk (needs to be combined with a function, e.g. CCAMS) - text only
+*	active RWY - SIDs can be configured to need the specified RWY as active to be considered
+*	debugging "areas" to be able to select only specific debug messages
 
 [CHANGED]
 *	Settings save format as settings have increased
 *	detection of active airports to not use runways
 *	allow automode force only if at least one lower controller is online
+*	automode - up to TWR only the own airport can be set in automode
+*	automode - APP can only set own airport and where mentioned in appSI
+*	automode - CTR can only set where mentioned in appSI
+*	default timezone for airport configs is now "Etc/UTC"
+*	arrAsDep for rwys is now per area and not per airport
 
 [FIXED]
 
@@ -16,6 +23,7 @@
 *	tagItem SID was flashing for "VFR" and "NO SID"
 *	tagItem SID was slow in showing the text for "VFR" and "NO SID" (has to be monitored)
 *	automode now changes SID when rwy at airport changes
+*	Crash if unconfigured airport was selected
 
 [Changelog v0.7.2]
 
