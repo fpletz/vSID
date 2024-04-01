@@ -2,10 +2,9 @@
     "EDLN": {
         "elevation": 125,
         "runways": "13,31",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "DLD,DLA,BOT,PADH",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

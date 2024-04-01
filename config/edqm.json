@@ -2,10 +2,9 @@
     "EDQM": {
         "elevation": 1960,
         "runways": "08,26",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "FRK,BBG,HOF,RDG",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

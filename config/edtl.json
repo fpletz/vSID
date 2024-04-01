@@ -2,10 +2,9 @@
     "EDTL": {
         "elevation": 511,
         "runways": "03,21",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 8000,
-        "customRules" : {},
+        "appSI": "REU,STG,BAD,DKB,KTG",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

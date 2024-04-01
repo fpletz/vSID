@@ -2,10 +2,9 @@
     "EDJA": {
         "elevation": 2079,
         "runways": "06,24",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "ILR,SWA,FUE,ZUG,TRU,RDG",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

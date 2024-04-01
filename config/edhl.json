@@ -2,10 +2,9 @@
     "EDHL": {
         "elevation": 55,
         "runways": "07,25",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "HEI,ALR",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

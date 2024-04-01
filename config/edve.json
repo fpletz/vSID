@@ -2,10 +2,9 @@
     "EDVE": {
         "elevation": 297,
         "runways": "08,26",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "HAN,HRZ,DST,EIDW",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {

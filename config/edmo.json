@@ -2,10 +2,9 @@
     "EDMO": {
         "elevation": 1947,
         "runways": "02,22",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
+        "appSI": "DMSL,DMNL,DMSH,DMNH,NDG,ZUG,RDG",
         "timeMode": true,
 		"timezone": "Europe/Berlin",
         "sids": {
