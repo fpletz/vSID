@@ -5,7 +5,7 @@
         "transAlt": 5000,
         "maxInitialClimb": 7000,
         "customRules" : {"traalg":false},
-		"appSI": "NDG,ZUG,RDG",
+		"appSI": "NDG,WLD,ZUG,RDG",
         "timeMode": true,
         "timezone": "Europe/Berlin",
         "sids": {
@@ -26,7 +26,7 @@
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 99,
 					"area": "cargo"
                 },
 			    "S1": {
@@ -39,7 +39,7 @@
                     "rwy": "26L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 99,
 					"area": "cargo"
                 },
 			    "N": {
@@ -120,7 +120,7 @@
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 99,
 					"area": "cargo"
                 },
 			    "S1": {
@@ -133,7 +133,7 @@
                     "rwy": "26L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 99,
 					"area": "cargo"
                 },
 			    "N": {
@@ -214,7 +214,7 @@
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 99,
 					"area": "cargo"
                 },
 			    "S1": {
@@ -228,7 +228,7 @@
                     "rwy": "26L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 99,
                     "engineType": "TP",
 					"area": "cargo"
                 },
@@ -251,7 +251,7 @@
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 99,
 					"area": "cargo"
                 },
 				"E2": {
@@ -270,7 +270,7 @@
                     "rwy": "26L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 99,
 					"area": "cargo"
                 },
 			    "N": {
@@ -297,7 +297,7 @@
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 99,
 					"area": "cargo"
                 },
 			    "S1": {
@@ -310,7 +310,7 @@
                     "rwy": "26L",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 99,
 					"area": "cargo"
                 },
 				"N": {
@@ -576,7 +576,7 @@
                     "rwy": "08R",
                     "initial": 7000,
                     "climbvia": true,
-                    "prio": 1,
+                    "prio": 99,
 					"area": "cargo"
                 },
 			    "S": {
