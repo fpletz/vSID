@@ -35,6 +35,7 @@ void vsid::ConfigParser::loadMainConfig()
     {
         messageHandler->writeMessage("ERROR", "Failed to parse main config: " + std::string(e.what()));
     }
+
     try
     {
         for (auto &elem : this->vSidConfig.at("colors").items())
@@ -51,6 +52,18 @@ void vsid::ConfigParser::loadMainConfig()
     catch (std::error_code& e)
     {
         messageHandler->writeMessage("ERROR", "Failed to import colors: " + e.message());
+    }
+
+    try
+    {
+        for (auto& elem : this->vSidConfig.at("requests").items())
+        {
+            this->reqTimes.insert({ elem.key(), elem.value()});
+        }
+    }
+    catch (std::error_code& e)
+    {
+        messageHandler->writeMessage("ERROR", "Failed to get request timers: " + e.message());
     }
 }
 
@@ -123,6 +136,11 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                         apt.second.transAlt = this->parsedConfig.at(apt.first).value("transAlt", 0);
                         apt.second.maxInitialClimb = this->parsedConfig.at(apt.first).value("maxInitialClimb", 0);
                         apt.second.timezone = this->parsedConfig.at(apt.first).value("timezone", "Etc/UTC");
+                        apt.second.requests["clearance"] = {};
+                        apt.second.requests["startup"] = {};
+                        apt.second.requests["pushback"] = {};
+                        apt.second.requests["taxi"] = {};
+                        apt.second.requests["departure"] = {};
                         std::map<std::string, bool> customRules;
 
                         // customRules
@@ -365,5 +383,18 @@ COLORREF vsid::ConfigParser::getColor(std::string color)
         // return if color could not be found is purple to signal error
         COLORREF rgbColor = RGB(190, 30, 190);
         return rgbColor;
+    }
+}
+
+int vsid::ConfigParser::getReqTime(std::string time)
+{
+    if (this->reqTimes.contains(time))
+    {
+        return this->reqTimes[time];
+    }
+    else
+    {
+        messageHandler->writeMessage("ERROR", "Failed to retrieve request time setting for key \"" + time + "\"");
+        return 0;
     }
 }

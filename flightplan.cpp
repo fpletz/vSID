@@ -36,6 +36,7 @@ std::pair<std::string, std::string> vsid::fpln::getAtcBlock(const std::vector<st
 		if (filedRoute.front().find('/') != std::string::npos && filedRoute.front().find("/N") == std::string::npos)
 		{
 			std::vector<std::string> sidBlock = vsid::utils::split(filedRoute.at(0), '/');
+			//messageHandler->writeMessage("DEBUG", "sidBlock: " + vsid::utils::join(sidBlock, '/'), vsid::MessageHandler::DebugArea::Dev);
 			if (sidBlock.front().find_first_of("0123456789RV") != std::string::npos || sidBlock.front() == origin)
 			{
 				atcSid = sidBlock.front();
@@ -82,7 +83,7 @@ bool vsid::fpln::setScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedDat
 	std::string scratch = cad.GetScratchPadString();
 	scratch += toAdd;
 
-	if (!cad.SetScratchPadString(scratch.c_str())) return false;
+	if (!cad.SetScratchPadString(vsid::utils::trim(scratch).c_str())) return false;
 	else return true;
 }
 
@@ -96,7 +97,7 @@ bool vsid::fpln::removeScratchPad(EuroScopePlugIn::CFlightPlanControllerAssigned
 		std::string newScratch = scratch.substr(0, pos);
 		if (newScratch != scratch)
 		{
-			if (!cad.SetScratchPadString(newScratch.c_str())) return false;
+			if (!cad.SetScratchPadString(vsid::utils::trim(newScratch).c_str())) return false;
 			else return true;
 		}
 	}
