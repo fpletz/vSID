@@ -18,7 +18,7 @@
                 "W": {
                     "rwy": "24",
                     "initial": 5000,
-                    "climbvia": true,
+                    "climbvia": false,
                     "prio": 1
                 }
 			},
@@ -46,7 +46,7 @@
                 "W": {
                     "rwy": "24",
                     "initial": 5000,
-                    "climbvia": true,
+                    "climbvia": false,
                     "prio": 1
                 }
 			},
@@ -74,7 +74,7 @@
                 "W": {
                     "rwy": "24",
                     "initial": 5000,
-                    "climbvia": true,
+                    "climbvia": false,
                     "prio": 1
                 }
 			}

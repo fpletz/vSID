@@ -4,9 +4,7 @@
         "runways": "07,25",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "appSI": "DMNL,DMSL,DMNH,DMSH,NDG,ZUG,RDG",
-        "timeMode": true,
-		"timezone": "Europe/Berlin",
+        "appSI": "DMNL,DMSL,DMNH,DMSH,NDG,ZUG,RDG,EDMM",
         "sids": {
             "MAH": {
                 "F": {
