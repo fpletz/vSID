@@ -10,7 +10,6 @@
 #include <set>
 #include <algorithm>
 
-
 // DEV
 #include "display.h"
 // END DEV
@@ -37,6 +36,12 @@ vsid::VSIDPlugin::VSIDPlugin() : EuroScopePlugIn::CPlugIn(EuroScopePlugIn::COMPA
 	RegisterTagItemFunction("RWY Menu", TAG_FUNC_VSID_RWYMENU);
 
 	RegisterTagItemType("vSID Squawk", TAG_ITEM_VSID_SQW);
+
+	RegisterTagItemType("vSID Request", TAG_ITEM_VSID_REQ);
+	RegisterTagItemFunction("REQ Menu", TAG_FUNC_VSID_REQMENU);
+
+	RegisterTagItemType("vSID Request Timer", TAG_ITEM_VSID_REQTIMER);
+
 	RegisterDisplayType("vSID (no display)", false, false, false, true); /// DEV
 
 	UpdateActiveAirports(); // preload rwy settings
@@ -172,7 +177,6 @@ vsid::Sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan FlightPlan, 
 			if (it->customRule == "" || wptRules.contains(it->waypoint)) ++it;
 			if (it == this->activeAirports[icao].sids.end()) break;
 
-			bool arrAsDep = false;
 			std::set<std::string> depRwys = this->activeAirports[icao].depRwys;
 			std::vector<std::string> sidRules = vsid::utils::split(it->customRule, ',');
 			std::vector<std::string> sidRwys = vsid::utils::split(it->rwy, ',');
@@ -257,8 +261,14 @@ vsid::Sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan FlightPlan, 
 					else return false;
 				}))
 			{
-				std::set<std::string> arrRwys = this->activeAirports[icao].arrRwys;
-				depRwys.merge(arrRwys);
+				for (std::string& area : sidAreas)
+				{
+					if (this->activeAirports[icao].areas.contains(area) && this->activeAirports[icao].areas[area].arrAsDep)
+					{
+						std::set<std::string> arrRwys = this->activeAirports[icao].arrRwys;
+						depRwys.merge(arrRwys);
+					}
+				}
 			}
 		}
 
@@ -739,7 +749,7 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 			if (this->activeAirports[fplnData.GetOrigin()].settings["auto"])
 			{
 				EuroScopePlugIn::CFlightPlanControllerAssignedData cad = fpln.GetControllerAssignedData();
-				std::string scratch = ".vsid_" + std::string(ControllerMyself().GetCallsign());
+				std::string scratch = ".vsid_auto_" + std::string(ControllerMyself().GetCallsign());
 				messageHandler->writeMessage("DEBUG", "[" + callsign + "] adding to scratchpad: " + scratch, vsid::MessageHandler::DebugArea::Dev);
 				vsid::fpln::setScratchPad(cad, scratch);
 				messageHandler->writeMessage("DEBUG", "[" + callsign + "] removing from scratchpad: " + scratch, vsid::MessageHandler::DebugArea::Dev);
@@ -1008,6 +1018,33 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 			{
 				this->processed[callsign].atcRWY = true;
 			}
+		}
+	}
+
+	if (FunctionId == TAG_FUNC_VSID_REQMENU)
+	{
+		if (strlen(sItemString) == 0)
+		{
+			this->OpenPopupList(Area, "REQ", 1);
+
+			this->AddPopupListElement("No Req", "No Req", TAG_FUNC_VSID_REQMENU, false, EuroScopePlugIn::POPUP_ELEMENT_NO_CHECKBOX, false, false);
+
+			if (this->activeAirports.contains(fplnData.GetOrigin()))
+			{
+				this->AddPopupListElement("Clearance", "Clearance", TAG_FUNC_VSID_REQMENU, false, EuroScopePlugIn::POPUP_ELEMENT_NO_CHECKBOX, false, false);
+				this->AddPopupListElement("Startup", "Startup", TAG_FUNC_VSID_REQMENU, false, EuroScopePlugIn::POPUP_ELEMENT_NO_CHECKBOX, false, false);
+				this->AddPopupListElement("Pushback", "Pushback", TAG_FUNC_VSID_REQMENU, false, EuroScopePlugIn::POPUP_ELEMENT_NO_CHECKBOX, false, false);
+				this->AddPopupListElement("Taxi", "Taxi", TAG_FUNC_VSID_REQMENU, false, EuroScopePlugIn::POPUP_ELEMENT_NO_CHECKBOX, false, false);
+				this->AddPopupListElement("Departure", "Departure", TAG_FUNC_VSID_REQMENU, false, EuroScopePlugIn::POPUP_ELEMENT_NO_CHECKBOX, false, false);
+			}
+		}
+		else if (strlen(sItemString) != 0)
+		{
+			messageHandler->writeMessage("DEBUG", "Call req with: \"" + std::string(sItemString) + "\"", vsid::MessageHandler::DebugArea::Dev);
+			EuroScopePlugIn::CFlightPlanControllerAssignedData cad = fpln.GetControllerAssignedData();
+			std::string scratch = ".vsid_req_" + std::string(sItemString);
+			vsid::fpln::setScratchPad(cad, scratch);
+			vsid::fpln::removeScratchPad(cad, scratch);
 		}
 	}
 }
@@ -1438,6 +1475,54 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 		else *pRGB = this->configParser.getColor("squawkSet");
 		
 		if(assignedSquawk != "0000") strcpy_s(sItemString, 16, assignedSquawk.c_str());
+	}
+
+	if (ItemCode == TAG_ITEM_VSID_REQ)
+	{
+		if (this->processed.contains(callsign) && this->activeAirports.contains(fplnData.GetOrigin()))
+		{
+			for (auto& request : this->activeAirports[fplnData.GetOrigin()].requests)
+			{
+				for (auto& fpln : request.second)
+				{
+					if (fpln.first == callsign)
+					{
+						std::string req = vsid::utils::toupper(request.first).at(0) + std::to_string(fpln.second.first);
+						strcpy_s(sItemString, 16, req.c_str());
+					}
+				}
+				
+			}
+		}
+	}
+
+	if (ItemCode == TAG_ITEM_VSID_REQTIMER)
+	{
+		if (this->processed.contains(callsign) && this->activeAirports.contains(fplnData.GetOrigin()))
+		{
+			*pColorCode = EuroScopePlugIn::TAG_COLOR_RGB_DEFINED;
+			std::chrono::time_point<std::chrono::utc_clock, std::chrono::minutes> now = std::chrono::floor<std::chrono::minutes>(std::chrono::utc_clock::now());
+			for (auto& request : this->activeAirports[fplnData.GetOrigin()].requests)
+			{
+				for (auto& fpln : request.second)
+				{
+					if (fpln.first == callsign)
+					{
+						int minutes = (now - fpln.second.second).count();
+
+						if (minutes < this->configParser.getReqTime("caution")) *pRGB = this->configParser.getColor("requestNeutral");
+						else if (minutes >= this->configParser.getReqTime("caution") &&
+								minutes < this->configParser.getReqTime("warning")) *pRGB = this->configParser.getColor("requestCaution");
+						else if (minutes >= this->configParser.getReqTime("warning")) *pRGB = this->configParser.getColor("requestWarning");
+
+						//std::string minutes = std::string(std::format("{:%M}", now - fpln.second.second)) + "m";
+
+						std::string strMinute = std::to_string(minutes) + "m";
+						strcpy_s(sItemString, 16, strMinute.c_str());
+					}
+				}
+			}
+		}
 	}
 }
 
@@ -1879,6 +1964,30 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 			else messageHandler->writeMessage("INFO", vsid::utils::toupper(command[2]) + " not in active airports");
 			return true;
 		}
+		else if (vsid::utils::tolower(command[1]) == "sync")
+		{
+			for (EuroScopePlugIn::CFlightPlan fp = this->FlightPlanSelectFirst(); fp.IsValid(); fp = this->FlightPlanSelectNext(fp))
+			{
+				std::string callsign = fp.GetCallsign();
+				std::string icao = fp.GetFlightPlanData().GetOrigin();
+				if (!this->processed.contains(callsign)) continue;
+				if (!this->activeAirports.contains(icao)) continue;
+
+				for (auto &request : this->activeAirports[icao].requests)
+				{
+					if (!request.second.contains(callsign)) continue;
+
+					EuroScopePlugIn::CFlightPlanControllerAssignedData cad = fp.GetControllerAssignedData();
+					messageHandler->writeMessage("DEBUG", "[" + callsign + "] - time: \"" + vsid::time::toFullString(request.second[callsign].second) + "\" and epoch: \"" + std::to_string(request.second[callsign].second.time_since_epoch().count()) + "\"", vsid::MessageHandler::DebugArea::Dev);
+
+					std::string scratch = ".vsid_sync_" + request.first + std::to_string(request.second[callsign].first) + "/" + std::to_string(request.second[callsign].second.time_since_epoch().count());
+					messageHandler->writeMessage("DEBUG", "[" + callsign + "] - new scratch: " + scratch, vsid::MessageHandler::DebugArea::Dev);
+					vsid::fpln::setScratchPad(cad, scratch);
+					vsid::fpln::removeScratchPad(cad, scratch);
+				}				
+			}
+			return true;
+		}
 		else if (vsid::utils::tolower(command[1]) == "debug")
 		{
 			if (command.size() == 2)
@@ -1901,6 +2010,7 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 				if (messageHandler->getLevel() != vsid::MessageHandler::Level::Debug && vsid::utils::toupper(command[2]) != "STATUS")
 				{
 					messageHandler->setLevel("DEBUG");
+					messageHandler->setDebugArea(vsid::utils::toupper(command[2]));
 					messageHandler->writeMessage("INFO", "DEBUG MODE: ON");
 				}
 
@@ -2064,24 +2174,138 @@ void vsid::VSIDPlugin::OnFlightPlanControllerAssignedDataUpdate(EuroScopePlugIn:
 	std::string callsign = FlightPlan.GetCallsign();
 	std::string icao = FlightPlan.GetFlightPlanData().GetOrigin();
 
+	messageHandler->writeMessage("DEBUG", "cad called. datatype: " + std::to_string(DataType), vsid::MessageHandler::DebugArea::Dev);
+
 	if (!this->activeAirports.contains(icao)) return;
 
-	if (this->processed.contains(callsign) && DataType == 5 && this->activeAirports[icao].settings["auto"])
-	{
-		std::string scratchpad = cad.GetScratchPadString();
-		if (scratchpad.size() > 0)
-		{
-			std::string toFind = ".vsid_";
-			size_t pos = scratchpad.find(vsid::utils::toupper(toFind));
+	std::string scratchpad = cad.GetScratchPadString();
 
-			if (pos != std::string::npos)
+	if (this->processed.contains(callsign) && scratchpad.size() > 0)
+	{
+		if (DataType == EuroScopePlugIn::CTR_DATA_TYPE_SCRATCH_PAD_STRING && this->activeAirports[icao].settings["auto"])
+		{
+			if (scratchpad.find(".VSID_AUTO_") != std::string::npos)
 			{
-				std::string atc = scratchpad.substr(pos + toFind.size(), scratchpad.size());
-				if (ControllerMyself().GetCallsign() != atc)
+				std::string toFind = ".VSID_AUTO_";
+				size_t pos = scratchpad.find(toFind);
+
+				if (pos != std::string::npos)
 				{
-					messageHandler->writeMessage("WARNING", "[" + callsign + "] assigned SID \"" + FlightPlan.GetFlightPlanData().GetSidName() + "\" by " + atc);
+					std::string atc = scratchpad.substr(pos + toFind.size(), scratchpad.size());
+					if (ControllerMyself().GetCallsign() != atc)
+					{
+						messageHandler->writeMessage("WARNING", "[" + callsign + "] assigned SID \"" + FlightPlan.GetFlightPlanData().GetSidName() + "\" by " + atc);
+					}
 				}
-			}		
+			}
+		}
+		if (DataType == EuroScopePlugIn::CTR_DATA_TYPE_SCRATCH_PAD_STRING)
+		{
+			messageHandler->writeMessage("DEBUG", "scratchpad: \"" + scratchpad + " \"", vsid::MessageHandler::DebugArea::Dev);
+
+			if (scratchpad.find(".VSID_REQ_") != std::string::npos)
+			{
+				std::string toFind = ".VSID_REQ_";
+				size_t pos = scratchpad.find(toFind);
+
+				std::string req = scratchpad.substr(pos + toFind.size(), scratchpad.size());
+				std::chrono::time_point<std::chrono::utc_clock, std::chrono::minutes> reqTime = std::chrono::floor<std::chrono::minutes>(std::chrono::utc_clock::now());
+
+				// clear all possible requests before setting a new one
+				for (auto& request : this->activeAirports[icao].requests)
+				{
+					auto count = std::erase_if(request.second, [&](auto req)
+						{
+							return req.first == callsign;
+						});
+				}
+
+				if (req == "CLEARANCE")
+				{
+					this->activeAirports[icao].requests["clearance"].insert({ callsign, {this->activeAirports[icao].requests["clearance"].size() + 1, reqTime}});
+				}
+				else if (req == "STARTUP")
+				{
+					this->activeAirports[icao].requests["startup"].insert({ callsign, {this->activeAirports[icao].requests["startup"].size() + 1, reqTime} });
+				}
+				else if (req == "PUSHBACK")
+				{
+					this->activeAirports[icao].requests["pushback"].insert({ callsign, {this->activeAirports[icao].requests["pushback"].size() + 1, reqTime} });
+				}
+				else if (req == "TAXI")
+				{
+					this->activeAirports[icao].requests["taxi"].insert({ callsign, {this->activeAirports[icao].requests["taxi"].size() + 1, reqTime} });
+				}
+				else if (req == "DEPARTURE")
+				{
+					this->activeAirports[icao].requests["departure"].insert({ callsign, {this->activeAirports[icao].requests["departure"].size() + 1, reqTime} });
+				}
+
+				this->activeAirports[icao].sortRequests();
+			}
+
+			else if (scratchpad.find(".VSID_SYNC_") != std::string::npos)
+			{
+				std::string toFind = ".VSID_SYNC_";
+				size_t pos = scratchpad.find(toFind);
+
+				std::string scratchpad = scratchpad.substr(pos + toFind.size(), scratchpad.size());
+				std::vector sync = vsid::utils::split(scratchpad, '/');
+				std::string reqType;
+				int reqPos = 0;
+
+				try
+				{
+					size_t reqSplit = sync.at(0).find_first_of("0123456789");
+					reqType = sync.at(0).substr(0, reqSplit);
+					reqPos = std::stoi(sync.at(0).substr(reqSplit, sync.at(0).size()));
+				}
+				catch(std::out_of_range)
+				{
+					messageHandler->writeMessage("ERROR", "[" + callsign + "] failed to sync request");
+				}
+
+				std::chrono::time_point<std::chrono::utc_clock, std::chrono::minutes> tp{ std::chrono::minutes{std::stoi(sync.at(1))} };
+
+				messageHandler->writeMessage("DEBUG", "[" + callsign + "] scratch_tp: \"" + sync.at(1) + "\" - new tp: \"" + vsid::time::toTimeString(tp) + "\"", vsid::MessageHandler::DebugArea::Dev);
+				messageHandler->writeMessage("DEBUG", "[" + callsign + "] request: " + reqType + std::to_string(reqPos), vsid::MessageHandler::DebugArea::Dev);
+			}
+		}
+	}
+	else if (this->processed.contains(callsign) && this->activeAirports.contains(icao))
+	{
+		if (DataType == EuroScopePlugIn::CTR_DATA_TYPE_CLEARENCE_FLAG)
+		{
+			if (FlightPlan.GetClearenceFlag() && this->activeAirports[icao].requests["clearance"].contains(callsign))
+			{
+				this->activeAirports[icao].requests["clearance"].erase(callsign);
+				this->activeAirports[icao].sortRequests();
+			}
+		}
+		if (DataType == EuroScopePlugIn::CTR_DATA_TYPE_GROUND_STATE)
+		{
+			std::string state = FlightPlan.GetGroundState();
+
+			if (state == "STUP" && this->activeAirports[icao].requests["startup"].contains(callsign))
+			{
+				this->activeAirports[icao].requests["startup"].erase(callsign);
+				this->activeAirports[icao].sortRequests();
+			}
+			else if (state == "PUSH" && this->activeAirports[icao].requests["pushback"].contains(callsign))
+			{
+				this->activeAirports[icao].requests["pushback"].erase(callsign);
+				this->activeAirports[icao].sortRequests();
+			}
+			else if (state == "TAXI" && this->activeAirports[icao].requests["taxi"].contains(callsign))
+			{
+				this->activeAirports[icao].requests["taxi"].erase(callsign);
+				this->activeAirports[icao].sortRequests();
+			}
+			else if (state == "DEPA" && this->activeAirports[icao].requests["departure"].contains(callsign))
+			{
+				this->activeAirports[icao].requests["departure"].erase(callsign);
+				this->activeAirports[icao].sortRequests();
+			}
 		}
 	}
 }
