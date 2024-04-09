@@ -4,7 +4,7 @@
         "runways": "07,25",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-		"appSI": "SAS,TRS,MEI,GER,HAL,HOF",
+		"appSI": "SAS,TRS,MEI,GER,HAL,HOF,EDMM",
         "sids": {
             "ABLOX": {
                 "S": {
@@ -41,7 +41,7 @@
         "runways": "04,22",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-		"appSI": "TRS,TRN,GER,MEI,HAL,HOF",
+		"appSI": "TRS,TRN,GER,MEI,HAL,HOF,EDMM",
         "sids": {
             "EKPEK": {
                 "A": {
@@ -121,7 +121,7 @@
         "runways": "08,26",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-		"appSI": "FRK,BBG,HOF,RDG",
+		"appSI": "FRK,BBG,HOF,RDG,EDMM",
         "sids": {
             "PEROX": {
                 "S": {
@@ -200,7 +200,7 @@
         "runways": "12,30",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-		"appSI": "FRK,BBG,HOF,RDG",
+		"appSI": "FRK,BBG,HOF,RDG,EDMM",
         "sids": {
             "LASGA": {
                 "E": {
@@ -236,7 +236,7 @@
         "runways": "06,24",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-		"appSI": "FRK,BBG,HOF,RDG",
+		"appSI": "FRK,BBG,HOF,RDG,EDMM",
         "sids": {
             "ABERU": {
                 "R": {
@@ -308,7 +308,7 @@
         "runways": "03,21",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-		"appSI": "FRK,BBG,HOF,RDG",
+		"appSI": "FRK,BBG,HOF,RDG,EDMM",
         "sids": {
             "ANELA": {
                 "E": {
@@ -345,7 +345,7 @@
         "runways": "09,27",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-		"appSI": "RDG,EGG,ALB,WLD,ZUG",
+		"appSI": "RDG,EGG,ALB,WLD,ZUG,EDMM",
         "sids": {
             "MAMOR": {
                 "R": {
@@ -394,7 +394,7 @@
         "runways": "08,26",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-		"appSI": "EGG,RDG,ALB,WLD,ZUG",
+		"appSI": "EGG,RDG,ALB,WLD,ZUG,EDMM",
         "sids": {
             "BIBAG": {
                 "R": {
