@@ -2,11 +2,10 @@
     "EDDC": {
         "elevation": 754,
         "runways": "04,22",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "customRules" : {},
         "timeMode": true,
+		"appSI": "SAS,TRS,MEI,GER,HAL,HOF",
 		"timezone": "Europe/Berlin",
         "sids": {
             "BEBEX": {
