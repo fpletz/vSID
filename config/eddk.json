@@ -2,12 +2,9 @@
     "EDDK": {
         "elevation": 302,
         "runways": "32R,32L,24,14L,14R,06",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
         "customRules" : {"high":false},
-        "timeMode": true,
-        "timezone": "Europe/Berlin",
 		"appSI": "DKA,NOR,PADH",
         "sids": {
             "COL": {

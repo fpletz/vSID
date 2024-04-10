@@ -5,8 +5,6 @@
         "transAlt": 5000,
         "maxInitialClimb": 7000,
         "appSI": "PADL,HMM,PADH",
-        "timeMode": true,
-		"timezone": "Europe/Berlin",
         "sids": {
             "DOMEG": {
                 "X": {
