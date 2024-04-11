@@ -11,7 +11,7 @@
 #include <algorithm>
 
 // DEV
-#include "display.h"
+//#include "display.h"
 #include "airport.h"
 // END DEV
 
@@ -19,7 +19,7 @@ vsid::VSIDPlugin* vsidPlugin;
 
 vsid::VSIDPlugin::VSIDPlugin() : EuroScopePlugIn::CPlugIn(EuroScopePlugIn::COMPATIBILITY_CODE, pluginName.c_str(), pluginVersion.c_str(), pluginAuthor.c_str(), pluginCopyright.c_str()) {
 
-	this->detectPlugins();
+	//this->detectPlugins();
 	this->configParser.loadMainConfig();
 	this->configParser.loadGrpConfig();
 	this->gsList = "STUP,PUSH,TAXI,DEPA";
@@ -43,7 +43,7 @@ vsid::VSIDPlugin::VSIDPlugin() : EuroScopePlugIn::CPlugIn(EuroScopePlugIn::COMPA
 
 	RegisterTagItemType("vSID Request Timer", TAG_ITEM_VSID_REQTIMER);
 
-	RegisterDisplayType("vSID (no display)", false, false, false, true); /// DEV
+	//RegisterDisplayType("vSID (no display)", false, false, false, true); /// DEV
 
 	UpdateActiveAirports(); // preload rwy settings
 
@@ -56,39 +56,39 @@ vsid::VSIDPlugin::~VSIDPlugin() {};
 * BEGIN OWN FUNCTIONS
 */
 
-void vsid::VSIDPlugin::detectPlugins()
-{
-	HMODULE hMods[1024];
-	HANDLE hProcess;
-	DWORD cbNeeded;
-	unsigned int i;
-
-	hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, GetCurrentProcessId());
-	if (hProcess == NULL) return;
-
-	if (EnumProcessModules(hProcess, hMods, sizeof(hMods), &cbNeeded))
-	{
-		for (i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
-		{
-			TCHAR szModName[MAX_PATH];
-
-			if (GetModuleFileNameEx(hProcess, hMods[i], szModName, sizeof(szModName) / sizeof(TCHAR)))
-			{
-				std::string modName = szModName;
-				if (modName.find("SYSTEM32") != std::string::npos ||
-					modName.find("System32") != std::string::npos ||
-					modName.find("system32") != std::string::npos) continue;
-				size_t pos = modName.find_last_of("\\");
-				if (pos == std::string::npos) continue;
-				modName = modName.substr(pos + 1);
-
-				if (modName == "CCAMS.dll") this->ccamsLoaded = true;
-				if (modName == "TopSky.dll") this->topskyLoaded = true;
-			}
-		}
-	}
-	CloseHandle(hProcess);
-}
+//void vsid::VSIDPlugin::detectPlugins()
+//{
+//	HMODULE hMods[1024];
+//	HANDLE hProcess;
+//	DWORD cbNeeded;
+//	unsigned int i;
+//
+//	hProcess = OpenProcess(PROCESS_QUERY_INFORMATION | PROCESS_VM_READ, FALSE, GetCurrentProcessId());
+//	if (hProcess == NULL) return;
+//
+//	if (EnumProcessModules(hProcess, hMods, sizeof(hMods), &cbNeeded))
+//	{
+//		for (i = 0; i < (cbNeeded / sizeof(HMODULE)); i++)
+//		{
+//			TCHAR szModName[MAX_PATH];
+//
+//			if (GetModuleFileNameEx(hProcess, hMods[i], szModName, sizeof(szModName) / sizeof(TCHAR)))
+//			{
+//				std::string modName = szModName;
+//				if (modName.find("SYSTEM32") != std::string::npos ||
+//					modName.find("System32") != std::string::npos ||
+//					modName.find("system32") != std::string::npos) continue;
+//				size_t pos = modName.find_last_of("\\");
+//				if (pos == std::string::npos) continue;
+//				modName = modName.substr(pos + 1);
+//
+//				if (modName == "CCAMS.dll") this->ccamsLoaded = true;
+//				if (modName == "TopSky.dll") this->topskyLoaded = true;
+//			}
+//		}
+//	}
+//	CloseHandle(hProcess);
+//}
 
 std::string vsid::VSIDPlugin::findSidWpt(EuroScopePlugIn::CFlightPlanData FlightPlanData)
 {
@@ -175,8 +175,9 @@ vsid::Sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan FlightPlan, 
 		std::map<std::string, bool> customRules = this->activeAirports[icao].customRules;
 		for (auto it = this->activeAirports[icao].sids.begin(); it != this->activeAirports[icao].sids.end();)
 		{
-			if (it->customRule == "" || wptRules.contains(it->waypoint)) ++it;
-			if (it == this->activeAirports[icao].sids.end()) break;
+			// DEV MONITOR
+			if (it->customRule == "" || wptRules.contains(it->waypoint)) { ++it; continue; }
+			// FOR MONITOR if (it == this->activeAirports[icao].sids.end()) break;
 
 			std::set<std::string> depRwys = this->activeAirports[icao].depRwys;
 			std::vector<std::string> sidRules = vsid::utils::split(it->customRule, ',');
@@ -751,9 +752,7 @@ void vsid::VSIDPlugin::processFlightplan(EuroScopePlugIn::CFlightPlan FlightPlan
 			{
 				EuroScopePlugIn::CFlightPlanControllerAssignedData cad = fpln.GetControllerAssignedData();
 				std::string scratch = ".vsid_auto_" + std::string(ControllerMyself().GetCallsign());
-				messageHandler->writeMessage("DEBUG", "[" + callsign + "] adding to scratchpad: " + scratch, vsid::MessageHandler::DebugArea::Dev);
 				vsid::fpln::setScratchPad(cad, scratch);
-				messageHandler->writeMessage("DEBUG", "[" + callsign + "] removing from scratchpad: " + scratch, vsid::MessageHandler::DebugArea::Dev);
 				vsid::fpln::removeScratchPad(cad, scratch);
 			}
 			this->processed[callsign].atcRWY = true;
@@ -1596,7 +1595,7 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 						std::ostringstream ss;
 						for (std::pair<const std::string, bool>& rule : this->activeAirports[icao].customRules)
 						{
-							std::string status = (rule.second) ? "ON" : "OFF";
+							std::string status = (rule.second) ? "ON " : "OFF ";
 							ss << rule.first << ": " << status;
 						}
 						messageHandler->writeMessage(icao + " Rules", ss.str());
@@ -2053,12 +2052,12 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 	return false;
 }
 
-EuroScopePlugIn::CRadarScreen* vsid::VSIDPlugin::OnRadarScreenCreated(const char* sDisplayName, bool NeedRadarContent, bool GeoReferenced, bool CanBeSaved, bool CanBeCreated) /// DEV
-{
-	messageHandler->writeMessage("INFO", "OnRadarScreenCreated called");
-	this->radarScreen = new vsid::Display();
-	return this->radarScreen;
-}
+//EuroScopePlugIn::CRadarScreen* vsid::VSIDPlugin::OnRadarScreenCreated(const char* sDisplayName, bool NeedRadarContent, bool GeoReferenced, bool CanBeSaved, bool CanBeCreated) /// DEV
+//{
+//	messageHandler->writeMessage("INFO", "OnRadarScreenCreated called");
+//	this->radarScreen = new vsid::Display();
+//	return this->radarScreen;
+//}
 
 void vsid::VSIDPlugin::OnFlightPlanFlightPlanDataUpdate(EuroScopePlugIn::CFlightPlan FlightPlan)
 {
@@ -2182,8 +2181,6 @@ void vsid::VSIDPlugin::OnFlightPlanControllerAssignedDataUpdate(EuroScopePlugIn:
 	std::string callsign = FlightPlan.GetCallsign();
 	std::string icao = FlightPlan.GetFlightPlanData().GetOrigin();
 
-	messageHandler->writeMessage("DEBUG", "cad called. datatype: " + std::to_string(DataType), vsid::MessageHandler::DebugArea::Dev);
-
 	if (!this->activeAirports.contains(icao)) return;
 
 	std::string scratchpad = cad.GetScratchPadString();
@@ -2209,8 +2206,6 @@ void vsid::VSIDPlugin::OnFlightPlanControllerAssignedDataUpdate(EuroScopePlugIn:
 		}
 		if (DataType == EuroScopePlugIn::CTR_DATA_TYPE_SCRATCH_PAD_STRING)
 		{
-			messageHandler->writeMessage("DEBUG", "scratchpad: \"" + scratchpad + " \"", vsid::MessageHandler::DebugArea::Dev);
-
 			if (scratchpad.find(".VSID_REQ_") != std::string::npos)
 			{
 				std::string toFind = ".VSID_REQ_";
@@ -2489,7 +2484,7 @@ void vsid::VSIDPlugin::OnControllerDisconnect(EuroScopePlugIn::CController Contr
 void vsid::VSIDPlugin::OnAirportRunwayActivityChanged()
 {
 	//dev only
-	this->detectPlugins();
+	//this->detectPlugins();
 	// end dev
 	this->UpdateActiveAirports();
 }
