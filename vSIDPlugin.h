@@ -64,8 +64,10 @@ namespace vsid
 		 * @param FlightPlanData 
 		 * @return
 		 */
-		void detectPlugins();
 		std::string findSidWpt(EuroScopePlugIn::CFlightPlanData FlightPlanData);
+
+		//void detectPlugins();
+
 		/**
 		 * @brief Search for a matching SID depending on current RWYs in use, SID wpt
 		 * and configured SIDs in config
@@ -114,7 +116,9 @@ namespace vsid
 		 * @return
 		 */
 		bool OnCompileCommand(const char* sCommandLine);
-		EuroScopePlugIn::CRadarScreen* OnRadarScreenCreated(const char* sDisplayName, bool NeedRadarContent, bool GeoReferenced, bool CanBeSaved, bool CanBeCreated);
+
+		/*EuroScopePlugIn::CRadarScreen* OnRadarScreenCreated(const char* sDisplayName, bool NeedRadarContent, bool GeoReferenced, bool CanBeSaved, bool CanBeCreated);*/
+
 		/**
 		 * @brief Called when something is changed in the flightplan (used for route updates)
 		 * 
