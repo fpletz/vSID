@@ -44,7 +44,7 @@ void vsid::ConfigParser::loadMainConfig()
             COLORREF rgbColor = RGB(
                 this->vSidConfig.at("colors").at(elem.key()).value("r", 60),
                 this->vSidConfig.at("colors").at(elem.key()).value("g", 80),
-                this->vSidConfig.at("colors").at(elem.key()).value("b", 240),
+                this->vSidConfig.at("colors").at(elem.key()).value("b", 240)
                 );
             this->colors[elem.key()] = rgbColor;
         }
