@@ -56,10 +56,8 @@ void vsid::ConfigParser::loadMainConfig()
 
     try
     {
-        for (auto& elem : this->vSidConfig.at("requests").items())
-        {
-            this->reqTimes.insert({ elem.key(), elem.value()});
-        }
+        this->reqTimes.insert({ "caution", this->vSidConfig.at("requests").value("caution", 2) });
+        this->reqTimes.insert({ "warning", this->vSidConfig.at("requests").value("warning", 5) });
     }
     catch (std::error_code& e)
     {
@@ -141,16 +139,17 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                         apt.second.requests["pushback"] = {};
                         apt.second.requests["taxi"] = {};
                         apt.second.requests["departure"] = {};
-                        std::map<std::string, bool> customRules;
 
                         // customRules
 
+                        std::map<std::string, bool> customRules;
                         for (auto &el : this->parsedConfig.at(apt.first).value("customRules", std::map<std::string, bool>{}))
                         {
                             std::pair<std::string, bool> rule = { vsid::utils::toupper(el.first), el.second };
                             customRules.insert(rule);
                         }
                         // overwrite loaded rule settings from config with current values at the apt
+
                         if (savedCustomRules.contains(apt.first))
                         {
                             for (std::pair<const std::string, bool>& rule : savedCustomRules[apt.first])
@@ -162,8 +161,8 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                             }
                         }
                         apt.second.customRules = customRules;
-                        customRules.clear();
-                        savedCustomRules.clear();
+                        //customRules.clear();
+                        
 
                         std::set<std::string> appSI;
                         int appSIPrio = 0;
@@ -221,7 +220,6 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                                 apt.second.areas.insert({ vsid::utils::toupper(area.key()), vsid::Area{coords, isActive, arrAsDep} });
                             }
                         }
-                        savedAreas.clear();
 
                         // airport settings
                         if (savedSettings.contains(apt.first))
@@ -235,7 +233,6 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                                                     {"auto", false}
                             };
                         }
-                        savedSettings.clear();
 
                         // sids
                         for (auto &sid : this->parsedConfig.at(apt.first).at("sids").items())
@@ -315,6 +312,9 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
             }
         }
     }
+    /*savedCustomRules.clear(); // MONITOR - DROPPED ANYWAYS
+    savedAreas.clear();
+    savedSettings.clear();*/
 
     // airport health check - remove apt without config
 
