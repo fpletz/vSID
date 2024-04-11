@@ -38,11 +38,11 @@ namespace vsid
 			bool atcRWY = false;
 			bool noFplnUpdate = false;
 			bool remarkChecked = false;
-			bool autoWarning = false;
 			vsid::Sid sid = {};
 			vsid::Sid customSid = {};
 			std::chrono::time_point<std::chrono::utc_clock, std::chrono::seconds> lastUpdate;
 			int updateCounter = 0;
+			bool request = false;
 		};
 		/**
 		 * @brief Strip the filed route from SID/RWY and/or SID to have a bare route to populate with set SID.

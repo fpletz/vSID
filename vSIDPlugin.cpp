@@ -12,6 +12,7 @@
 
 // DEV
 #include "display.h"
+#include "airport.h"
 // END DEV
 
 vsid::VSIDPlugin* vsidPlugin;
@@ -1040,9 +1041,10 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 		}
 		else if (strlen(sItemString) != 0)
 		{
-			messageHandler->writeMessage("DEBUG", "Call req with: \"" + std::string(sItemString) + "\"", vsid::MessageHandler::DebugArea::Dev);
 			EuroScopePlugIn::CFlightPlanControllerAssignedData cad = fpln.GetControllerAssignedData();
-			std::string scratch = ".vsid_req_" + std::string(sItemString);
+			
+			std::string scratch = ".vsid_req_" + std::string(sItemString) + "/" +
+								std::to_string(std::chrono::floor<std::chrono::seconds>(std::chrono::utc_clock::now()).time_since_epoch().count());
 			vsid::fpln::setScratchPad(cad, scratch);
 			vsid::fpln::removeScratchPad(cad, scratch);
 		}
@@ -1479,47 +1481,47 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 
 	if (ItemCode == TAG_ITEM_VSID_REQ)
 	{
-		if (this->processed.contains(callsign) && this->activeAirports.contains(fplnData.GetOrigin()))
+		if (this->processed.contains(callsign) && this->processed[callsign].request && this->activeAirports.contains(fplnData.GetOrigin()))
 		{
 			for (auto& request : this->activeAirports[fplnData.GetOrigin()].requests)
 			{
-				for (auto& fpln : request.second)
+				bool found = false;
+				for (std::set<std::pair<std::string, long long>>::iterator it = request.second.begin(); it != request.second.end();++it)
 				{
-					if (fpln.first == callsign)
-					{
-						std::string req = vsid::utils::toupper(request.first).at(0) + std::to_string(fpln.second.first);
-						strcpy_s(sItemString, 16, req.c_str());
-					}
+					if (it->first != callsign) continue;
+
+					int pos = std::distance(it, request.second.end());
+					std::string req = vsid::utils::toupper(request.first).at(0) + std::to_string(pos);
+					strcpy_s(sItemString, 16, req.c_str());
+					found = true;
+					break;
 				}
-				
+				if (found) break;
 			}
 		}
 	}
 
 	if (ItemCode == TAG_ITEM_VSID_REQTIMER)
 	{
-		if (this->processed.contains(callsign) && this->activeAirports.contains(fplnData.GetOrigin()))
+		if (this->processed.contains(callsign) && this->processed[callsign].request && this->activeAirports.contains(fplnData.GetOrigin()))
 		{
 			*pColorCode = EuroScopePlugIn::TAG_COLOR_RGB_DEFINED;
-			std::chrono::time_point<std::chrono::utc_clock, std::chrono::minutes> now = std::chrono::floor<std::chrono::minutes>(std::chrono::utc_clock::now());
+			long long now = std::chrono::floor<std::chrono::seconds>(std::chrono::utc_clock::now()).time_since_epoch().count();
 			for (auto& request : this->activeAirports[fplnData.GetOrigin()].requests)
 			{
-				for (auto& fpln : request.second)
+				for (auto& fp : request.second)
 				{
-					if (fpln.first == callsign)
-					{
-						int minutes = (now - fpln.second.second).count();
+					if (fp.first != callsign) continue;
+					
+					int minutes = static_cast<int>((now - fp.second) / 60);
 
-						if (minutes < this->configParser.getReqTime("caution")) *pRGB = this->configParser.getColor("requestNeutral");
-						else if (minutes >= this->configParser.getReqTime("caution") &&
-								minutes < this->configParser.getReqTime("warning")) *pRGB = this->configParser.getColor("requestCaution");
-						else if (minutes >= this->configParser.getReqTime("warning")) *pRGB = this->configParser.getColor("requestWarning");
+					if (minutes < this->configParser.getReqTime("caution")) *pRGB = this->configParser.getColor("requestNeutral");
+					else if (minutes >= this->configParser.getReqTime("caution") &&
+							minutes < this->configParser.getReqTime("warning")) *pRGB = this->configParser.getColor("requestCaution");
+					else if (minutes >= this->configParser.getReqTime("warning")) *pRGB = this->configParser.getColor("requestWarning");
 
-						//std::string minutes = std::string(std::format("{:%M}", now - fpln.second.second)) + "m";
-
-						std::string strMinute = std::to_string(minutes) + "m";
-						strcpy_s(sItemString, 16, strMinute.c_str());
-					}
+					std::string strMinute = std::to_string(minutes) + "m";
+					strcpy_s(sItemString, 16, strMinute.c_str());
 				}
 			}
 		}
@@ -1966,25 +1968,31 @@ bool vsid::VSIDPlugin::OnCompileCommand(const char* sCommandLine)
 		}
 		else if (vsid::utils::tolower(command[1]) == "sync")
 		{
-			for (EuroScopePlugIn::CFlightPlan fp = this->FlightPlanSelectFirst(); fp.IsValid(); fp = this->FlightPlanSelectNext(fp))
+			for (std::pair<const std::string, vsid::fpln::Info> &fp : this->processed)
 			{
-				std::string callsign = fp.GetCallsign();
-				std::string icao = fp.GetFlightPlanData().GetOrigin();
-				if (!this->processed.contains(callsign)) continue;
-				if (!this->activeAirports.contains(icao)) continue;
-
-				for (auto &request : this->activeAirports[icao].requests)
+				if (fp.second.request)
 				{
-					if (!request.second.contains(callsign)) continue;
+					EuroScopePlugIn::CFlightPlan fpln = FlightPlanSelect(fp.first.c_str());
+					std::string icao = fpln.GetFlightPlanData().GetOrigin();
+					if(!this->activeAirports.contains(icao)) continue;
+					
+					bool found = false;
+					for (auto& request : this->activeAirports[icao].requests)
+					{
+						for (auto& fpReq : request.second)
+						{
+							if (fpReq.first != fp.first) continue;
 
-					EuroScopePlugIn::CFlightPlanControllerAssignedData cad = fp.GetControllerAssignedData();
-					messageHandler->writeMessage("DEBUG", "[" + callsign + "] - time: \"" + vsid::time::toFullString(request.second[callsign].second) + "\" and epoch: \"" + std::to_string(request.second[callsign].second.time_since_epoch().count()) + "\"", vsid::MessageHandler::DebugArea::Dev);
-
-					std::string scratch = ".vsid_sync_" + request.first + std::to_string(request.second[callsign].first) + "/" + std::to_string(request.second[callsign].second.time_since_epoch().count());
-					messageHandler->writeMessage("DEBUG", "[" + callsign + "] - new scratch: " + scratch, vsid::MessageHandler::DebugArea::Dev);
-					vsid::fpln::setScratchPad(cad, scratch);
-					vsid::fpln::removeScratchPad(cad, scratch);
-				}				
+							found = true;
+							EuroScopePlugIn::CFlightPlanControllerAssignedData cad = fpln.GetControllerAssignedData();
+							std::string scratch = ".vsid_req_" + request.first + "/" + std::to_string(fpReq.second);
+							vsid::fpln::setScratchPad(cad, scratch);
+							vsid::fpln::removeScratchPad(cad, scratch);
+							break;
+						}
+						if (found) break;
+					}
+				}
 			}
 			return true;
 		}
@@ -2208,103 +2216,103 @@ void vsid::VSIDPlugin::OnFlightPlanControllerAssignedDataUpdate(EuroScopePlugIn:
 				std::string toFind = ".VSID_REQ_";
 				size_t pos = scratchpad.find(toFind);
 
-				std::string req = scratchpad.substr(pos + toFind.size(), scratchpad.size());
-				std::chrono::time_point<std::chrono::utc_clock, std::chrono::minutes> reqTime = std::chrono::floor<std::chrono::minutes>(std::chrono::utc_clock::now());
-
-				// clear all possible requests before setting a new one
-				for (auto& request : this->activeAirports[icao].requests)
-				{
-					auto count = std::erase_if(request.second, [&](auto req)
-						{
-							return req.first == callsign;
-						});
-				}
-
-				if (req == "CLEARANCE")
-				{
-					this->activeAirports[icao].requests["clearance"].insert({ callsign, {this->activeAirports[icao].requests["clearance"].size() + 1, reqTime}});
-				}
-				else if (req == "STARTUP")
-				{
-					this->activeAirports[icao].requests["startup"].insert({ callsign, {this->activeAirports[icao].requests["startup"].size() + 1, reqTime} });
-				}
-				else if (req == "PUSHBACK")
-				{
-					this->activeAirports[icao].requests["pushback"].insert({ callsign, {this->activeAirports[icao].requests["pushback"].size() + 1, reqTime} });
-				}
-				else if (req == "TAXI")
-				{
-					this->activeAirports[icao].requests["taxi"].insert({ callsign, {this->activeAirports[icao].requests["taxi"].size() + 1, reqTime} });
-				}
-				else if (req == "DEPARTURE")
-				{
-					this->activeAirports[icao].requests["departure"].insert({ callsign, {this->activeAirports[icao].requests["departure"].size() + 1, reqTime} });
-				}
-
-				this->activeAirports[icao].sortRequests();
-			}
-
-			else if (scratchpad.find(".VSID_SYNC_") != std::string::npos)
-			{
-				std::string toFind = ".VSID_SYNC_";
-				size_t pos = scratchpad.find(toFind);
-
-				std::string scratchpad = scratchpad.substr(pos + toFind.size(), scratchpad.size());
-				std::vector sync = vsid::utils::split(scratchpad, '/');
-				std::string reqType;
-				int reqPos = 0;
-
 				try
 				{
-					size_t reqSplit = sync.at(0).find_first_of("0123456789");
-					reqType = sync.at(0).substr(0, reqSplit);
-					reqPos = std::stoi(sync.at(0).substr(reqSplit, sync.at(0).size()));
+					std::vector<std::string> req = vsid::utils::split(scratchpad.substr(pos + toFind.size(), scratchpad.size()), '/');
+					std::string reqType = vsid::utils::tolower(req.at(0));
+					long long reqTime = std::stoll(req.at(1));
+
+					// clear all possible requests before setting a new one
+					for (auto it = this->activeAirports[icao].requests.begin(); it != this->activeAirports[icao].requests.end();++it)
+					{
+						for (std::set<std::pair<std::string, long long>>::iterator jt = it->second.begin(); jt != it->second.end();)
+						{
+							if (jt->first != callsign)
+							{
+								++jt;
+								continue;
+							}
+							this->processed[callsign].request = false;
+							jt = it->second.erase(jt);
+						}
+						if (it->first == reqType && this->processed.contains(callsign))
+						{
+							it->second.insert({ callsign, reqTime });
+							this->processed[callsign].request = true;
+						}
+					}
 				}
-				catch(std::out_of_range)
+				catch (std::out_of_range)
 				{
-					messageHandler->writeMessage("ERROR", "[" + callsign + "] failed to sync request");
+					messageHandler->writeMessage("ERROR", "[" + callsign + "] failed to set the request");
 				}
-
-				std::chrono::time_point<std::chrono::utc_clock, std::chrono::minutes> tp{ std::chrono::minutes{std::stoi(sync.at(1))} };
-
-				messageHandler->writeMessage("DEBUG", "[" + callsign + "] scratch_tp: \"" + sync.at(1) + "\" - new tp: \"" + vsid::time::toTimeString(tp) + "\"", vsid::MessageHandler::DebugArea::Dev);
-				messageHandler->writeMessage("DEBUG", "[" + callsign + "] request: " + reqType + std::to_string(reqPos), vsid::MessageHandler::DebugArea::Dev);
 			}
 		}
 	}
-	else if (this->processed.contains(callsign) && this->activeAirports.contains(icao))
+	else if (this->processed.contains(callsign) && this->processed[callsign].request && this->activeAirports.contains(icao))
 	{
 		if (DataType == EuroScopePlugIn::CTR_DATA_TYPE_CLEARENCE_FLAG)
 		{
-			if (FlightPlan.GetClearenceFlag() && this->activeAirports[icao].requests["clearance"].contains(callsign))
+			if (FlightPlan.GetClearenceFlag())
 			{
-				this->activeAirports[icao].requests["clearance"].erase(callsign);
-				this->activeAirports[icao].sortRequests();
+				for (auto& fp : this->activeAirports[icao].requests["clearance"])
+				{
+					if (fp.first != callsign) continue;
+
+					this->activeAirports[icao].requests["clearance"].erase(fp);
+					this->processed[callsign].request = false;
+					break;
+				}
 			}
 		}
 		if (DataType == EuroScopePlugIn::CTR_DATA_TYPE_GROUND_STATE)
 		{
 			std::string state = FlightPlan.GetGroundState();
 
-			if (state == "STUP" && this->activeAirports[icao].requests["startup"].contains(callsign))
+			if (state == "STUP")
 			{
-				this->activeAirports[icao].requests["startup"].erase(callsign);
-				this->activeAirports[icao].sortRequests();
+				for (auto& fp : this->activeAirports[icao].requests["startup"])
+				{
+					if (fp.first != callsign) continue;
+
+					this->activeAirports[icao].requests["startup"].erase(fp);
+					this->processed[callsign].request = false;
+					break;
+				}
 			}
-			else if (state == "PUSH" && this->activeAirports[icao].requests["pushback"].contains(callsign))
+			else if (state == "PUSH")
 			{
-				this->activeAirports[icao].requests["pushback"].erase(callsign);
-				this->activeAirports[icao].sortRequests();
+				for (auto& fp : this->activeAirports[icao].requests["pushback"])
+				{
+					if (fp.first != callsign) continue;
+
+					this->activeAirports[icao].requests["pushback"].erase(fp);
+					this->processed[callsign].request = false;
+					break;
+				}
 			}
-			else if (state == "TAXI" && this->activeAirports[icao].requests["taxi"].contains(callsign))
+			else if (state == "TAXI")
 			{
-				this->activeAirports[icao].requests["taxi"].erase(callsign);
-				this->activeAirports[icao].sortRequests();
+				for (auto& fp : this->activeAirports[icao].requests["taxi"])
+				{
+					if (fp.first != callsign) continue;
+
+					this->activeAirports[icao].requests["taxi"].erase(fp);
+					this->processed[callsign].request = false;
+					break;
+				}
+				
 			}
-			else if (state == "DEPA" && this->activeAirports[icao].requests["departure"].contains(callsign))
+			else if (state == "DEPA")
 			{
-				this->activeAirports[icao].requests["departure"].erase(callsign);
-				this->activeAirports[icao].sortRequests();
+				for (auto& fp : this->activeAirports[icao].requests["departure"])
+				{
+					if (fp.first != callsign) continue;
+
+					this->activeAirports[icao].requests["departure"].erase(fp);
+					this->processed[callsign].request = false;
+					break;
+				}
 			}
 		}
 	}
