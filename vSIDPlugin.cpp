@@ -153,7 +153,7 @@ vsid::Sid vsid::VSIDPlugin::processSid(EuroScopePlugIn::CFlightPlan FlightPlan, 
 	if (!this->activeAirports.contains(icao))
 	{
 		messageHandler->writeMessage("DEBUG", icao + " is not an active airport. Skipping all SID checks");
-		return vsid::Sid::Sid();
+		return vsid::Sid();
 	}
 
 	messageHandler->writeMessage("DEBUG", "Processing SID for [" + callsign + "]", vsid::MessageHandler::DebugArea::Sid);
@@ -830,12 +830,12 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 			if (sid.waypoint == filedSidWpt && sid.rwy.find(depRWY) != std::string::npos)
 			{
 				validDepartures[sid.waypoint + sid.number + sid.designator[0]] = sid;
-				validDepartures[sid.waypoint + 'R' + 'V'] = vsid::Sid::Sid(sid.waypoint, 'R', "V", depRWY);
+				validDepartures[sid.waypoint + 'R' + 'V'] = vsid::Sid(sid.waypoint, 'R', "V", depRWY);
 			}
 			else if (filedSidWpt == "" && depRWY == "")
 			{
 				validDepartures[sid.waypoint + sid.number + sid.designator[0]] = sid;
-				validDepartures[sid.waypoint + 'R' + 'V'] = vsid::Sid::Sid(sid.waypoint, 'R', "V", depRWY);
+				validDepartures[sid.waypoint + 'R' + 'V'] = vsid::Sid(sid.waypoint, 'R', "V", depRWY);
 			}
 			else if (filedSidWpt == "" && sid.rwy.find(depRWY) != std::string::npos &&
 					this->activeAirports[fplnData.GetOrigin()].depRwys.find(depRWY) !=
@@ -843,7 +843,7 @@ void vsid::VSIDPlugin::OnFunctionCall(int FunctionId, const char * sItemString, 
 					)
 			{
 				validDepartures[sid.waypoint + sid.number + sid.designator[0]] = sid;
-				validDepartures[sid.waypoint + 'R' + 'V'] = vsid::Sid::Sid(sid.waypoint, 'R', "V", depRWY);
+				validDepartures[sid.waypoint + 'R' + 'V'] = vsid::Sid(sid.waypoint, 'R', "V", depRWY);
 			}
 		}
 
