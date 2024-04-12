@@ -1465,15 +1465,41 @@ void vsid::VSIDPlugin::OnGetTagItem(EuroScopePlugIn::CFlightPlan FlightPlan, Eur
 
 	if (ItemCode == TAG_ITEM_VSID_SQW)
 	{
-		*pColorCode = EuroScopePlugIn::TAG_COLOR_RGB_DEFINED;
-		
 		std::string setSquawk = FlightPlan.GetFPTrackPosition().GetSquawk();
 		std::string assignedSquawk = FlightPlan.GetControllerAssignedData().GetSquawk();
+
 		if (setSquawk != assignedSquawk)
 		{
+			*pColorCode = EuroScopePlugIn::TAG_COLOR_RGB_DEFINED;
 			*pRGB = this->configParser.getColor("squawkNotSet");
 		}
-		else *pRGB = this->configParser.getColor("squawkSet");
+		else
+		{
+			if (this->configParser.getColor("squawkSet") == RGB(300, 300, 300))
+			{
+				if (FlightPlan.GetState() == EuroScopePlugIn::FLIGHT_PLAN_STATE_NON_CONCERNED)
+				{
+					*pColorCode = EuroScopePlugIn::TAG_COLOR_NON_CONCERNED;
+				}
+				else if (FlightPlan.GetState() == EuroScopePlugIn::FLIGHT_PLAN_STATE_NOTIFIED)
+				{
+					*pColorCode = EuroScopePlugIn::TAG_COLOR_NOTIFIED;
+				}
+				else if (FlightPlan.GetState() == EuroScopePlugIn::FLIGHT_PLAN_STATE_ASSUMED)
+				{
+					*pColorCode = EuroScopePlugIn::TAG_COLOR_ASSUMED;
+				}
+				else
+				{
+					*pColorCode = EuroScopePlugIn::TAG_COLOR_DEFAULT;
+				}
+			}
+			else
+			{
+				*pColorCode = EuroScopePlugIn::TAG_COLOR_RGB_DEFINED;
+				*pRGB = this->configParser.getColor("squawkSet");
+			}
+		}
 		
 		if(assignedSquawk != "0000") strcpy_s(sItemString, 16, assignedSquawk.c_str());
 	}
