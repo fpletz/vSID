@@ -257,5 +257,59 @@
                 }
 			}
         }
+    },
+	"EDWI": {
+        "elevation": 19,
+        "runways": "02,20,16,34",
+        "transAlt": 5000,
+        "maxInitialClimb": 7000,
+        "appSI": "EIDE,EIDW,ALR,WC",
+        "sids": {
+            "IGREF": {
+                "N": {
+                    "rwy": "02",
+                    "initial": 4000,
+                    "prio": 1
+                },
+                "S": {
+                    "rwy": "20",
+                    "initial": 4000,
+                    "prio": 1
+                }
+			},
+			"POBZU": {
+                "N": {
+                    "rwy": "02",
+                    "initial": 4000,
+                    "prio": 1
+                },
+                "S": {
+                    "rwy": "20",
+                    "initial": 4000,
+                    "prio": 1
+                }
+			}
+        }
+    },
+	"EDWE": {
+        "elevation": 2,
+        "runways": "07,25",
+        "transAlt": 5000,
+        "maxInitialClimb": 7000,
+        "appSI": "EIDE,EIDW,ALR,WC",
+        "sids": {
+            "KUCMI": {
+                "P": {
+                    "rwy": "07",
+                    "initial": 5000,
+                    "prio": 1
+                },
+                "G": {
+                    "rwy": "25",
+                    "initial": 5000,
+                    "prio": 1
+                }
+			}
+        }
     }
 }
