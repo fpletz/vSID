@@ -1,18 +1,17 @@
 cmake_minimum_required(VERSION 3.14)
 
-PROJECT(vSID LANGUAGES C CXX VERSION "0.8.0")
-SET(CMAKE_CXX_STANDARD 20)
-SET(CMAKE_CXX_STANDARD_REQUIRED ON)
-SET(CMAKE_CXX_EXTENSIONS OFF)
-SET(CMAKE_INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
+project(vSID LANGUAGES C CXX VERSION "0.8.0")
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-INCLUDE_DIRECTORIES(
+add_definitions(-D_AFXDLL)
+set(CMAKE_MFC_FLAG 1)
+
+include_directories(
     ${CMAKE_SOURCE_DIR}/include
 )
 
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -D_AFXDLL")
-
-SET(SOURCE_FILES
+set(SRCS
     area.cpp
     configparser.cpp
     flightplan.cpp
@@ -25,11 +24,8 @@ SET(SOURCE_FILES
     vSIDPlugin.cpp
 )
 
-# FIXME: find with find_package
-# find_package(MFC REQUIRED)
-link_directories(
-    "C:\\Program Files\\Microsoft Visual Studio\\2022\\Community\\VC\\Tools\\MSVC\\14.39.33519\\atlmfc\\lib\\spectre\\x86"
-)
+add_library(vSID WIN32 ${SRCS})
+target_link_libraries(vSID ${CMAKE_SOURCE_DIR}/include/es/EuroScopePlugInDLL.lib)
 
-ADD_LIBRARY(vSID SHARED ${SOURCE_FILES})
-TARGET_LINK_LIBRARIES(vSID ${CMAKE_SOURCE_DIR}/include/es/EuroScopePlugInDLL.lib)
+install(FILES ${CMAKE_SOURCE_DIR}/vSidConfig.json DESTINATION ${CMAKE_BINARY_DIR}/vSidConfig.json)
+install(DIRECTORY ${CMAKE_SOURCE_DIR}/config DESTINATION ${CMAKE_BINARY_DIR}/config)
