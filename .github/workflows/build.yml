@@ -1,0 +1,34 @@
+name: Build Plugin
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+      - cmake
+
+env:
+  BUILD_CONFIGURATION: Release
+
+jobs:
+  build:
+    runs-on: windows-latest
+    name: "Build plugin"
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install MSVC toolset
+        run: choco install visualstudio2022buildtools --package-parameters "--add Microsoft.Component.MSBuild --add Microsoft.VisualStudio.Component.VC.Tools.x86.x64 --add Microsoft.VisualStudio.Component.VC.ATLMFC --add Microsoft.VisualStudio.Component.VC.CMake.Project"
+
+      - name: Set up MSVC environment
+        shell: pwsh
+        run: |
+          Import-Module "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools\Common7\Tools\Microsoft.VisualStudio.DevShell.dll"
+          Enter-VsDevShell -VsInstallPath "C:\Program Files (x86)\Microsoft Visual Studio\2022\BuildTools"
+
+      - name: Configure CMake
+        run: cmake -B build -DCMAKE_BUILD_TYPE=${{env.BUILD_CONFIGURATION}} -A Win32
+
+      - name: Build DLL
+        run: cmake -B build --config ${{env.BUILD_CONFIGURATION}}
