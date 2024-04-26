@@ -90,10 +90,10 @@ namespace vsid
 		 */
 		bool addRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std::string(& toAdd));
 
-		bool findScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toSearch);
+		bool findScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData cad, const std::string& toSearch);
 
-		bool setScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toAdd);
+		bool setScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData cad, const std::string& toAdd);
 
-		bool removeScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toRemove);
+		bool removeScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData cad, const std::string& toRemove);
 	}
 }

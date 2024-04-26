@@ -36,7 +36,7 @@ std::pair<std::string, std::string> vsid::fpln::getAtcBlock(const std::vector<st
 		if (filedRoute.front().find('/') != std::string::npos && filedRoute.front().find("/N") == std::string::npos)
 		{
 			std::vector<std::string> sidBlock = vsid::utils::split(filedRoute.at(0), '/');
-			//messageHandler->writeMessage("DEBUG", "sidBlock: " + vsid::utils::join(sidBlock, '/'), vsid::MessageHandler::DebugArea::Dev);
+
 			if (sidBlock.front().find_first_of("0123456789RV") != std::string::npos || sidBlock.front() == origin)
 			{
 				atcSid = sidBlock.front();
@@ -73,21 +73,22 @@ bool vsid::fpln::addRemark(EuroScopePlugIn::CFlightPlanData& fplnData, const std
 	return fplnData.SetRemarks(vsid::utils::join(remarks).c_str());
 }
 
-bool vsid::fpln::findScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toSearch)
+bool vsid::fpln::findScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData cad, const std::string& toSearch)
 {
 	return std::string(cad.GetScratchPadString()).find(vsid::utils::toupper(toSearch));
 }
 
-bool vsid::fpln::setScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toAdd)
+bool vsid::fpln::setScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData cad, const std::string& toAdd)
 {
 	std::string scratch = cad.GetScratchPadString();
 	scratch += toAdd;
 
+	messageHandler->writeMessage("DEBUG", "Setting scratch : " + scratch, vsid::MessageHandler::DebugArea::Req);
 	if (!cad.SetScratchPadString(vsid::utils::trim(scratch).c_str())) return false;
 	else return true;
 }
 
-bool vsid::fpln::removeScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData& cad, const std::string& toRemove)
+bool vsid::fpln::removeScratchPad(EuroScopePlugIn::CFlightPlanControllerAssignedData cad, const std::string& toRemove)
 {
 	std::string scratch = cad.GetScratchPadString();
 	size_t pos = scratch.find(vsid::utils::toupper(toRemove));
@@ -95,8 +96,10 @@ bool vsid::fpln::removeScratchPad(EuroScopePlugIn::CFlightPlanControllerAssigned
 	if (pos != std::string::npos)
 	{
 		std::string newScratch = scratch.substr(0, pos);
+
 		if (newScratch != scratch)
 		{
+			messageHandler->writeMessage("DEBUG", "Removing request. New scratch : \"" + newScratch + "\"", vsid::MessageHandler::DebugArea::Req);
 			if (!cad.SetScratchPadString(vsid::utils::trim(newScratch).c_str())) return false;
 			else return true;
 		}

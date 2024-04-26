@@ -44,10 +44,13 @@ void vsid::ConfigParser::loadMainConfig()
             COLORREF rgbColor = RGB(
                 this->vSidConfig.at("colors").at(elem.key()).value("r", 60),
                 this->vSidConfig.at("colors").at(elem.key()).value("g", 80),
-                this->vSidConfig.at("colors").at(elem.key()).value("b", 240),
+                this->vSidConfig.at("colors").at(elem.key()).value("b", 240)
                 );
             this->colors[elem.key()] = rgbColor;
         }
+
+        // pseudo values for special color use cases
+        if (!this->colors.contains("squawkSet")) this->colors["squawkSet"] = RGB(300, 300, 300);
     }
     catch (std::error_code& e)
     {
@@ -59,9 +62,9 @@ void vsid::ConfigParser::loadMainConfig()
         this->reqTimes.insert({ "caution", this->vSidConfig.at("requests").value("caution", 2) });
         this->reqTimes.insert({ "warning", this->vSidConfig.at("requests").value("warning", 5) });
     }
-    catch (std::error_code& e)
+    catch (json::parse_error& e)
     {
-        messageHandler->writeMessage("ERROR", "Failed to get request timers: " + e.message());
+        messageHandler->writeMessage("ERROR", "Failed to get request timers: " + std::string(e.what()));
     }
 }
 

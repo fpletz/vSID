@@ -5,8 +5,6 @@
         "transAlt": 5000,
         "maxInitialClimb": 7000,
         "appSI": "EIF,PFA,RUD,GIN,KTG",
-        "timeMode": true,
-		"timezone": "Europe/Berlin",
         "sids": {
             "ABSIX": {
                 "K": {

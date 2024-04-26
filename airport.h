@@ -81,6 +81,7 @@ namespace vsid
 		 * @brief Checks if another controller with a lower facility is online
 		 * 
 		 * @param myself - Controller().ControllerMyself()
+		 * @param toActivate - if the check should consider activation of automode (true) or only if it needs to be disabled
 		 */
 		inline bool hasLowerAtc(const EuroScopePlugIn::CController &myself, bool toActivate = false)
 		{
