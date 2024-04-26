@@ -14,6 +14,7 @@
 //#include "display.h"
 #include "airport.h"
 #include <thread>
+
 // END DEV
 
 vsid::VSIDPlugin* vsidPlugin;
@@ -2282,7 +2283,7 @@ void vsid::VSIDPlugin::OnFlightPlanControllerAssignedDataUpdate(EuroScopePlugIn:
 			{
 				std::string toFind = ".VSID_REQ_";
 				size_t pos = scratchpad.find(toFind);
-
+        
 				messageHandler->writeMessage("DEBUG", "[" + callsign + "] found \".vsid_req_\" in scratch: " + scratchpad, vsid::MessageHandler::DebugArea::Req);
 
 				try
@@ -2303,16 +2304,19 @@ void vsid::VSIDPlugin::OnFlightPlanControllerAssignedDataUpdate(EuroScopePlugIn:
 							}
 							this->processed[callsign].request = false;
 							messageHandler->writeMessage("DEBUG", "[" + callsign + "] removing from requests in: " + it->first, vsid::MessageHandler::DebugArea::Req);
+
 							jt = it->second.erase(jt);
 						}
 						if (it->first == reqType && this->processed.contains(callsign))
 						{
 							messageHandler->writeMessage("DEBUG", "[" + callsign + "] setting in requests in: " + it->first, vsid::MessageHandler::DebugArea::Req);
+
 							it->second.insert({ callsign, reqTime });
 							this->processed[callsign].request = true;
 						}
 					}
 					vsid::fpln::removeScratchPad(cad, scratchpad.substr(pos, scratchpad.size()));
+
 				}
 				catch (std::out_of_range)
 				{
