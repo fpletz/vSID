@@ -4,9 +4,7 @@
         "runways": "09,27",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "timeMode": true,
-		"appSI": "TRS,GER,MEI,HAL,HOF",
-		"timezone": "Europe/Berlin",
+		"appSI": "TRS,GER,MEI,HAL,HOF,EDMM",
         "sids": {
             "ERSIL": {
                 "C": {

@@ -2,12 +2,9 @@
     "EDDL": {
         "elevation": 147,
         "runways": "05L,05R,23L,23R",
-        "ArrAsDep": false,
         "transAlt": 5000,
         "maxInitialClimb": 7000,
 		"appSI": "DLA,DLD,BOT,PADH",
-        "timeMode": true,
-		"timezone": "Europe/Berlin",
         "sids": {
             "COL": {
                 "J": {

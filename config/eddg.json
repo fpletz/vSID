@@ -4,8 +4,6 @@
         "runways": "25,07",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "timeMode": true,
-        "timezone": "Europe/Berlin",
 		"appSI": "HMM,PADL,PADH",
         "sids": {
             "DOMEG": {

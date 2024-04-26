@@ -5,8 +5,6 @@
         "transAlt": 5000,
         "maxInitialClimb": 8000,
         "appSI": "REU,STG,BAD,DKB,KTG",
-        "timeMode": true,
-		"timezone": "Europe/Berlin",
         "sids": {
             "NATOR": {
                 "W": {

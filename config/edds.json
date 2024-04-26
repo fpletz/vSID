@@ -4,9 +4,7 @@
         "runways": "25,07",
         "transAlt": 5000,
         "maxInitialClimb": 7000,
-        "appSI": "",
-        "timeMode": true,
-		"timezone": "Europe/Berlin",
+        "appSI": "STG,REU,BAD,DKB,KTG",
         "sids": {
             "ABTAL": {
                 "B": {

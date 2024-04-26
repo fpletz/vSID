@@ -1,6 +1,5 @@
 {
     "airportConfigs": "config",
-    "grp": "config/grp",
     "colors": {
         "sidSuggestion": {
             "r": 255,
