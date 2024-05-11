@@ -32,6 +32,7 @@ std::vector<std::string> vsid::utils::split(const std::string &string, const cha
 
 	while (std::getline(ss, elem, del))
 	{
+		if (elem == "") continue; // remove excessive whitespaces to prevent a crash caused by wrong routes
 		elems.push_back(vsid::utils::trim(elem));
 	}
 	return elems;
