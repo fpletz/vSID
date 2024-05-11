@@ -41,7 +41,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 namespace vsid
 {
 	const std::string pluginName = "vSID";
-	const std::string pluginVersion = "0.8.1a";
+	const std::string pluginVersion = "0.8.2";
 	const std::string pluginAuthor = "Gameagle";
 	const std::string pluginCopyright = "GPL v3";
 	const std::string pluginViewAviso = "";
@@ -182,6 +182,7 @@ namespace vsid
 		std::map<std::string, std::map<std::string, bool>> savedSettings;
 		std::map<std::string, std::map<std::string, bool>> savedRules;
 		std::map<std::string, std::map<std::string, vsid::Area>> savedAreas;
+		std::map<std::string, std::map<std::string, std::set<std::pair<std::string, long long>, vsid::Airport::compreq>>> savedRequests = {};
 		// list of ground states set by controllers
 		std::string gsList;
 		std::map<std::string, std::string> actAtc;
