@@ -71,7 +71,8 @@ void vsid::ConfigParser::loadMainConfig()
 void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> &activeAirports,
                                         std::map<std::string, std::map<std::string, bool>>& savedCustomRules,
                                         std::map<std::string, std::map<std::string, bool>>& savedSettings,
-                                        std::map<std::string, std::map<std::string, vsid::Area>>& savedAreas
+                                        std::map<std::string, std::map<std::string, vsid::Area>>& savedAreas,
+                                        std::map<std::string, std::map<std::string, std::set<std::pair<std::string, long long>, vsid::Airport::compreq>>>& savedRequests
                                         )
 {
     // get the current path where plugins .dll is stored
@@ -163,9 +164,7 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                                 }
                             }
                         }
-                        apt.second.customRules = customRules;
-                        //customRules.clear();
-                        
+                        apt.second.customRules = customRules;                        
 
                         std::set<std::string> appSI;
                         int appSIPrio = 0;
@@ -235,6 +234,12 @@ void vsid::ConfigParser::loadAirportConfig(std::map<std::string, vsid::Airport> 
                                                     {"time", this->parsedConfig.at(apt.first).value("timeMode", false)},
                                                     {"auto", false}
                             };
+                        }
+
+                        // saved requests - if not found base settings already in general settings
+                        if (savedRequests.contains(apt.first))
+                        {
+                            apt.second.requests = savedRequests[apt.first];
                         }
 
                         // sids
