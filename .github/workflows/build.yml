@@ -1,0 +1,221 @@
+name: Build Complete Delete
+
+on:
+  #push:
+      #branches:
+        #- v0.8.x # needs to be the same as vars.DEV_BRANCH
+
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+      - v0.8.x # needs to be the same as vars.DEV_BRANCH
+
+  workflow_dispatch:
+
+jobs:
+  build:
+    if: |
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == 'main') ||
+      (github.event_name == 'pull_request' && github.event.pull_request.merged == true && github.base_ref == '${{ vars.DEV_BRANCH }}' && github.head_ref != 'config') ||
+      (github.event_name == 'push' && github.ref == 'refs/heads/${{ vars.DEV_BRANCH }}')
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Install LLVM and Clang
+      uses: KyleMayes/install-llvm-action@v2
+      with:
+        version: 17
+
+    - name: Configure CMake
+      run: cmake -B build -A Win32 -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
+
+    - name: Build DLL
+      run: cmake --build build --config Release
+
+    - name: Short commit SHA
+      run: echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
+
+    - name: Create first zip file (file.dll and config.json)
+      shell: pwsh
+      run: |
+        New-Item -ItemType Directory -Force -Path output
+        Compress-Archive -Path vSIDPlugin.cpp, vSIDConfig.json -DestinationPath output/files.zip
+
+    - name: Create second zip file (config folder)
+      shell: pwsh
+      run: |
+        Compress-Archive -Path config -DestinationPath output/config.zip
+
+    - name: Get dll version
+      run: |
+        $version = (Get-Content -Path vSIDPlugin.h | Select-String -Pattern 'const std::string pluginVersion = "(.*)";' | ForEach-Object {
+        $_.Matches.Groups[1].Value
+        })
+        echo "DLL_VERSION=$version" >> $env:GITHUB_ENV
+          
+    - name: Extract and Compare Versions
+      id: version
+      shell: bash
+      run: |
+          # Extract version from Changelog
+          version=$(grep -o '\[Changelog v[0-9]\{1,2\}\.[0-9]\{1,2\}\.[0-9]\{1,2\}\]' Changelog.txt | head -n 1 | sed 's/\[Changelog v\([0-9]\{1,2\}\.[0-9]\{1,2\}\.[0-9]\{1,2\}\)\]/\1/')
+          echo "Extracted version: $version"
+          
+          # Compare with current app version
+          if [[ "$version" == "${{env.DLL_VERSION}}" ]]; then
+            echo "Versions match!"
+            echo "match=true" >> $GITHUB_OUTPUT
+            echo "version=$version" >> $GITHUB_OUTPUT
+          else
+            echo "Versions do not match."
+            echo "match=false" >> $GITHUB_OUTPUT
+          fi
+          echo "DLL Version - '${DLL_VERSION}' and log version - '$version'"
+
+        #env:
+        #  APP_VERSION: ${{ secrets.APP_VERSION }} # Set your current app version as a secret
+          
+    - name: Extract Release Body
+      if: ${{ steps.version.outputs.match == 'true' }}
+      id: release_body
+      shell: bash
+      run: |
+          # Extract version and release body
+          version="${{ steps.version.outputs.version }}"
+          releaseBody=$(awk -v version="$version" '
+            $0 ~ "\\[Changelog v" version "\\]" { 
+              found=1
+              next 
+            } 
+            found && /^\[Changelog v/ { 
+              exit 
+            } 
+            found { 
+              print 
+            }' Changelog.txt)
+        
+          echo "Release Body:"
+          echo "$releaseBody"
+        
+          # Save release body to a file
+          echo "$releaseBody" > release_body.txt
+
+      env:
+        VERSION: ${{ steps.version.outputs.version }}
+          
+    #- name: Upload Release Body
+    #  if: steps.version.outputs.match == 'true'
+    #  uses: softprops/action-gh-release@v2
+    #  with:
+    #    tag_name: v${{ env.DLL_VERSION }}
+    #    body_path: release_body.txt
+
+    - name: Determine prerelease of current build
+      id: prerelease
+      shell: bash
+      run: |
+        if [[ ${{github.ref}} == "refs/heads/${{ vars.DEV_BRANCH }}" ]]; then
+          echo "Prerelease is true"
+          echo "prerelease=true" >> $GITHUB_OUTPUT
+        elif [[ ${{github.event_name}} == 'pull_request' && github.base_ref == ${{ vars.DEV_BRANCH }} ]]; then
+          echo "Prerelease is true"
+          echo "prerelease=true" >> $GITHUB_OUTPUT
+        else
+          echo "Prerelease is not true"
+          echo "prerelease=false" >> $GITHUB_OUTPUT
+        fi
+        echo "github.ref is ${{ github.ref }}"
+        echo "github.base_ref is ${{ github.base_ref}}"
+    
+    - name: Print output vars
+      run: |
+        echo "match_output - ${{ steps.version.outputs.match }}"
+        echo "version_output - ${{ steps.version.outputs.version }}"
+        echo "prerelease - ${{steps.prerelease.outputs.prerelease}}"
+
+    - name: Get current release info
+      shell: bash
+      id: get_release_info
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        latest_release=$(gh release list --limit 1 --json name --jq '.[0].name' | tr -d '"')
+        gh release view $last_release --json tagName,isPrerelease --jq '{tagName: .tagName, isPrerelease: .isPrerelease}' > release_info.json
+        echo "RELEASE_TAG=$(jq -r '.tagName' release_info.json)" >> $GITHUB_ENV
+        echo "RELEASE_PRERELEASE=$(jq -r '.isPrerelease' release_info.json)" >> $GITHUB_ENV
+
+    - name: Save all releases in file
+      shell: bash
+      id: list_releases
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        gh release list --json tagName,isPrerelease --jq '.[] | {tagName: .tagName, isPrerelease: .isPrerelease}' > releases.json
+        
+    - name: Delete old pre-releases with same version
+      shell: bash
+      if: ${{ steps.prerelease.outputs.prerelease == 'false' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+          VERSION_NEW_RELEASE=$(echo "${{ env.RELEASE_TAG }}" | sed -e 's/^v//')
+          cat releases.json | while read -r release; do
+            echo "Checking $release"
+            if echo "$release" | jq -e 'has("tagName") and has("isPrerelease")' > /dev/null; then
+              echo "Inside if of isPrerelease"
+              TAG=$(echo "$release" | jq -r '.tagName')
+              RELEASE_PRERELEASE=$(echo "$release" | jq -r '.isPrerelease')
+              echo "RELEASE_PRERELEASE is ${RELEASE_PRERELEASE}"
+              if [[ "${RELEASE_PRERELEASE}" == "true" ]]; then
+                VERSION_RELEASE_PRERELEASE=$(echo "$TAG" | sed -e 's/^v//')
+                echo "Now inside is_prerelese true for next check to delete with version_release_pre ${VERSION_RELEASE_PRERELEASE}"
+                  if [[ "${{steps.version.outputs.version}}" == "${VERSION_RELEASE_PRERELEASE}" ]]; then
+                    echo "Deleting pre-release $TAG"
+                    gh release delete "${TAG}" -y
+                  fi
+              fi
+            else
+              echo "Skipping invalid release entry: $release"
+            fi
+          done
+
+    - name: Delete previous pre-releases on new pre-release
+      shell: bash
+      if: ${{ steps.prerelease.outputs.prerelease == 'true' }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      run: |
+        #jq -c '.[]' <<< "${{ env.RELEASES }}" | while read release; do
+        cat releases.json | while read -r release; do
+          if echo "$release" | jq -e 'has("tagName") and has("isPrerelease")' > /dev/null; then
+            TAG=$(jq -r '.tagName' <<< "$release")
+            IS_PRERELEASE=$(jq -r '.isPrerelease' <<< "$release")
+            if [[ "${IS_PRERELEASE}" == "true" && "$TAG" != "${{ env.RELEASE_TAG }}" ]]; then
+              echo "Deleting pre-release $TAG"
+              gh release delete "$TAG" -y
+            fi
+          fi
+        done
+
+    - name: Create GitHub Release and Upload Assets
+      id: create_release
+      uses: softprops/action-gh-release@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.ESVS_TOKEN }}
+      with:
+        #tag_name: v${{ github.run_id }}
+        tag_name: v${{ env.DLL_VERSION }}
+        body_path: release_body.txt
+        #name: Release ${{ github.run_id }}
+        name: v${{ env.DLL_VERSION }}
+        draft: false
+        prerelease: ${{steps.prerelease.outputs.prerelease}}
+        #prerelease: ${{ github.ref == 'refs/heads/${{ vars.DEV_BRANCH }}' || (github.event_name == 'pull_request' && github.base_ref == '${{ vars.DEV_BRANCH }}') }}
+        files: |
+          output/files.zip
+          output/config.zip
+    # Assuming your DLL is generated in the build directory, you can add steps for testing, deployment, etc. here.
