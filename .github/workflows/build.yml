@@ -36,9 +36,6 @@ jobs:
     - name: Build DLL
       run: cmake --build build --config Release
 
-    - name: Short commit SHA
-      run: echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
-
     - name: Create first zip file (file.dll and config.json)
       shell: pwsh
       run: |
@@ -75,9 +72,6 @@ jobs:
             echo "match=false" >> $GITHUB_OUTPUT
           fi
           echo "DLL Version - '${DLL_VERSION}' and log version - '$version'"
-
-        #env:
-        #  APP_VERSION: ${{ secrets.APP_VERSION }} # Set your current app version as a secret
           
     - name: Extract Release Body
       if: ${{ steps.version.outputs.match == 'true' }}
@@ -106,13 +100,6 @@ jobs:
 
       env:
         VERSION: ${{ steps.version.outputs.version }}
-          
-    #- name: Upload Release Body
-    #  if: steps.version.outputs.match == 'true'
-    #  uses: softprops/action-gh-release@v2
-    #  with:
-    #    tag_name: v${{ env.DLL_VERSION }}
-    #    body_path: release_body.txt
 
     - name: Determine prerelease of current build
       id: prerelease
@@ -130,12 +117,6 @@ jobs:
         fi
         echo "github.ref is ${{ github.ref }}"
         echo "github.base_ref is ${{ github.base_ref}}"
-    
-    - name: Print output vars
-      run: |
-        echo "match_output - ${{ steps.version.outputs.match }}"
-        echo "version_output - ${{ steps.version.outputs.version }}"
-        echo "prerelease - ${{steps.prerelease.outputs.prerelease}}"
 
     - name: Get current release info
       shell: bash
@@ -144,9 +125,17 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: |
         latest_release=$(gh release list --limit 1 --json name --jq '.[0].name' | tr -d '"')
-        gh release view $last_release --json tagName,isPrerelease --jq '{tagName: .tagName, isPrerelease: .isPrerelease}' > release_info.json
-        echo "RELEASE_TAG=$(jq -r '.tagName' release_info.json)" >> $GITHUB_ENV
-        echo "RELEASE_PRERELEASE=$(jq -r '.isPrerelease' release_info.json)" >> $GITHUB_ENV
+        
+        if [ -z "$latest_release" ]; then
+          echo "No releases found."
+          echo "RELEASE_TAG=none" >> $GITHUB_ENV
+          echo "RELEASE_PRERELEASE=false" >> $GITHUB_ENV
+        else
+          gh release view $latest_release --json tagName,isPrerelease --jq '{tagName: .tagName, isPrerelease: .isPrerelease}' > release_info.json
+          echo "RELEASE_TAG=$(jq -r '.tagName' release_info.json)" >> $GITHUB_ENV
+          echo "RELEASE_PRERELEASE=$(jq -r '.isPrerelease' release_info.json)" >> $GITHUB_ENV
+        fi
+
 
     - name: Save all releases in file
       shell: bash
@@ -166,13 +155,11 @@ jobs:
           cat releases.json | while read -r release; do
             echo "Checking $release"
             if echo "$release" | jq -e 'has("tagName") and has("isPrerelease")' > /dev/null; then
-              echo "Inside if of isPrerelease"
               TAG=$(echo "$release" | jq -r '.tagName')
               RELEASE_PRERELEASE=$(echo "$release" | jq -r '.isPrerelease')
               echo "RELEASE_PRERELEASE is ${RELEASE_PRERELEASE}"
               if [[ "${RELEASE_PRERELEASE}" == "true" ]]; then
                 VERSION_RELEASE_PRERELEASE=$(echo "$TAG" | sed -e 's/^v//')
-                echo "Now inside is_prerelese true for next check to delete with version_release_pre ${VERSION_RELEASE_PRERELEASE}"
                   if [[ "${{steps.version.outputs.version}}" == "${VERSION_RELEASE_PRERELEASE}" ]]; then
                     echo "Deleting pre-release $TAG"
                     gh release delete "${TAG}" -y
@@ -207,15 +194,11 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.ESVS_TOKEN }}
       with:
-        #tag_name: v${{ github.run_id }}
         tag_name: v${{ env.DLL_VERSION }}
         body_path: release_body.txt
-        #name: Release ${{ github.run_id }}
         name: v${{ env.DLL_VERSION }}
         draft: false
         prerelease: ${{steps.prerelease.outputs.prerelease}}
-        #prerelease: ${{ github.ref == 'refs/heads/${{ vars.DEV_BRANCH }}' || (github.event_name == 'pull_request' && github.base_ref == '${{ vars.DEV_BRANCH }}') }}
         files: |
           output/files.zip
           output/config.zip
-    # Assuming your DLL is generated in the build directory, you can add steps for testing, deployment, etc. here.
