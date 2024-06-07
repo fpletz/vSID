@@ -1,6 +1,7 @@
 name: Build Complete Delete
 
 on:
+  # push currently not needed and disabled
   #push:
       #branches:
         #- v0.8.x # needs to be the same as vars.DEV_BRANCH
@@ -31,16 +32,21 @@ jobs:
         version: 17
 
     - name: Configure CMake
-      run: cmake -B build -A Win32 -DCMAKE_C_COMPILER=clang -DCMAKE_CXX_COMPILER=clang++
-
+      # remove --trace for less verbosity
+      run: cmake -B build -S . -A Win32 --trace
+      
     - name: Build DLL
-      run: cmake --build build --config Release
+      # remove --verbose for less verbosity
+      run: cmake --build build --config Release --verbose
+
+    - name: Short commit SHA
+      run: echo "SHORT_SHA=${GITHUB_SHA:0:7}" >> $GITHUB_ENV
 
     - name: Create first zip file (file.dll and config.json)
       shell: pwsh
       run: |
         New-Item -ItemType Directory -Force -Path output
-        Compress-Archive -Path vSIDPlugin.cpp, vSIDConfig.json -DestinationPath output/files.zip
+        Compress-Archive -Path build\Release\vSID.dll, vSIDConfig.json -DestinationPath output/files.zip
 
     - name: Create second zip file (config folder)
       shell: pwsh
@@ -155,11 +161,13 @@ jobs:
           cat releases.json | while read -r release; do
             echo "Checking $release"
             if echo "$release" | jq -e 'has("tagName") and has("isPrerelease")' > /dev/null; then
+              echo "Inside if of isPrerelease"
               TAG=$(echo "$release" | jq -r '.tagName')
               RELEASE_PRERELEASE=$(echo "$release" | jq -r '.isPrerelease')
               echo "RELEASE_PRERELEASE is ${RELEASE_PRERELEASE}"
               if [[ "${RELEASE_PRERELEASE}" == "true" ]]; then
                 VERSION_RELEASE_PRERELEASE=$(echo "$TAG" | sed -e 's/^v//')
+                echo "Now inside is_prerelese true for next check to delete with version_release_pre ${VERSION_RELEASE_PRERELEASE}"
                   if [[ "${{steps.version.outputs.version}}" == "${VERSION_RELEASE_PRERELEASE}" ]]; then
                     echo "Deleting pre-release $TAG"
                     gh release delete "${TAG}" -y
@@ -192,7 +200,7 @@ jobs:
       id: create_release
       uses: softprops/action-gh-release@v2
       env:
-        GITHUB_TOKEN: ${{ secrets.ESVS_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: v${{ env.DLL_VERSION }}
         body_path: release_body.txt
