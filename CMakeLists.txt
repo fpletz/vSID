@@ -1,17 +1,23 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.15)
 
-project(vSID LANGUAGES C CXX VERSION "0.8.0")
+project(vSID VERSION "0.8.0" LANGUAGES C CXX)
 set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_BUILD_TYPE Release)
 
-add_definitions(-D_AFXDLL)
+set(CMAKE_CXX_COMPILER clang)
+set(CMAKE_C_COMPILER clang)
 
-# Add the directory containing example.lib to the list of directories CMake searches for libraries
+cmake_policy(SET CMP0091 NEW)
+cmake_policy(SET CMP0156 NEW)
+
+# directory for additional linkage
 link_directories(${CMAKE_SOURCE_DIR}/include/es)
 
-# Add the header files directory if necessary
+# directory where headers are stored
 include_directories(${CMAKE_SOURCE_DIR}/include)
 
-# Define your DLL's source files
+# DLL source files
 set(SOURCES 
     area.cpp
     configparser.cpp
@@ -25,9 +31,11 @@ set(SOURCES
     vSIDPlugin.cpp
 )
 
-# Define your DLL's target
+# DLL target
 add_library(vSID SHARED ${SOURCES})
 
-# Link your DLL with example.lib
-#target_link_libraries(vSID ${CMAKE_SOURCE_DIR}/include/es/EuroScopePlugInDLL.lib)
-target_link_libraries(vSID EuroScopePlugInDLL.lib)
+# set to use MSVC
+set_property(TARGET vSID PROPERTY MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>")
+
+# link against ES library
+target_link_libraries(vSID PRIVATE EuroScopePlugInDLL.lib)
